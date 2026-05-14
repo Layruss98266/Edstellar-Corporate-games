@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Two Truths and a Lie - Edstellar Engage</title>
+<style>
+:root{
+  --deep:#0B3C5D;--blue:#2563EB;--blue-dark:#1D4ED8;--sky:#38BDF8;
+  --bg:#F5F7FA;--border:#E5E7EB;
+  --heading:#0F172A;--body:#334155;--muted:#64748B;
+  --success:#10B981;--success-dark:#059669;
+  --warning:#F59E0B;--warning-dark:#D97706;
+  --danger:#EF4444;--gold:#F59E0B;
+  --coin-grad:linear-gradient(135deg,#FCD34D,#F59E0B);
+  --shadow:0 18px 45px rgba(15,23,42,.10);
+  --shadow-sm:0 6px 14px rgba(15,23,42,.06);
+  --radius:22px;--radius-sm:14px;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--body);
+  background:radial-gradient(900px 600px at 0% -10%,rgba(56,189,248,.22),transparent 50%),radial-gradient(900px 600px at 110% 0%,rgba(37,99,235,.20),transparent 55%),linear-gradient(180deg,#fff 0%,var(--bg) 40%,#E6EEF8 100%);overflow-x:hidden}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:1100}
+.skip-link{position:absolute;left:-9999px}
+.skip-link:focus{position:fixed;left:16px;top:16px;background:var(--blue);color:#fff;padding:10px 16px;border-radius:10px;z-index:2000;font-weight:900}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
+.shell{max-width:1360px;margin:0 auto;padding:24px}
+.back-pill{position:fixed;top:16px;left:16px;z-index:1001;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.94);border:1px solid var(--border);color:var(--deep);text-decoration:none;font-weight:800;font-size:13px;box-shadow:var(--shadow-sm);backdrop-filter:blur(8px);transition:transform .12s ease}
+.back-pill:hover{transform:translateX(-2px)}
+.mode-banner{display:none;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:#0F172A;color:#fff;font-size:12px;font-weight:800;position:fixed;top:14px;right:14px;z-index:1001}
+body.mode-present .mode-banner,body.mode-play .mode-banner{display:inline-flex}
+.mode-banner a{color:#7ee5d6;text-decoration:underline;font-weight:900}
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:20px;margin-top:8px}
+.card,.panel,.toast{background:rgba(255,255,255,.95);border:1px solid rgba(229,231,235,.95);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero-card{padding:24px 26px;position:relative;overflow:hidden}
+.hero-card:after{content:"";position:absolute;right:-90px;top:-100px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.22),transparent 65%)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#EFF6FF;color:var(--blue);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+h1,h2,h3{color:var(--heading);margin:0;line-height:1.1;letter-spacing:-.035em}
+h1{font-size:clamp(28px,4.2vw,46px)}h2{font-size:22px;margin-bottom:10px}h3{font-size:16px;margin-bottom:8px}
+.hero-text{position:relative;z-index:2;max-width:680px;margin:8px 0 0;font-size:14.5px;line-height:1.6}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:2}
+.btn{border:none;border-radius:14px;min-height:44px;padding:11px 18px;font-weight:850;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-dark));box-shadow:0 10px 22px rgba(37,99,235,.24);transition:transform .14s ease,box-shadow .14s ease;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(37,99,235,.32)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn.secondary{color:var(--deep);background:#fff;border:1px solid #C7D2FE;box-shadow:none}
+.btn.ghost{color:var(--body);background:#F8FAFC;border:1px solid var(--border);box-shadow:none}
+.btn.success{background:linear-gradient(135deg,var(--success),var(--success-dark));box-shadow:0 10px 22px rgba(16,185,129,.28)}
+.btn.warning{background:linear-gradient(135deg,var(--warning),var(--warning-dark))}
+.btn.danger{background:linear-gradient(135deg,var(--danger),#DC2626)}
+.btn.tertiary{background:transparent;border:1px solid transparent;color:var(--muted);box-shadow:none;font-weight:700;padding:8px 12px}
+.btn.tertiary:hover{color:var(--deep);border-color:var(--border)}
+.btn-sm{min-height:34px;padding:7px 12px;font-size:12.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.score-card{padding:22px;display:flex;flex-direction:column;gap:14px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat-box{padding:12px 14px;border-radius:16px;background:#F8FAFC;border:1px solid var(--border)}
+.stat-label{display:block;font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.stat-value{display:block;margin-top:4px;color:var(--heading);font-size:24px;font-weight:900;letter-spacing:-.04em}
+#roundCount{background:linear-gradient(135deg,var(--blue),var(--blue-dark));-webkit-background-clip:text;background-clip:text;color:transparent}
+.coins-strip{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border-radius:16px;background:linear-gradient(135deg,#0B3C5D,#1E40AF);color:#fff;box-shadow:var(--shadow-sm)}
+.budget-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 12px;border-radius:999px;font-weight:900;font-size:13px}
+.streak-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#FB923C,#EF4444);color:#fff;padding:4px 10px;border-radius:999px;font-weight:900;font-size:11px;box-shadow:0 4px 10px rgba(239,68,68,.25);text-transform:uppercase;letter-spacing:.06em}
+.mini{padding:14px 16px;border-radius:18px;background:#fff;border:1px solid var(--border)}
+.mini p{margin:0;line-height:1.55;font-size:13.5px}
+.kbd-help{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:11px;color:var(--muted)}
+.kbd-help span{display:inline-flex;align-items:center;gap:4px;background:#F8FAFC;border:1px solid var(--border);padding:3px 7px;border-radius:6px}
+.kbd-help kbd{background:#fff;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-family:inherit;font-size:10px;font-weight:900;color:var(--heading)}
+.settings-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12px}
+.settings-row label{display:inline-flex;align-items:center;gap:6px;color:var(--muted);cursor:pointer;font-weight:700}
+.autosave{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--muted)}
+.autosave::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px rgba(16,185,129,.18)}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px}
+.flow-step{padding:10px 12px;border-radius:16px;background:#fff;border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:900;text-align:center}
+.flow-step.active{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 10px 24px rgba(37,99,235,.22)}
+.grid{display:grid;grid-template-columns:380px minmax(0,1fr);gap:18px;align-items:start}
+.panel{padding:20px 22px}
+.setup-panel{padding:20px 22px 90px;position:relative}
+.setup-section{padding:14px 0;border-bottom:1px solid var(--border)}
+.setup-section:last-of-type{border-bottom:none}
+.setup-section-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.setup-section-head .sec-ico{width:28px;height:28px;border-radius:9px;background:#EFF6FF;color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0}
+.setup-section-head h3{margin:0;font-size:14px;color:var(--heading);font-weight:900}
+.setup-section-head .step{margin-left:auto;background:#F8FAFC;color:var(--muted);padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:900;letter-spacing:.06em}
+.setup-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setup-grid-2 .form-row{margin-bottom:0}
+.setup-grid-2 select,.setup-grid-2 input{padding:9px 11px;font-size:13px}
+.form-row{display:grid;gap:7px;margin-bottom:14px}
+label{color:var(--heading);font-size:13px;font-weight:800}
+input,select,textarea{width:100%;border:1px solid #CBD5E1;border-radius:13px;background:#fff;color:var(--heading);padding:11px 12px;outline:none;transition:border-color .14s ease,box-shadow .14s ease}
+textarea{min-height:60px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.hint{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
+.quickstart{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.quickstart .btn{justify-content:center;padding:11px 12px;min-height:42px}
+.estimator{display:flex;align-items:center;gap:10px;margin-top:10px;background:linear-gradient(135deg,#EFF6FF,#fff);border:1px solid #BFDBFE;border-radius:12px;padding:10px 12px;font-size:12.5px;color:var(--deep);line-height:1.4}
+.estimator strong{color:var(--blue);font-weight:900}
+.estimator .ico{font-size:18px;line-height:1}
+.add-team-form{display:grid;gap:6px}
+.add-team-form .name-row{display:grid;grid-template-columns:1fr auto;gap:6px}
+.team-list-head{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.team-list-head small{color:var(--muted);font-weight:700;font-size:11.5px}
+.start-cta{position:sticky;bottom:0;margin:14px -22px -20px;padding:14px 22px;background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.98) 30%);backdrop-filter:blur(8px);border-top:1px solid var(--border);display:flex;gap:8px;align-items:center}
+.start-cta .btn{flex:1;justify-content:center;min-height:46px;font-size:15px}
+.start-cta .help{font-size:11px;color:var(--muted);max-width:130px;line-height:1.35}
+.team-list{display:grid;gap:10px}
+.team-item{border:1px solid var(--border);background:#fff;border-radius:16px;padding:12px;display:flex;align-items:center;gap:12px}
+.team-avatar{width:42px;height:42px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:20px;background:var(--team-color,#0B3C5D);box-shadow:0 4px 10px rgba(15,23,42,.12)}
+.team-info{flex:1;min-width:0}
+.team-name{color:var(--heading);font-weight:900;font-size:14.5px}
+.team-meta{color:var(--muted);font-size:12px;line-height:1.45}
+.team-actions{display:flex;gap:6px;flex-shrink:0}
+.team-btn{border:1px solid var(--border);background:#fff;color:var(--deep);border-radius:10px;padding:7px 10px;font-weight:800;font-size:12px}
+.team-btn:hover{border-color:var(--blue);color:var(--blue)}
+.delete-team{border:none;background:#FEF2F2;color:#B91C1C;border-radius:10px;padding:7px 11px;font-weight:900}
+.member-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.member-pill{display:inline-flex;align-items:center;gap:4px;background:#F1F5F9;color:var(--deep);padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700}
+.member-pill::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--team-color,#0B3C5D)}
+.member-count{display:inline-flex;align-items:center;gap:4px;color:var(--muted);font-size:11px;font-weight:800;margin-left:6px}
+.team-edit{margin-top:10px;padding:14px;background:#F8FAFC;border-radius:14px;border:1px solid var(--border);display:grid;gap:10px}
+.team-edit h4{margin:0 0 4px;font-size:13px;color:var(--heading);font-weight:900}
+.swatch-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.swatch{width:26px;height:26px;border-radius:9px;border:2px solid transparent;cursor:pointer;transition:transform .1s ease,border-color .12s ease;padding:0}
+.swatch:hover{transform:scale(1.08)}
+.swatch.active{border-color:#0F172A;box-shadow:0 0 0 2px #fff inset}
+.avatar-row{display:flex;gap:6px;flex-wrap:wrap}
+.avatar-pick{width:32px;height:32px;border-radius:10px;border:1px solid var(--border);background:#fff;font-size:16px;cursor:pointer}
+.avatar-pick.active{background:#EFF6FF;border-color:var(--blue);box-shadow:0 0 0 2px rgba(37,99,235,.2)}
+.edit-actions{display:flex;gap:8px;justify-content:flex-end}
+.game-board{display:grid;gap:18px}
+.status{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 18px 18px;border-radius:18px;background:linear-gradient(135deg,#0B3C5D,#1E40AF);color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:background .35s ease}
+.status strong{font-size:16px;position:relative}
+.status span{color:#DBEAFE;font-size:13px;position:relative}
+.status > div:first-child{position:relative}
+.timer{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;font-weight:900;font-variant-numeric:tabular-nums;font-size:16px;position:relative;transition:.25s ease}
+.timer.warn{background:rgba(245,158,11,.95);color:#3a2700;animation:pulseWarn 1s ease-in-out infinite}
+.timer.danger{background:rgba(239,68,68,.95);color:#fff;animation:pulseDanger .6s ease-in-out infinite}
+@keyframes pulseWarn{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes pulseDanger{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.status-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.1);overflow:hidden}
+.status-progress-fill{display:block;height:100%;background:linear-gradient(90deg,var(--sky),var(--success));width:0;transition:width .4s ease}
+body[data-phase="submit"] .status,body[data-phase="vote"] .status{background:linear-gradient(135deg,#0B3C5D,#16A34A)}
+body[data-phase="reveal"] .status{background:linear-gradient(135deg,#0B3C5D,#F59E0B)}
+body[data-phase="review"] .status{background:linear-gradient(135deg,#0B3C5D,#7C3AED)}
+body[data-phase="setup"] .timer{display:none}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tab{border:1px solid var(--border);background:#fff;color:var(--body);padding:9px 14px;border-radius:999px;font-size:13px;font-weight:900}
+.tab.active{color:#fff;background:var(--blue);border-color:var(--blue)}
+.tab.judge.active{background:#7C3AED;border-color:#7C3AED}
+.tab .kbd{background:rgba(255,255,255,.2);border-radius:5px;padding:1px 6px;font-size:10px}
+.tab:not(.active) .kbd{background:#F1F5F9;color:var(--muted)}
+.hidden{display:none!important}
+body[data-rounds-played="0"] .tab[data-view="awards"],body[data-rounds-played="0"] .tab[data-view="log"],body[data-rounds-played="0"] .tab[data-view="review"]{display:none}
+.game-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;margin-top:6px}
+.stage{min-height:540px;border-radius:22px;border:1px solid #BFDBFE;background:linear-gradient(180deg,#EFF6FF 0%,#fff 74%,#F8FAFC 100%);position:relative;overflow:hidden;padding:22px}
+.stage:before{content:"VOTING STAGE";position:absolute;left:22px;top:18px;color:#1D4ED8;font-size:11px;font-weight:900;letter-spacing:.08em}
+.stage-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 14px}
+.round-pill{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:8px 12px;background:#DBEAFE;color:#1D4ED8;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.speaker-card{border-radius:22px;background:#fff;border:1px solid #BFDBFE;box-shadow:0 16px 34px rgba(37,99,235,.12);padding:18px 20px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.speaker-avatar{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:var(--team-color,#0B3C5D);color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.12);flex-shrink:0}
+.speaker-name{font-size:24px;font-weight:900;color:var(--heading);letter-spacing:-.03em;line-height:1.15}
+.speaker-sub{color:var(--muted);font-size:13px;margin-top:2px}
+.statement-grid{display:grid;gap:12px}
+.statement-card{border:1px solid var(--border);background:#fff;border-radius:18px;padding:16px;position:relative;overflow:hidden;transition:.18s ease;cursor:pointer}
+.statement-card:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(15,23,42,.09);border-color:#BFDBFE}
+.statement-card.selected{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12);background:#F8FBFF}
+.statement-card.revealed.truth{border-color:#86EFAC;background:#F0FDF4}
+.statement-card.revealed.lie{border-color:#FCA5A5;background:#FEF2F2}
+.statement-card.revealed{cursor:default}
+.statement-card.locked{cursor:not-allowed;opacity:.55}
+.stmt-head{display:flex;align-items:center;gap:10px}
+.statement-num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:12px;background:#EFF6FF;color:var(--blue);font-weight:900;flex-shrink:0}
+.statement-card.revealed.truth .statement-num{background:#DCFCE7;color:#047857}
+.statement-card.revealed.lie .statement-num{background:#FEE2E2;color:#B91C1C}
+.statement-text{color:var(--heading);font-size:16px;line-height:1.5;font-weight:700}
+.vote-bar{height:9px;border-radius:999px;background:#E5E7EB;overflow:hidden;margin-top:12px}
+.vote-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--blue));width:0%;transition:.25s ease}
+.statement-card.revealed.lie .vote-fill{background:linear-gradient(90deg,#FCA5A5,var(--danger))}
+.statement-card.revealed.truth .vote-fill{background:linear-gradient(90deg,#86EFAC,var(--success))}
+.vote-meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px;margin-top:6px;font-weight:700}
+.result-banner{margin-top:14px;border-radius:18px;padding:14px 16px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);display:none}
+.result-banner.show{display:block;animation:pop .28s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.result-title{font-size:20px;font-weight:900;color:var(--heading);margin-bottom:4px}
+.result-text{font-size:13px;line-height:1.55;color:var(--body)}
+.side-panel{display:flex;flex-direction:column;gap:14px}
+.voter-card{padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,#F0FDF4,#fff);border:1px solid #BBF7D0;color:#047857;font-weight:800;line-height:1.45}
+.voter-card.empty{background:#F8FAFC;border-color:var(--border);color:var(--muted)}
+.summary-row{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border-radius:12px;background:#F8FAFC;border:1px solid var(--border);font-size:13px}
+.summary-row strong{color:var(--heading)}
+.voter-grid{display:grid;gap:6px}
+.voter-chip{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--border);background:#fff;border-radius:12px;padding:8px 11px;font-size:12px;font-weight:700}
+.voter-chip.current{border-color:var(--blue);background:#EFF6FF;color:var(--blue)}
+.voter-chip.done{background:#ECFDF5;border-color:#BBF7D0;color:#047857}
+.twist-card{border:1px solid #FDE68A;background:linear-gradient(135deg,#FFFBEB,#FEF3C7);color:#92400E;border-radius:14px;padding:12px;font-size:13px;line-height:1.5}
+.twist-card strong{display:block;margin-bottom:3px}
+body[data-phase="setup"] .twist-card{display:none}
+.action-stack{display:grid;gap:8px}
+.action-stack .btn{justify-content:center}
+.action-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.action-tools .btn{flex:initial}
+.leaderboard{display:grid;gap:10px}
+.leader-item{border:1px solid var(--border);background:#fff;border-radius:16px;padding:14px;display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center}
+.rank{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#EFF6FF;color:var(--blue);font-weight:900}
+.leader-item.leader::before{content:"👑";position:absolute;margin-top:-26px;margin-left:-8px;font-size:22px}
+.leader-item{position:relative}
+.leader-item.rank-1{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-color:var(--gold);box-shadow:0 14px 28px rgba(245,158,11,.22)}
+.leader-item.rank-1 .leader-score{font-size:30px;color:#92400E}
+.leader-item.rank-1 .rank{background:var(--coin-grad);color:#3a2700}
+.leader-item.rank-2{background:linear-gradient(135deg,#F8FAFC,#E5E7EB);border-color:#9CA3AF}
+.leader-item.rank-2 .leader-score{font-size:26px;color:#374151}
+.leader-item.rank-2 .rank{background:#E5E7EB;color:#374151}
+.leader-item.rank-3{background:linear-gradient(135deg,#FED7AA,#FFF7ED);border-color:#FB923C}
+.leader-item.rank-3 .leader-score{font-size:24px;color:#9A3412}
+.leader-item.rank-3 .rank{background:#FED7AA;color:#9A3412}
+.leader-score{color:var(--heading);font-size:22px;font-weight:900;text-align:right;line-height:1}
+.leader-score small{display:block;margin-top:2px;color:var(--muted);font-size:10px;font-weight:800;text-align:right}
+.live-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:900;margin-left:8px}
+.live-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#10B981;box-shadow:0 0 0 5px rgba(16,185,129,.14)}
+.awards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.award-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 12px;text-align:center;position:relative}
+.award-card.earned{border-color:#F59E0B;background:linear-gradient(135deg,#FFFBEB,#FEF3C7);box-shadow:0 8px 18px rgba(245,158,11,.18)}
+.award-card.locked{opacity:.45}
+.award-icon{font-size:32px;line-height:1;margin-bottom:6px}
+.award-name{font-weight:900;color:var(--heading);font-size:13px;margin-bottom:3px}
+.award-desc{color:var(--muted);font-size:11px;line-height:1.4}
+.award-by{margin-top:6px;font-size:10px;color:var(--blue);font-weight:800}
+.log{display:grid;gap:10px}
+.log-item{border:1px solid var(--border);background:#fff;border-radius:16px;padding:14px}
+.empty{padding:20px;border-radius:16px;border:1px dashed #CBD5E1;background:#F8FAFC;color:var(--muted);text-align:center;line-height:1.55}
+.empty::before{content:"🎯";display:block;font-size:34px;margin-bottom:8px;opacity:.6}
+.float-points{position:absolute;pointer-events:none;font-weight:900;font-size:20px;color:var(--success);animation:floatUp 1s ease-out forwards;z-index:50;text-shadow:0 2px 6px rgba(0,0,0,.15)}
+.float-points.negative{color:var(--danger)}
+@keyframes floatUp{from{opacity:0;transform:translateY(0) scale(.8)}20%{opacity:1;transform:translateY(-10px) scale(1.1)}100%{opacity:0;transform:translateY(-40px) scale(1)}}
+.overlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.62);backdrop-filter:blur(8px)}
+.overlay.show{display:flex;animation:fade .2s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.overlay-modal{width:min(920px,96vw);max-height:90vh;overflow:auto;background:#fff;border-radius:28px;box-shadow:0 30px 90px rgba(15,23,42,.36);animation:modalPop .34s ease both}
+@keyframes modalPop{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.overlay-head{padding:24px 26px;background:linear-gradient(135deg,#0B3C5D,#2563EB);color:#fff;border-radius:28px 28px 0 0;display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.overlay-head.judge{background:linear-gradient(135deg,#5B21B6,#7C3AED)}
+.overlay-head h2{color:#fff;margin-bottom:6px}
+.overlay-head p{margin:0;color:#DBEAFE;line-height:1.55}
+.close{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.13);color:#fff;border-radius:12px;min-width:40px;height:40px;font-size:20px;font-weight:900}
+.overlay-body{padding:24px 26px 26px}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.how-step{min-height:130px;padding:16px;border-radius:20px;border:1px solid var(--border);background:#F8FAFC}
+.how-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:16px;background:#EFF6FF;color:var(--blue);font-size:22px;margin-bottom:10px}
+.examples{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.example{border:1px solid #BFDBFE;background:#EFF6FF;border-radius:18px;padding:14px}
+.example.weak{border-color:#FECACA;background:#FEF2F2}
+.example.strong{border-color:#BBF7D0;background:#F0FDF4}
+.example strong{display:block;color:var(--deep);margin-bottom:8px}
+.example.weak strong{color:#991B1B}
+.example.strong strong{color:#047857}
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:14px}
+.cheat-section{background:#F8FAFC;border:1px solid var(--border);border-radius:14px;padding:14px}
+.cheat-section h4{margin:0 0 10px;color:var(--heading);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.cheat-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px}
+.cheat-row:last-child{border-bottom:none}
+.cheat-row .lbl{color:var(--body);flex:1}
+.cheat-row kbd{background:#fff;border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-family:inherit;font-size:11px;font-weight:900;color:var(--heading)}
+.summary-winner{text-align:center;padding:28px 24px;background:linear-gradient(135deg,#FCD34D,#F59E0B);border-radius:24px 24px 0 0;color:#3a2700}
+.summary-winner h2{color:#3a2700;font-size:28px;margin:6px 0 4px}
+.summary-winner .crown{font-size:54px;line-height:1}
+.summary-grid{display:grid;gap:10px;padding:20px 24px}
+.summary-row-final{display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;background:#F8FAFC;border-radius:14px;border:1px solid var(--border)}
+.summary-row-final .delta{background:#ECFDF5;color:#047857;padding:4px 10px;border-radius:999px;font-weight:900;font-size:12px}
+.share-box{background:#F8FAFC;border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.share-box input{flex:1;border:none;background:transparent;font-family:ui-monospace,monospace;font-size:12px}
+.share-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.share-row .btn{flex:1;min-width:140px;justify-content:center}
+.undo-banner{position:fixed;left:50%;bottom:80px;transform:translateX(-50%) translateY(20px);background:#0F172A;color:#fff;padding:10px 14px;border-radius:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:998;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
+.undo-banner.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.undo-banner button{background:var(--warning);color:#3a2700;border:none;border-radius:10px;padding:6px 12px;font-weight:900;font-size:12px;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);padding:12px 18px;color:var(--heading);font-weight:900;opacity:0;pointer-events:none;transition:.2s ease;z-index:999;border-radius:14px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:#ECFDF5;border-color:#A7F3D0;color:#065F46}
+.toast.warning{background:#FFFBEB;border-color:#FDE68A;color:#92400E}
+/* Statements editor (private) */
+.stmt-editor{display:grid;gap:14px}
+.stmt-team{border:1px solid var(--border);background:#fff;border-radius:18px;padding:16px}
+.stmt-team .head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.stmt-team .head .lock-pill{margin-left:auto;background:#F1F5F9;color:var(--muted);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800}
+.stmt-team .head .lock-pill.done{background:#DCFCE7;color:#047857}
+.stmt-row{display:grid;gap:6px;margin-bottom:10px}
+.stmt-row .lie-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);font-weight:700}
+.stmt-row .lie-row input[type=radio]{width:auto;margin:0}
+.stmt-row .lie-row.is-lie{color:var(--danger)}
+/* Judge view */
+.judge-warn{padding:14px;border-radius:14px;background:linear-gradient(135deg,#FAF5FF,#F3E8FF);border:1px solid #C4B5FD;color:#5B21B6;font-size:13px;line-height:1.5;margin-bottom:14px;font-weight:700}
+.judge-team{border:1px solid var(--border);background:#fff;border-radius:18px;padding:14px 16px;margin-bottom:12px}
+.judge-team h3{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.judge-stmt{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;margin-bottom:6px;font-size:13px;line-height:1.45}
+.judge-stmt.lie{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+.judge-stmt.truth{background:#F0FDF4;border:1px solid #BBF7D0;color:#065F46}
+.judge-stmt .lbl{font-weight:900;text-transform:uppercase;font-size:10px;letter-spacing:.08em;flex-shrink:0;padding:3px 8px;border-radius:999px}
+.judge-stmt.lie .lbl{background:#FCA5A5;color:#7F1D1D}
+.judge-stmt.truth .lbl{background:#86EFAC;color:#14532D}
+/* Power-up shop */
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:10px}
+.shop-card{border:1px solid var(--border);background:#fff;border-radius:14px;padding:12px;text-align:center}
+.shop-card .ico{font-size:26px;line-height:1;margin-bottom:6px}
+.shop-card .nm{font-weight:900;color:var(--heading);font-size:12.5px}
+.shop-card .cs{font-size:11px;color:var(--muted);margin:4px 0 8px;line-height:1.4}
+.shop-card .btn{width:100%;justify-content:center;min-height:32px;padding:6px 10px;font-size:12px}
+.shop-card.locked{opacity:.5}
+.template-pill{display:inline-flex;align-items:center;gap:6px;background:#EFF6FF;color:var(--blue);padding:5px 11px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid #BFDBFE;cursor:pointer;margin:3px}
+.template-pill:hover{background:var(--blue);color:#fff}
+.template-pill .x{background:rgba(255,255,255,.4);border-radius:50%;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;font-size:10px}
+.footer-note{margin-top:24px;padding:16px;border-radius:18px;background:#fff;border:1px solid var(--border);color:var(--muted);font-size:12px;text-align:center}
+/* Modes */
+body.mode-present .back-pill,body.mode-present .hero aside,body.mode-present .flow,body.mode-present aside.setup-panel,body.mode-present .side-panel,body.mode-present .tabs,body.mode-present .footer-note{display:none!important}
+body.mode-present .grid,body.mode-present .hero{grid-template-columns:1fr}
+body.mode-present .game-layout{grid-template-columns:1fr}
+body.mode-present .stage{min-height:80vh}
+body.mode-present .timer{font-size:32px;padding:18px 28px}
+body.mode-present .statement-text{font-size:22px}
+body.mode-play .back-pill,body.mode-play .hero,body.mode-play .flow,body.mode-play aside.setup-panel,body.mode-play .tabs,body.mode-play #leaderboardView,body.mode-play #awardsView,body.mode-play #logView{display:none!important}
+body.mode-play .grid,body.mode-play .game-layout{grid-template-columns:1fr}
+body.mode-play .shell{padding:14px;max-width:600px}
+/* High-contrast */
+body.hc{--deep:#000;--blue:#0033CC;--blue-dark:#001F8B;--heading:#000;--body:#1F2937;--muted:#374151;--border:#000;--bg:#FFFFFF;background:#fff!important}
+body.hc .panel,body.hc .card,body.hc .team-item,body.hc .award-card,body.hc .statement-card{border-width:2px;border-color:#000}
+body.hc .btn,body.hc .timer{box-shadow:none}
+/* Responsive */
+@media (max-width:1020px){.hero,.grid,.game-layout{grid-template-columns:1fr}.how-steps,.examples,.flow{grid-template-columns:1fr 1fr}.shell{padding:14px}.hero-card,.panel{padding:18px}.stage{min-height:480px}.setup-grid-2{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.flow{grid-template-columns:1fr}.stat-grid,.setup-grid-2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media print{.btn,.actions,.setup-panel,.status,.toast,.back-pill,.tabs{display:none!important}body{background:#fff}.shell{max-width:none;padding:0}}
+</style>
+</head>
+<body data-phase="setup" data-teams="0" data-rounds-played="0">
+<a class="skip-link" href="#gameArea">Skip to game</a>
+<div class="sr-only" id="ariaAnnouncer" role="status" aria-live="polite" aria-atomic="true"></div>
+<a class="back-pill" href="../game.html?id=two-truths-and-a-lie">← Back to Engage</a>
+<div class="mode-banner" id="modeBanner"></div>
+
+<div class="shell">
+
+<section class="hero">
+  <div class="hero-card card">
+    <div class="eyebrow">Edstellar Engage · Workplace Game</div>
+    <h1>Two Truths and a Lie</h1>
+    <p class="hero-text">Each player drops three statements — two true, one a lie. Voters listen, watch, and guess. Speakers earn coins for fooling the room; voters earn for catching the lie. A dedicated Judge view hides the answer key from players. 14 languages · presenter mode · share link · streak tracker.</p>
+    <div class="actions">
+      <button class="btn success" id="demoBtn">▶ Play Demo Now</button>
+      <button class="btn" id="setupBtn">⚙ Setup Custom Game</button>
+      <button class="btn secondary" id="howBtn">📖 How to Play</button>
+      <button class="btn tertiary" id="resetBtn" title="Reset all game state">↺ Reset</button>
+    </div>
+  </div>
+  <aside class="score-card card">
+    <h2>Game Snapshot</h2>
+    <div class="stat-grid">
+      <div class="stat-box"><span class="stat-label">Teams</span><span class="stat-value" id="teamCount">0</span></div>
+      <div class="stat-box"><span class="stat-label">Round</span><span class="stat-value" id="roundCount">0 / 0</span></div>
+      <div class="stat-box"><span class="stat-label">Speakers done</span><span class="stat-value" id="speakersDone">0</span></div>
+      <div class="stat-box"><span class="stat-label">Phase</span><span class="stat-value" id="phaseStat" style="font-size:18px">Setup</span></div>
+    </div>
+    <div class="coins-strip">
+      <div>
+        <small style="color:#cbd5e1;text-transform:uppercase;letter-spacing:.06em;font-size:10px;font-weight:800">Leader</small>
+        <div style="font-size:18px;font-weight:900;color:#fff;line-height:1.2" id="leaderName">No teams yet</div>
+        <div style="font-size:13px;color:#dbeafe" id="leaderScoreSnap">0 points</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+        <span class="budget-pill">💰 <span id="leaderCoins">50</span> coins</span>
+        <div class="streak-pill" id="streakPill" style="display:none">🔥 <span id="streakDays">0</span>-day streak</div>
+      </div>
+    </div>
+    <div class="mini">
+      <p><strong style="color:var(--heading)">Scoring:</strong> Catch the lie +10 · Fool a voter +5 · Fool the majority +10 · Perfect lie (fool everyone) +20 bonus.</p>
+      <div class="kbd-help">
+        <span><kbd>Space</kbd> start</span>
+        <span><kbd>D</kbd> reveal</span>
+        <span><kbd>N</kbd> next speaker</span>
+        <span><kbd>?</kbd> shortcuts</span>
+      </div>
+      <div class="settings-row">
+        <label><input type="checkbox" id="hcToggle"/> High-contrast</label>
+        <button class="btn ghost btn-sm" id="cheatBtn">⌨ Shortcuts</button>
+        <span class="autosave" id="autosaveLabel">Saved just now</span>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<div class="flow">
+  <div class="flow-step active" id="flow-setup">1. Setup</div>
+  <div class="flow-step" id="flow-submit">2. Submit</div>
+  <div class="flow-step" id="flow-vote">3. Vote</div>
+  <div class="flow-step" id="flow-reveal">4. Reveal</div>
+  <div class="flow-step" id="flow-review">5. Review</div>
+</div>
+
+<section class="grid">
+
+<aside class="setup-panel panel" id="setupPanel">
+  <h2 style="margin-bottom:6px">Custom Setup</h2>
+  <p class="hint" style="margin:0 0 12px">Three quick steps. Or just hit <strong>Play Demo Now</strong>.</p>
+
+  <div class="setup-section">
+    <div class="setup-section-head"><span class="sec-ico">1</span><h3>Quick start</h3><span class="step">Optional</span></div>
+    <div class="quickstart">
+      <button class="btn ghost" id="sampleBtn">↻ Use 5 demo players</button>
+      <button class="btn ghost" id="saveTemplateBtn">⭑ Save as template</button>
+    </div>
+    <div id="templateList" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px"></div>
+  </div>
+
+  <div class="setup-section">
+    <div class="setup-section-head"><span class="sec-ico">2</span><h3>Game settings</h3><span class="step">Required</span></div>
+    <div class="form-row">
+      <label for="langSelect">Language</label>
+      <select id="langSelect">
+        <option value="en">English</option><option value="hi">हिन्दी · Hindi</option><option value="ar">العربية · Arabic (RTL)</option>
+        <option value="es">Español · Spanish</option><option value="fr">Français · French</option><option value="de">Deutsch · German</option>
+        <option value="pt">Português · Portuguese</option><option value="ja">日本語 · Japanese</option><option value="ko">한국어 · Korean</option>
+        <option value="zh">中文 · Chinese</option><option value="ru">Русский · Russian</option><option value="it">Italiano · Italian</option>
+        <option value="id">Bahasa Indonesia</option><option value="tr">Türkçe · Turkish</option>
+      </select>
+    </div>
+    <div class="setup-grid-2">
+      <div class="form-row">
+        <label for="timeSelect">Vote time</label>
+        <select id="timeSelect">
+          <option value="30">30 seconds</option><option value="45" selected>45 seconds</option>
+          <option value="60">60 seconds</option><option value="90">90 seconds</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="rpsSelect">Rounds per speaker</label>
+        <select id="rpsSelect">
+          <option value="1" selected>1 round each</option><option value="2">2 rounds each</option>
+        </select>
+      </div>
+    </div>
+    <div class="estimator" id="setupEstimator">
+      <span class="ico">⏱</span>
+      <div>Session: <strong id="estTime">~9 min</strong> · <strong>10 plot twists</strong> · <strong>5 power-ups</strong></div>
+    </div>
+  </div>
+
+  <div class="setup-section">
+    <div class="setup-section-head"><span class="sec-ico">3</span><h3>Teams</h3><span class="step">Required</span></div>
+    <div class="add-team-form">
+      <div class="name-row">
+        <input id="teamName" placeholder="Player or team name (e.g. Asha)" aria-label="Team name"/>
+        <button class="btn btn-sm" id="addTeamBtn">+ Add</button>
+      </div>
+      <textarea id="teamMembers" placeholder="Role / members (optional): HR Manager · Onboarding lead"></textarea>
+    </div>
+    <p class="hint" style="margin-top:8px">Each team starts with <strong>50 coins</strong> to spend on power-ups during voting.</p>
+    <div class="team-list-head"><h3 style="margin:0;font-size:13px">Roster</h3><small id="rosterCount">0 teams</small></div>
+    <div class="team-list" id="teamList"><div class="empty">Add your first player, load demo players, or click Play Demo Now.</div></div>
+  </div>
+
+  <div class="start-cta">
+    <button class="btn success" id="startGameBtn">▶ Start Game</button>
+    <span class="help" id="startCtaHelp">Add at least 3 players to start.</span>
+  </div>
+</aside>
+
+<main class="game-board" id="gameArea">
+  <div class="status">
+    <div><strong id="statusTitle">Ready to play</strong><br/><span id="statusSub">Click Play Demo Now or add players.</span></div>
+    <div class="timer" id="timer">⏱ 00:00</div>
+    <div class="status-progress" aria-hidden="true"><span class="status-progress-fill" id="statusProgressFill"></span></div>
+  </div>
+
+  <section class="panel">
+    <div class="tabs">
+      <button class="tab active" data-view="play">▶ Play <span class="kbd">P</span></button>
+      <button class="tab" data-view="submit">✍️ Statements <span class="kbd">S</span></button>
+      <button class="tab judge" data-view="judge">🛡 Judge <span class="kbd">J</span></button>
+      <button class="tab" data-view="leaderboard">🏆 Leaderboard <span class="kbd">L</span></button>
+      <button class="tab" data-view="review">💬 Review <span class="kbd">R</span></button>
+      <button class="tab" data-view="awards">🎖 Awards <span class="kbd">A</span></button>
+      <button class="tab" data-view="log">📋 Round Log</button>
+    </div>
+
+    <div id="playView">
+      <div class="game-layout">
+        <div class="stage">
+          <div class="stage-top">
+            <span class="round-pill" id="speakerPill">No speaker selected</span>
+            <button class="btn ghost btn-sm" id="shuffleBtn">🔀 Shuffle</button>
+          </div>
+          <div class="speaker-card">
+            <div class="speaker-avatar" id="speakerAvatar" style="--team-color:#0B3C5D">👤</div>
+            <div>
+              <div class="speaker-name" id="speakerName">Start the game</div>
+              <div class="speaker-sub" id="speakerSub">The current speaker's three statements will appear here.</div>
+            </div>
+          </div>
+          <div class="statement-grid" id="statementGrid">
+            <div class="empty">Click <strong>Start Round</strong> to show the speaker's statements.</div>
+          </div>
+          <div class="result-banner" id="resultBanner">
+            <div class="result-title" id="resultTitle">Round revealed</div>
+            <div class="result-text" id="resultText">Votes and scoring appear here.</div>
+          </div>
+        </div>
+
+        <aside class="side-panel">
+          <div class="voter-card empty" id="voterCard">No voter yet</div>
+
+          <div class="action-stack">
+            <button class="btn success" id="startRoundBtn">▶ Start Round</button>
+            <button class="btn warning" id="twistBtn">🎲 Plot Twist</button>
+            <button class="btn danger" id="revealBtn">⬇ Reveal Lie</button>
+            <button class="btn secondary" id="nextSpeakerBtn">→ Next Speaker</button>
+            <div class="action-tools">
+              <button class="btn ghost btn-sm" id="skipVoterBtn">↷ Skip Voter</button>
+              <button class="btn ghost btn-sm" id="shopBtn">🛒 Power-ups</button>
+            </div>
+          </div>
+
+          <div class="twist-card" id="twistCard"><strong>No plot twist</strong><span>Click 🎲 Plot Twist mid-round to spice things up.</span></div>
+
+          <div class="mini">
+            <h3 style="margin-bottom:8px">Round summary</h3>
+            <div class="summary-row"><span>Speaker</span><strong id="sumSpeaker">-</strong></div>
+            <div class="summary-row"><span>Votes cast</span><strong id="sumVotes">0</strong></div>
+            <div class="summary-row"><span>Caught the lie</span><strong id="sumCorrect">0</strong></div>
+            <div class="summary-row"><span>Fooled</span><strong id="sumFooled">0</strong></div>
+          </div>
+
+          <div class="mini">
+            <h3 style="margin-bottom:8px">Voters</h3>
+            <div class="voter-grid" id="voterGrid"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div id="submitView" class="hidden">
+      <h2>Private Statements <span class="live-badge">Private</span></h2>
+      <p class="hint">Each player adds three statements and privately marks the lie. <strong>Voters never see the lie marker</strong> — only the Judge tab shows the answer key.</p>
+      <div class="stmt-editor" id="stmtEditor"></div>
+    </div>
+
+    <div id="judgeView" class="hidden">
+      <h2>Judge / Facilitator View</h2>
+      <div class="judge-warn">🛡 <strong>Private answer area · do not show players.</strong> This screen reveals every speaker's flagged lie so the facilitator can confirm the result before reveal. The Judge tab auto-locks every time you leave it — you'll be prompted to confirm before re-opening.</div>
+      <div id="judgeContent"></div>
+    </div>
+
+    <div id="leaderboardView" class="hidden">
+      <h2>Leaderboard <span class="live-badge">Live</span></h2>
+      <div class="leaderboard" id="leaderboard"></div>
+    </div>
+
+    <div id="reviewView" class="hidden">
+      <h2>Auto Review</h2>
+      <div id="reviewContent"></div>
+      <div class="actions" style="margin-top:14px">
+        <button class="btn" id="exportBtn">📥 Export JSON</button>
+        <button class="btn secondary" id="exportCsvBtn">📊 Export CSV</button>
+        <button class="btn secondary" id="shareBtn">🔗 Share session</button>
+        <button class="btn secondary" id="reminderBtn">📅 14-day reminder</button>
+        <button class="btn ghost" onclick="window.print()">🖨 Print / PDF</button>
+      </div>
+    </div>
+
+    <div id="awardsView" class="hidden">
+      <h2>Awards &amp; badges</h2>
+      <p class="hint">10 awards unlock through reading the room, crafting believable lies, and overall game wins.</p>
+      <div class="awards-grid" id="awardsList"></div>
+    </div>
+
+    <div id="logView" class="hidden">
+      <h2>Round Log</h2>
+      <div class="log" id="roundLog"></div>
+    </div>
+  </section>
+</main>
+
+</section>
+
+<div class="footer-note">Standalone prototype · runs fully in the browser · no backend, login, or internet required after download.</div>
+
+</div>
+
+<!-- How to play -->
+<div class="overlay" id="howOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="overlay-head">
+      <div><h2>How to Play Two Truths and a Lie</h2><p>Each speaker shares three statements. Two are true. One is a lie. Everyone else votes for the lie.</p></div>
+      <button class="close" id="closeHow">×</button>
+    </div>
+    <div class="overlay-body">
+      <div class="how-steps">
+        <div class="how-step"><div class="how-icon">✍️</div><strong>1. Submit</strong><span>Each player privately enters 2 truths and 1 lie.</span></div>
+        <div class="how-step"><div class="how-icon">🎤</div><strong>2. Present</strong><span>The speaker's statements appear in random order.</span></div>
+        <div class="how-step"><div class="how-icon">🗳️</div><strong>3. Vote</strong><span>Each voter picks the one they think is the lie.</span></div>
+        <div class="how-step"><div class="how-icon">🏆</div><strong>4. Score</strong><span>Correct voters score. Speakers score when they fool the room.</span></div>
+      </div>
+      <div class="examples">
+        <div class="example strong"><strong>Good lie</strong><p>"I once trained for a marathon." Sounds plausible and matches a real workplace persona.</p></div>
+        <div class="example weak"><strong>Weak lie</strong><p>"I have never used Excel." Too obvious — the group catches it instantly.</p></div>
+      </div>
+      <div class="actions" style="margin-top:16px">
+        <button class="btn success" id="howDemo">▶ Start Demo</button>
+        <button class="btn ghost" id="howClose2">Close Guide</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cheat sheet -->
+<div class="overlay" id="cheatOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="overlay-head"><div><h2>⌨ Keyboard &amp; Game Cheat Sheet</h2><p>All shortcuts, twists, power-ups, and awards in one screen.</p></div><button class="close" id="cheatClose">×</button></div>
+    <div class="overlay-body">
+      <div class="cheat-grid">
+        <div class="cheat-section">
+          <h4>Keyboard shortcuts</h4>
+          <div class="cheat-row"><span class="lbl">Start round</span><kbd>Space</kbd></div>
+          <div class="cheat-row"><span class="lbl">Reveal lie</span><kbd>D</kbd></div>
+          <div class="cheat-row"><span class="lbl">Plot twist</span><kbd>T</kbd></div>
+          <div class="cheat-row"><span class="lbl">Next speaker</span><kbd>N</kbd></div>
+          <div class="cheat-row"><span class="lbl">Skip voter</span><kbd>V</kbd></div>
+          <div class="cheat-row"><span class="lbl">Play tab</span><kbd>P</kbd></div>
+          <div class="cheat-row"><span class="lbl">Statements</span><kbd>S</kbd></div>
+          <div class="cheat-row"><span class="lbl">Judge tab</span><kbd>J</kbd></div>
+          <div class="cheat-row"><span class="lbl">Leaderboard</span><kbd>L</kbd></div>
+          <div class="cheat-row"><span class="lbl">Review</span><kbd>R</kbd></div>
+          <div class="cheat-row"><span class="lbl">Awards</span><kbd>A</kbd></div>
+          <div class="cheat-row"><span class="lbl">Cheat sheet</span><kbd>?</kbd></div>
+          <div class="cheat-row"><span class="lbl">Close modal</span><kbd>Esc</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Plot twists</h4>
+          <div class="cheat-row"><span class="lbl">Anonymous voting</span><kbd>hide names</kbd></div>
+          <div class="cheat-row"><span class="lbl">Confidence stake</span><kbd>2× points</kbd></div>
+          <div class="cheat-row"><span class="lbl">Speed round</span><kbd>15s vote</kbd></div>
+          <div class="cheat-row"><span class="lbl">Mirror round</span><kbd>vote for truth</kbd></div>
+          <div class="cheat-row"><span class="lbl">Silent round</span><kbd>gestures only</kbd></div>
+          <div class="cheat-row"><span class="lbl">Truth detector</span><kbd>1 voter peeks</kbd></div>
+          <div class="cheat-row"><span class="lbl">Add 4th statement</span><kbd>extra options</kbd></div>
+          <div class="cheat-row"><span class="lbl">Shuffle order</span><kbd>re-randomize</kbd></div>
+          <div class="cheat-row"><span class="lbl">Vote twice</span><kbd>second guess</kbd></div>
+          <div class="cheat-row"><span class="lbl">Crowd source</span><kbd>vote out loud</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Power-ups (coins)</h4>
+          <div class="cheat-row"><span class="lbl">🔍 Hint peek</span><kbd>40 coins</kbd></div>
+          <div class="cheat-row"><span class="lbl">✌️ Double down</span><kbd>50 coins</kbd></div>
+          <div class="cheat-row"><span class="lbl">🔄 Re-listen</span><kbd>30 coins</kbd></div>
+          <div class="cheat-row"><span class="lbl">🛡 Vote shield</span><kbd>60 coins</kbd></div>
+          <div class="cheat-row"><span class="lbl">🎰 Random vote</span><kbd>15 coins</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Awards (10 total)</h4>
+          <div class="cheat-row"><span class="lbl">🏆 Overall Winner</span><kbd>highest score</kbd></div>
+          <div class="cheat-row"><span class="lbl">🥇 First Win</span><kbd>won round 1</kbd></div>
+          <div class="cheat-row"><span class="lbl">👑 Champion</span><kbd>won the game</kbd></div>
+          <div class="cheat-row"><span class="lbl">🎭 Master Deceiver</span><kbd>fooled 100%</kbd></div>
+          <div class="cheat-row"><span class="lbl">🕵️ Sherlock</span><kbd>5 correct in a row</kbd></div>
+          <div class="cheat-row"><span class="lbl">🎯 Sharp Eye</span><kbd>≥80% correct rate</kbd></div>
+          <div class="cheat-row"><span class="lbl">🃏 Wild Card</span><kbd>most scattered votes</kbd></div>
+          <div class="cheat-row"><span class="lbl">📖 Storyteller</span><kbd>5+ speaker rounds</kbd></div>
+          <div class="cheat-row"><span class="lbl">💰 Coin Hoarder</span><kbd>100+ coins held</kbd></div>
+          <div class="cheat-row"><span class="lbl">🌟 All-Rounder</span><kbd>3+ caught &amp; 3+ fooled</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Modes</h4>
+          <div class="cheat-row"><span class="lbl">Standard</span><kbd>./</kbd></div>
+          <div class="cheat-row"><span class="lbl">Presenter</span><kbd>?mode=present</kbd></div>
+          <div class="cheat-row"><span class="lbl">Player</span><kbd>?mode=play</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Accessibility</h4>
+          <div class="cheat-row"><span class="lbl">High-contrast</span><kbd>toggle in snapshot</kbd></div>
+          <div class="cheat-row"><span class="lbl">Screen-reader</span><kbd>round events</kbd></div>
+          <div class="cheat-row"><span class="lbl">Skip to game</span><kbd>Tab once</kbd></div>
+          <div class="cheat-row"><span class="lbl">Languages</span><kbd>14 in setup</kbd></div>
+        </div>
+      </div>
+      <div class="actions"><button class="btn ghost" id="cheatCloseBottom">Close</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Judge confirm gate -->
+<div class="overlay" id="judgeGateOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal" style="max-width:520px">
+    <div class="overlay-head judge"><div><h2>🛡 Open Judge view?</h2><p>This screen reveals every speaker's flagged lie. Make sure other players can't see your screen before continuing.</p></div></div>
+    <div class="overlay-body">
+      <p style="margin:0 0 12px;line-height:1.5">The Judge view auto-locks every time you leave the tab and re-asks this confirm — keeping the answer key private.</p>
+      <div class="actions">
+        <button class="btn warning" id="judgeGateConfirm">🛡 I'm the host · show answers</button>
+        <button class="btn ghost" id="judgeGateCancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Round summary -->
+<div class="overlay" id="summaryOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="summary-winner"><div class="crown">👑</div><h2 id="summaryWinnerName">Round winner</h2><p style="margin:4px 0 0;color:#3a2700;font-weight:800" id="summaryWinnerScore">0 points</p></div>
+    <div class="summary-grid" id="summaryGrid"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 24px 24px;justify-content:flex-end">
+      <button class="btn ghost" id="summaryClose">Close</button>
+      <button class="btn warning" id="summaryNext">→ Next speaker</button>
+    </div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="overlay" id="shareOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="overlay-head"><div><h2>Share this session</h2><p>Shareable URL encodes the full session (statements stripped for privacy).</p></div><button class="close" id="shareClose">×</button></div>
+    <div class="overlay-body">
+      <label style="display:block;margin-bottom:6px;font-weight:900">Shareable URL</label>
+      <div class="share-box"><input id="shareUrl" readonly value=""/><button class="btn btn-sm" id="copyShareUrl">📋 Copy</button></div>
+      <label style="display:block;margin-bottom:6px;font-weight:900;margin-top:14px">Slack / Teams card</label>
+      <div class="share-box" style="display:block">
+        <p id="slackCard" style="margin:0;line-height:1.55;font-size:13.5px;white-space:pre-line"></p>
+        <button class="btn btn-sm" id="copySlackCard" style="margin-top:8px">📋 Copy card text</button>
+      </div>
+      <label style="display:block;margin-bottom:6px;font-weight:900;margin-top:14px">Embed snippet</label>
+      <div class="share-box"><input id="embedSnippet" readonly value=""/><button class="btn btn-sm" id="copyEmbed">📋 Copy</button></div>
+      <div class="share-row" style="margin-top:14px">
+        <button class="btn warning" id="presenterModeBtn">📺 Open Presenter View</button>
+        <button class="btn warning" id="playerModeBtn">📱 Open Player View</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Power-up shop -->
+<div class="overlay" id="shopOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal" style="max-width:680px">
+    <div class="overlay-head"><div><h2>🛒 Power-ups</h2><p>Spend EngageCoins to bend the round in your favour. Each team starts with 50 coins.</p></div><button class="close" id="shopClose">×</button></div>
+    <div class="overlay-body">
+      <label for="shopTeam" style="margin-bottom:6px">Spend for:</label>
+      <select id="shopTeam"></select>
+      <div class="shop-grid" id="shopGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="undo-banner" id="undoBanner" role="status" aria-live="polite">
+  <span id="undoText">Round saved.</span>
+  <button id="undoBtn">↶ Undo</button>
+</div>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="toast" id="toast">Ready</div>
+
+<script>
+/* ===========================================================
+   TWO TRUTHS AND A LIE - Edstellar Engage
+=========================================================== */
+
+const TEAM_COLORS = ['#0B3C5D','#2563EB','#10B981','#F59E0B','#7C3AED','#EC4899','#0EA5E9','#F97316'];
+const TEAM_AVATARS = ['🦅','⚡','🔥','🌟','🚀','🛡','🎯','🦄'];
+
+const SAMPLE_PLAYERS = [
+  {name:'Asha',  role:'HR Manager',        statements:['I once organized a company event for 500 people.','I prefer tea over coffee.','I have never attended a virtual meeting.'],liePosition:2},
+  {name:'Ravi',  role:'Sales Lead',        statements:['I closed my first deal through a referral.','I used to play cricket every weekend.','I dislike public speaking.'],liePosition:2},
+  {name:'Meera', role:'L&D Specialist',    statements:['I have built onboarding content from scratch.','I keep a notebook for every workshop idea.','I have never taken an online course.'],liePosition:2},
+  {name:'Nikhil',role:'Project Manager',   statements:['I use checklists for almost everything.','I once managed a project across three time zones.','I never miss deadlines.'],liePosition:2},
+  {name:'Sara',  role:'Customer Success',  statements:['I can remember client names very quickly.','I enjoy solving escalations.','I have never received a customer complaint.'],liePosition:2}
+];
+
+const TWISTS = [
+  {id:'anon',     name:'Anonymous Voting', desc:'Voter names hidden in the chip grid until reveal.'},
+  {id:'double',   name:'Confidence Stake', desc:'All points this round are doubled.'},
+  {id:'speed',    name:'Speed Round',      desc:'Vote time crashes to 15 seconds.'},
+  {id:'mirror',   name:'Mirror Round',     desc:'Vote for the most believable TRUTH instead — points awarded if you avoid the lie.'},
+  {id:'silent',   name:'Silent Round',     desc:'Speaker conveys statements through gestures and one-word hints only.'},
+  {id:'detector', name:'Truth Detector',   desc:'One random voter privately sees which statement is the lie.'},
+  {id:'fourth',   name:'Add a 4th',        desc:'Speaker adds a 4th made-up statement on the spot.'},
+  {id:'shuffle',  name:'Shuffle Order',    desc:'Statements re-shuffle mid-round, votes reset.'},
+  {id:'twice',    name:'Vote Twice',       desc:'Every voter gets a second guess if they want.'},
+  {id:'crowd',    name:'Crowd Source',     desc:'Voters discuss out loud before casting.'}
+];
+
+const POWER_UPS = [
+  {id:'hint',   icon:'🔍', name:'Hint Peek',    cost:40, desc:'Reveal one TRUTH (eliminates a wrong answer for this voter only).'},
+  {id:'double', icon:'✌️', name:'Double Down',  cost:50, desc:'Double the points you score on your next vote.'},
+  {id:'relisten',icon:'🔄',name:'Re-listen',    cost:30, desc:'Ask the speaker to re-read their statements.'},
+  {id:'shield', icon:'🛡', name:'Vote Shield',  cost:60, desc:'Opt out of this round with no penalty.'},
+  {id:'random', icon:'🎰', name:'Random Vote',  cost:15, desc:'Cast a random guess — fun-only, no double penalty.'}
+];
+
+const BADGES = [
+  {id:'winner',     icon:'🏆', name:'Overall Winner',  desc:'Highest total score',           check:(p,all)=> all.sort((a,b)=>b.score-a.score)[0]?.id===p.id && p.score>0},
+  {id:'first',      icon:'🥇', name:'First Win',       desc:'Won round 1 as voter or speaker',check:(p)=> !!p.firstWin},
+  {id:'champion',   icon:'👑', name:'Champion',        desc:'Won the final game',            check:(p)=> !!p.badges?.includes('champion')},
+  {id:'deceiver',   icon:'🎭', name:'Master Deceiver', desc:'Fooled 100% of voters in 1 round',check:(p)=> !!p.perfectLie},
+  {id:'sherlock',   icon:'🕵️', name:'Sherlock',        desc:'5 correct guesses in a row',    check:(p)=> (p.maxStreak||0) >= 5},
+  {id:'sharpeye',   icon:'🎯', name:'Sharp Eye',       desc:'≥80% lie-catch rate (min 5 votes)',check:(p)=> (p.totalVotes||0)>=5 && (p.correct/(p.totalVotes||1))>=.8},
+  {id:'wildcard',   icon:'🃏', name:'Wild Card',       desc:'Most scattered votes received as speaker',check:(p,all)=> all.sort((a,b)=>(b.scatter||0)-(a.scatter||0))[0]?.id===p.id && (p.scatter||0)>0},
+  {id:'storyteller',icon:'📖', name:'Storyteller',     desc:'5+ speaker rounds',             check:(p)=> (p.spoken||0) >= 5},
+  {id:'coinhoarder',icon:'💰', name:'Coin Hoarder',    desc:'Held 100+ coins',               check:(p)=> (p.coins||0) >= 100 || (p.maxCoins||0) >= 100},
+  {id:'allround',   icon:'🌟', name:'All-Rounder',     desc:'3+ caught and 3+ fooled',       check:(p)=> (p.correct||0)>=3 && (p.fooled||0)>=3}
+];
+
+const STORAGE_KEY = 'edstellarTwoTruthsLieV1';
+
+let teams = [];
+let speakerIndex = 0;
+let currentSpeakerId = null;
+let currentStatements = [];
+let lieIndex = null;
+let voterQueue = [];
+let currentVoterIndex = 0;
+let votes = {};
+let round = 0;
+let speakerRound = 0;
+let roundsPerSpeaker = 1;
+let phase = 'setup';
+let timer = null;
+let remaining = 0;
+let log = [];
+let currentTwist = null;
+let sessionTemplates = [];
+let currentLanguage = 'en';
+let editingTeamId = null;
+let lastSaveAt = 0;
+let undoSnapshot = null;
+let judgeUnlocked = false;
+
+const $ = id => document.getElementById(id);
+function makeId(){ return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()); }
+function safe(v){ return String(v??'').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c])); }
+
+function showToast(msg, kind=''){ const t=$('toast'); t.textContent=msg; t.className='toast show '+kind; setTimeout(()=>t.classList.remove('show'),1700) }
+function announce(msg){ const el=$('ariaAnnouncer'); if(!el)return; el.textContent=''; setTimeout(()=>el.textContent=msg,50) }
+
+function defaultTeam(name, members=''){
+  const i = teams.length;
+  return {
+    id: makeId(), name, members, color: TEAM_COLORS[i % 8], avatar: TEAM_AVATARS[i % 8],
+    score:0, coins:50, maxCoins:50, correct:0, fooled:0, spoken:0, totalVotes:0,
+    statements:['','',''], liePosition:2, badges:[],
+    streak:0, maxStreak:0, scatter:0, firstWin:false, perfectLie:false
+  };
+}
+
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    teams, speakerIndex, currentSpeakerId, round, speakerRound, roundsPerSpeaker,
+    phase, log, currentTwist, sessionTemplates, currentLanguage
+  }));
+  lastSaveAt = Date.now();
+  updateAutosaveLabel();
+}
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    teams = s.teams || [];
+    speakerIndex = s.speakerIndex || 0;
+    currentSpeakerId = s.currentSpeakerId || teams[0]?.id || null;
+    round = s.round || 0;
+    speakerRound = s.speakerRound || 0;
+    roundsPerSpeaker = s.roundsPerSpeaker || 1;
+    phase = s.phase || 'setup';
+    log = s.log || [];
+    currentTwist = s.currentTwist || null;
+    sessionTemplates = s.sessionTemplates || [];
+    currentLanguage = s.language || s.currentLanguage || 'en';
+  }catch(e){}
+}
+
+function updateAutosaveLabel(){
+  const el = $('autosaveLabel'); if(!el || !lastSaveAt) return;
+  const diff = Math.floor((Date.now() - lastSaveAt) / 1000);
+  el.textContent = diff < 5 ? 'Saved just now' : diff < 60 ? `Saved ${diff}s ago` : `Saved ${Math.floor(diff/60)}m ago`;
+}
+setInterval(updateAutosaveLabel, 5000);
+
+function setPhase(p){
+  phase = p;
+  ['setup','submit','vote','reveal','review'].forEach(x => $('flow-'+x).classList.toggle('active', x === p));
+  document.body.dataset.phase = p;
+  $('phaseStat').textContent = p[0].toUpperCase()+p.slice(1);
+}
+
+/* ---------- Players ---------- */
+function loadSampleTeams(announceIt=true){
+  teams = SAMPLE_PLAYERS.map(d => {
+    const t = defaultTeam(d.name, d.role);
+    t.statements = [...d.statements];
+    t.liePosition = d.liePosition;
+    return t;
+  });
+  speakerIndex = 0;
+  currentSpeakerId = teams[0].id;
+  saveState(); render();
+  if(announceIt) showToast('Sample players loaded', 'success');
+}
+
+function ensureTeams(){ if(teams.length < 3) loadSampleTeams(false); }
+
+function addTeam(){
+  const name = $('teamName').value.trim();
+  if(!name) return showToast('Add a player name', 'warning');
+  const members = $('teamMembers').value.trim();
+  const t = defaultTeam(name, members);
+  teams.push(t);
+  currentSpeakerId = currentSpeakerId || t.id;
+  $('teamName').value=''; $('teamMembers').value='';
+  saveState(); render(); showToast('Player added', 'success');
+}
+
+function removeTeam(id){
+  teams = teams.filter(t => t.id !== id);
+  if(currentSpeakerId === id) currentSpeakerId = teams[0]?.id || null;
+  if(editingTeamId === id) editingTeamId = null;
+  saveState(); render();
+}
+
+function editTeam(id){ editingTeamId = editingTeamId === id ? null : id; renderTeams(); }
+function setTeamColor(id, color){ const t=teams.find(x=>x.id===id); if(t){ t.color=color; saveState(); renderTeams(); } }
+function setTeamAvatar(id, av){ const t=teams.find(x=>x.id===id); if(t){ t.avatar=av; saveState(); renderTeams(); } }
+function saveTeamEdit(id){
+  const t = teams.find(x => x.id === id); if(!t) return;
+  const nm = document.getElementById('edit-name-'+id)?.value.trim();
+  const mb = document.getElementById('edit-mem-'+id)?.value.trim();
+  if(nm) t.name = nm; t.members = mb || t.members;
+  editingTeamId = null; saveState(); render(); showToast('Player updated', 'success');
+}
+
+function renderTeams(){
+  const host = $('teamList');
+  if(!teams.length){ host.innerHTML='<div class="empty">Add your first player, load demo players, or click Play Demo Now.</div>'; return; }
+  host.innerHTML = teams.map(t => {
+    const memberList = (t.members||'').split(/[,·\n]/).map(s=>s.trim()).filter(Boolean);
+    const memberPills = memberList.length ? `<div class="member-pills">${memberList.map(m=>`<span class="member-pill" style="--team-color:${t.color}">${safe(m)}</span>`).join('')}</div>` : '';
+    const lieReady = (t.statements||[]).every(s => s.trim()) ? '<span class="member-count" style="color:#047857">✓ Ready</span>' : '<span class="member-count" style="color:#B45309">✎ Needs statements</span>';
+    const edit = editingTeamId === t.id ? `
+      <div class="team-edit">
+        <h4>Customize player</h4>
+        <div class="form-row"><label>Name</label><input id="edit-name-${t.id}" value="${safe(t.name)}"></div>
+        <div class="form-row"><label>Role / members</label><textarea id="edit-mem-${t.id}">${safe(t.members||'')}</textarea></div>
+        <div class="swatch-row">${TEAM_COLORS.map(c=>`<button class="swatch ${t.color===c?'active':''}" style="background:${c}" onclick="setTeamColor('${t.id}','${c}')" aria-label="Color"></button>`).join('')}</div>
+        <div class="avatar-row">${TEAM_AVATARS.map(a=>`<button class="avatar-pick ${t.avatar===a?'active':''}" onclick="setTeamAvatar('${t.id}','${a}')">${a}</button>`).join('')}</div>
+        <div class="edit-actions"><button class="btn ghost btn-sm" onclick="editTeam('${t.id}')">Cancel</button><button class="btn btn-sm" onclick="saveTeamEdit('${t.id}')">Save</button></div>
+      </div>` : '';
+    return `<div class="team-item" style="--team-color:${t.color}">
+      <div class="team-avatar" style="background:${t.color}">${t.avatar}</div>
+      <div class="team-info">
+        <div class="team-name">${safe(t.name)} <span class="member-count">👥 ${memberList.length||1}</span> ${lieReady}</div>
+        <div class="team-meta">${safe(t.members||'Player')} · ${t.score} pts · 💰 ${t.coins}</div>
+        ${memberPills}
+        ${edit}
+      </div>
+      <div class="team-actions">
+        <button class="team-btn" onclick="editTeam('${t.id}')" aria-label="Edit">✎</button>
+        <button class="delete-team" onclick="removeTeam('${t.id}')" aria-label="Remove">×</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- Statement editor ---------- */
+function updateStatement(id, idx, value){
+  const t = teams.find(x => x.id === id); if(!t) return;
+  if(!t.statements) t.statements = ['','',''];
+  t.statements[idx] = value;
+  saveState(); renderJudge(); renderStmtEditor();
+}
+function setLiePosition(id, idx){
+  const t = teams.find(x => x.id === id); if(!t) return;
+  t.liePosition = idx;
+  saveState(); renderStmtEditor(); renderJudge();
+  showToast('Lie marker set (private)', 'success');
+}
+function renderStmtEditor(){
+  const host = $('stmtEditor'); if(!host) return;
+  if(!teams.length){ host.innerHTML='<div class="empty">Add players first. Each player needs 3 statements with one marked as the lie.</div>'; return; }
+  host.innerHTML = teams.map(t => {
+    const ready = (t.statements||[]).every(s => s.trim());
+    return `<div class="stmt-team" style="--team-color:${t.color}">
+      <div class="head"><div class="team-avatar" style="background:${t.color};width:36px;height:36px;font-size:18px;border-radius:12px">${t.avatar}</div>
+        <div><div class="team-name">${safe(t.name)}</div><div class="team-meta">${safe(t.members||'Player')} · the lie marker is private</div></div>
+        <span class="lock-pill ${ready?'done':''}">${ready?'✓ All 3 added':'✎ Needs statements'}</span>
+      </div>
+      ${[0,1,2].map(i => `
+        <div class="stmt-row">
+          <label>Statement ${i+1}</label>
+          <input value="${safe(t.statements?.[i]||'')}" placeholder="${i===2?'Try a believable lie...':'A real fact about you'}" onchange="updateStatement('${t.id}',${i},this.value)">
+          <label class="lie-row ${t.liePosition===i?'is-lie':''}"><input type="radio" name="lie-${t.id}" ${t.liePosition===i?'checked':''} onchange="setLiePosition('${t.id}',${i})"> Mark statement ${i+1} as the lie (private)</label>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+/* ---------- Judge view ---------- */
+function renderJudge(){
+  const host = $('judgeContent'); if(!host) return;
+  if(!judgeUnlocked){ host.innerHTML = '<div class="empty">Tab is locked. Click <strong>Judge</strong> in the tab row and confirm.</div>'; return; }
+  if(!teams.length){ host.innerHTML='<div class="empty">No players yet.</div>'; return; }
+  host.innerHTML = teams.map(t => `
+    <div class="judge-team" style="--team-color:${t.color}">
+      <h3><span class="team-avatar" style="background:${t.color};width:30px;height:30px;font-size:15px;border-radius:10px">${t.avatar}</span> ${safe(t.name)} <span class="member-count">${safe(t.members||'Player')}</span></h3>
+      ${(t.statements||['','','']).map((s, i) => {
+        const isLie = i === t.liePosition;
+        return `<div class="judge-stmt ${isLie?'lie':'truth'}"><span class="lbl">${isLie?'Lie':'Truth'}</span><span>${safe(s||'(not added yet)')}</span></div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+/* ---------- Round ---------- */
+function shuffle(arr){ return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]) }
+
+function startRound(){
+  ensureTeams();
+  const speaker = teams[speakerIndex % teams.length];
+  currentSpeakerId = speaker.id;
+  if(!speaker.statements.every(s => s.trim())){
+    switchView('submit');
+    showToast(`${speaker.name} needs 3 statements first`, 'warning');
+    return;
+  }
+  const raw = speaker.statements.map((text, i) => ({ text, type: i === speaker.liePosition ? 'lie' : 'truth' }));
+  currentStatements = shuffle(raw);
+  lieIndex = currentStatements.findIndex(s => s.type === 'lie');
+  voterQueue = teams.filter(t => t.id !== speaker.id).map(t => t.id);
+  currentVoterIndex = 0;
+  votes = {};
+  currentTwist = null;
+  round += 1;
+  remaining = Number($('timeSelect').value || 45);
+  setPhase('vote');
+  $('statusTitle').textContent = `Round ${round}: ${speaker.name} is speaking`;
+  $('statusSub').textContent = 'Vote for the statement you think is the lie.';
+  clearInterval(timer);
+  tickTimer();
+  timer = setInterval(() => {
+    remaining--;
+    tickTimer();
+    if(remaining <= 0){ clearInterval(timer); reveal(); }
+  }, 1000);
+  saveState(); render(); switchView('play');
+  announce(`Round ${round} started. ${speaker.name} is the speaker.`);
+}
+
+function tickTimer(){
+  const m = String(Math.floor(Math.max(0, remaining)/60)).padStart(2,'0');
+  const s = String(Math.max(0, remaining)%60).padStart(2,'0');
+  $('timer').textContent = `⏱ ${m}:${s}`;
+  const t = $('timer');
+  t.classList.toggle('warn', remaining <= 30 && remaining > 10);
+  t.classList.toggle('danger', remaining <= 10 && remaining > 0);
+  const totalTime = Number($('timeSelect').value || 45);
+  $('statusProgressFill').style.width = Math.max(0, Math.min(100, (remaining/totalTime)*100)) + '%';
+}
+
+function castVote(idx){
+  if(phase !== 'vote'){ return showToast('Voting not active', 'warning'); }
+  const voterId = voterQueue[currentVoterIndex];
+  if(!voterId){ return showToast('All voters have voted', 'warning'); }
+  votes[voterId] = idx;
+  currentVoterIndex = Math.min(currentVoterIndex + 1, voterQueue.length);
+  renderPlay();
+  showToast('Vote captured');
+  if(currentVoterIndex >= voterQueue.length){
+    setTimeout(() => { if(phase === 'vote') reveal(); }, 600);
+  }
+}
+function skipVoter(){
+  if(phase !== 'vote') return showToast('Start a round first','warning');
+  currentVoterIndex = Math.min(currentVoterIndex + 1, voterQueue.length);
+  renderPlay();
+}
+
+function reveal(){
+  if(!currentStatements.length) return showToast('Start a round first','warning');
+  undoSnapshot = JSON.stringify({teams, log, round, speakerRound, speakerIndex, currentSpeakerId});
+  clearInterval(timer);
+  const speaker = teams.find(t => t.id === currentSpeakerId);
+  const multiplier = currentTwist?.id === 'double' ? 2 : 1;
+  const mirror = currentTwist?.id === 'mirror';
+  const correctVoters = Object.entries(votes).filter(([_,v]) => mirror ? v !== lieIndex : v === lieIndex).map(([id]) => id);
+  const fooledCount = voterQueue.length - correctVoters.length;
+  // Update voters
+  correctVoters.forEach(id => {
+    const p = teams.find(x => x.id === id); if(!p) return;
+    p.score += 10 * multiplier;
+    p.correct = (p.correct||0) + 1;
+    p.coins += 10;
+    p.streak = (p.streak||0) + 1;
+    p.maxStreak = Math.max(p.maxStreak||0, p.streak);
+    p.maxCoins = Math.max(p.maxCoins||0, p.coins);
+  });
+  voterQueue.forEach(id => {
+    const p = teams.find(x => x.id === id); if(!p) return;
+    p.totalVotes = (p.totalVotes||0) + 1;
+    if(!correctVoters.includes(id)){ p.streak = 0; }
+  });
+  // Update speaker
+  if(speaker){
+    speaker.score += fooledCount * 5 * multiplier;
+    if(fooledCount >= Math.ceil(voterQueue.length/2)) speaker.score += 10 * multiplier;
+    if(fooledCount === voterQueue.length && voterQueue.length > 0){ speaker.score += 20 * multiplier; speaker.perfectLie = true; speaker.coins += 30; }
+    speaker.coins += fooledCount * 3;
+    speaker.maxCoins = Math.max(speaker.maxCoins||0, speaker.coins);
+    speaker.fooled = (speaker.fooled||0) + fooledCount;
+    speaker.spoken = (speaker.spoken||0) + 1;
+    // scatter: how many distinct statements got votes?
+    const distinct = new Set(Object.values(votes));
+    speaker.scatter = Math.max(speaker.scatter||0, distinct.size);
+  }
+  if(round === 1){
+    const winners = correctVoters.length ? correctVoters : (fooledCount >= Math.ceil(voterQueue.length/2) && speaker ? [speaker.id] : []);
+    winners.forEach(id => { const p = teams.find(x => x.id === id); if(p) p.firstWin = true; });
+  }
+  const review = generateReview(speaker, correctVoters.length, fooledCount);
+  log.push({round, speaker: speaker?.name||'-', lie: currentStatements[lieIndex]?.text||'-', correctVotes: correctVoters.length, fooled: fooledCount, twist: currentTwist?.name||null, review, time: new Date().toISOString()});
+  speakerRound += 1;
+  setPhase('reveal');
+  $('resultTitle').textContent = `The lie was statement ${lieIndex+1}`;
+  $('resultText').textContent = review.summary;
+  $('resultBanner').classList.add('show');
+  $('statusTitle').textContent = 'Round revealed';
+  $('statusSub').textContent = 'Scores updated. Click Next Speaker to continue.';
+  if(correctVoters.length > 0 || (speaker && fooledCount > 0)) fireConfetti();
+  showUndoBanner(`Round ${round} saved. Undo recomputes all scores.`);
+  saveState(); render(); switchView('play'); beep();
+  openSummary(speaker, correctVoters, fooledCount);
+  announce(`Round revealed. The lie was statement ${lieIndex+1}.`);
+  const maxRounds = teams.length * roundsPerSpeaker;
+  if(speakerRound >= maxRounds){
+    setTimeout(() => openFinalWinner(), 1200);
+  }
+}
+
+function generateReview(speaker, correct, fooled){
+  const total = voterQueue.length || 1;
+  const fooledRate = Math.round((fooled/total)*100);
+  let summary, points = [];
+  if(fooledRate >= 60){
+    summary = `${speaker?.name||'The speaker'} fooled most of the room (${fooledRate}%). The lie blended believably with two real statements.`;
+    points.push('Strong deception balance — the lie sounded realistic and specific.');
+  } else if(correct >= Math.ceil(total*.7)){
+    summary = `Most players spotted the lie (${correct}/${total}). It was probably too extreme or too generic.`;
+    points.push('Tighten the lie — anchor it in a plausible detail (a place, a number, a year).');
+  } else {
+    summary = `Balanced round (${correct} caught · ${fooled} fooled). The lie was close to believable but not airtight.`;
+    points.push('Good mix of truth and lie. Healthy uncertainty in the room.');
+  }
+  points.push('Best lies pair a real-sounding detail with a small twist the listener can\'t verify.');
+  points.push('Avoid lies that are too impossible ("I climbed Everest") or too generic ("I love coffee").');
+  return {summary, points, correct, fooled, fooledRate};
+}
+
+function nextSpeaker(){
+  if(!teams.length) return;
+  speakerIndex = (speakerIndex + 1) % teams.length;
+  currentSpeakerId = teams[speakerIndex].id;
+  currentStatements = []; votes = {}; voterQueue = []; currentVoterIndex = 0; currentTwist = null;
+  $('resultBanner').classList.remove('show');
+  setPhase('submit');
+  saveState(); render();
+  showToast(`Next speaker: ${teams[speakerIndex].name}`);
+}
+
+function shuffleStatements(){
+  if(!currentStatements.length) return showToast('Start a round first','warning');
+  currentStatements = shuffle(currentStatements);
+  lieIndex = currentStatements.findIndex(s => s.type === 'lie');
+  votes = {}; currentVoterIndex = 0;
+  renderPlay(); showToast('Statements re-shuffled');
+}
+
+function applyTwist(){
+  if(phase !== 'vote' && phase !== 'submit') return showToast('Start a round first','warning');
+  currentTwist = TWISTS[Math.floor(Math.random()*TWISTS.length)];
+  if(currentTwist.id === 'speed'){ remaining = Math.min(remaining, 15); tickTimer(); }
+  if(currentTwist.id === 'shuffle'){ currentStatements = shuffle(currentStatements); lieIndex = currentStatements.findIndex(s => s.type === 'lie'); votes = {}; currentVoterIndex = 0; }
+  saveState(); renderPlay();
+  showToast(`Plot twist: ${currentTwist.name}`, 'warning');
+  announce(`Plot twist: ${currentTwist.name}. ${currentTwist.desc}`);
+}
+
+/* ---------- Render ---------- */
+function renderPlay(){
+  const speaker = teams.find(t => t.id === currentSpeakerId);
+  $('speakerPill').textContent = speaker ? `Round ${round||1} · Speaker: ${speaker.name}` : 'No speaker selected';
+  $('speakerName').textContent = speaker ? speaker.name : 'Start the game';
+  $('speakerSub').textContent = speaker ? `${speaker.members||'Player'} · find the lie among three statements` : 'Click Start Round.';
+  const av = $('speakerAvatar');
+  if(speaker){ av.textContent = speaker.avatar; av.style.background = speaker.color; }
+  $('sumSpeaker').textContent = speaker?.name || '-';
+  $('sumVotes').textContent = Object.keys(votes).length;
+  const correct = Object.values(votes).filter(v => v === lieIndex).length;
+  $('sumCorrect').textContent = correct;
+  $('sumFooled').textContent = Object.keys(votes).length - correct;
+  // Voter card
+  const voter = teams.find(t => t.id === voterQueue[currentVoterIndex]);
+  const vc = $('voterCard');
+  if(voter){ vc.className = 'voter-card'; vc.innerHTML = `<strong>${safe(voter.name)}</strong> — pick the statement you think is the lie.`; }
+  else { vc.className = 'voter-card empty'; vc.innerHTML = voterQueue.length ? 'All voters have voted. Reveal the lie.' : 'No active round. Click ▶ Start Round.'; }
+  // Voter chips
+  const anon = currentTwist?.id === 'anon' && phase === 'vote';
+  $('voterGrid').innerHTML = voterQueue.length ? voterQueue.map((id, i) => {
+    const p = teams.find(x => x.id === id); const done = votes[id] !== undefined; const cur = i === currentVoterIndex && !done;
+    return `<div class="voter-chip ${done?'done':''} ${cur?'current':''}"><span>${anon && !done ? 'Anonymous' : safe(p?.name||'Voter')}</span><strong>${done?'Voted':cur?'Voting':'Waiting'}</strong></div>`;
+  }).join('') : '<div class="empty" style="padding:12px">No voters yet.</div>';
+  // Twist card
+  const tc = $('twistCard');
+  if(currentTwist){ tc.innerHTML = `<strong>🎲 ${safe(currentTwist.name)}</strong><span>${safe(currentTwist.desc)}</span>`; }
+  else { tc.innerHTML = '<strong>No plot twist</strong><span>Click 🎲 Plot Twist mid-round to spice things up.</span>'; }
+  // Statements
+  const grid = $('statementGrid');
+  if(!currentStatements.length){ grid.innerHTML = '<div class="empty">Click <strong>Start Round</strong> to show the speaker\'s statements.</div>'; return; }
+  const totalVotes = Math.max(1, Object.keys(votes).length);
+  const revealed = phase === 'reveal' || phase === 'review';
+  grid.innerHTML = currentStatements.map((s, i) => {
+    const count = Object.values(votes).filter(v => v === i).length;
+    const pct = Math.round((count/totalVotes)*100);
+    const selectedByCurrent = voter && votes[voter.id] === i;
+    const cls = `statement-card ${revealed?'revealed '+s.type:''} ${selectedByCurrent?'selected':''} ${revealed?'':''}`;
+    return `<div class="${cls}" onclick="castVote(${i})">
+      <div class="stmt-head"><span class="statement-num">${i+1}</span><span class="statement-text">${safe(s.text)}</span></div>
+      <div class="vote-bar"><div class="vote-fill" style="width:${pct}%"></div></div>
+      <div class="vote-meta"><span>${count} vote${count===1?'':'s'}</span><span>${revealed?(s.type==='lie'?'❌ Lie':'✅ Truth'):'Click to vote'}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderLeaderboard(){
+  const sorted = [...teams].sort((a,b) => b.score - a.score);
+  $('leaderboard').innerHTML = sorted.length ? sorted.map((p,i) => {
+    const cls = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    return `<div class="leader-item ${cls} ${i===0?'leader':''}" style="--team-color:${p.color}">
+      <div class="rank">${i+1}</div>
+      <div class="team-avatar" style="background:${p.color};width:38px;height:38px;font-size:18px;border-radius:12px">${p.avatar}</div>
+      <div><div class="team-name">${safe(p.name)}</div><div class="team-meta">${safe(p.members||'Player')} · ${p.correct||0} caught · ${p.fooled||0} fooled · 💰 ${p.coins}</div></div>
+      <div class="leader-score">${p.score}<small>points</small></div>
+    </div>`;
+  }).join('') : '<div class="empty">No players yet.</div>';
+}
+
+function renderReview(){
+  const last = log[log.length-1];
+  if(!last){ $('reviewContent').innerHTML = '<div class="empty">No review yet. Finish a round first.</div>'; return; }
+  const trainingUrl = 'https://www.edstellar.com/course/critical-thinking';
+  $('reviewContent').innerHTML = `<div class="panel" style="padding:18px;border-radius:18px">
+    <h3>Round ${last.round} · ${safe(last.speaker)}</h3>
+    <p style="margin:4px 0 10px;line-height:1.55"><strong>Summary:</strong> ${safe(last.review.summary)}</p>
+    <div class="stat-grid" style="margin:10px 0">
+      <div class="stat-box"><span class="stat-label">Caught</span><span class="stat-value">${last.correctVotes}</span></div>
+      <div class="stat-box"><span class="stat-label">Fooled</span><span class="stat-value">${last.fooled}</span></div>
+      <div class="stat-box"><span class="stat-label">Fooled rate</span><span class="stat-value">${last.review.fooledRate}%</span></div>
+      <div class="stat-box"><span class="stat-label">Plot twist</span><span class="stat-value" style="font-size:14px">${safe(last.twist||'None')}</span></div>
+    </div>
+    <ul style="line-height:1.7;margin:8px 0 0;padding-left:18px">${last.review.points.map(p=>`<li>${safe(p)}</li>`).join('')}</ul>
+    <p style="margin-top:12px;font-size:13px"><strong>Reinforce at work →</strong> <a href="${trainingUrl}" target="_blank" rel="noopener">Edstellar Critical Thinking training</a> sharpens the same listen-and-detect skill this game exercises.</p>
+  </div>`;
+}
+
+function renderAwards(){
+  if(!teams.length){ $('awardsList').innerHTML='<div class="empty">No awards yet.</div>'; return; }
+  $('awardsList').innerHTML = BADGES.map(b => {
+    const winners = teams.filter(p => { try { return b.check(p, teams); } catch(e){ return false; } });
+    const earned = winners.length > 0;
+    return `<div class="award-card ${earned?'earned':'locked'}">
+      <div class="award-icon">${b.icon}</div>
+      <div class="award-name">${b.name}</div>
+      <div class="award-desc">${b.desc}</div>
+      <div class="award-by">${earned ? winners.slice(0,2).map(w=>safe(w.name)).join(', ') + (winners.length>2?` +${winners.length-2}`:'') : 'Locked'}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderLog(){
+  $('roundLog').innerHTML = log.length ? log.slice().reverse().map(x => `
+    <div class="log-item">
+      <div class="team-name">Round ${x.round} · ${safe(x.speaker)}</div>
+      <div class="team-meta">Caught ${x.correctVotes} · Fooled ${x.fooled}${x.twist?' · 🎲 '+safe(x.twist):''} · ${new Date(x.time).toLocaleString()}</div>
+      <p style="margin:6px 0 0;font-size:13px;line-height:1.5"><strong>Lie:</strong> "${safe(x.lie)}"</p>
+      <p style="margin:4px 0 0;font-size:13px;line-height:1.5">${safe(x.review.summary)}</p>
+    </div>`).join('') : '<div class="empty">No completed rounds yet.</div>';
+}
+
+function updateEstimator(){
+  const dur = Number($('timeSelect')?.value || 45);
+  const rps = Number($('rpsSelect')?.value || 1);
+  const total = teams.length * rps * (dur + 30);
+  $('estTime').textContent = teams.length ? '~' + Math.max(1, Math.round(total/60)) + ' min' : '~9 min';
+  roundsPerSpeaker = rps;
+}
+
+function updateRosterCount(){ $('rosterCount').textContent = teams.length + (teams.length===1?' team':' teams') }
+
+function updateStartCta(){
+  const btn = $('startGameBtn'); const help = $('startCtaHelp');
+  if(!btn) return;
+  const ready = teams.length >= 3;
+  btn.disabled = !ready;
+  const maxRounds = teams.length * roundsPerSpeaker;
+  if(!ready){ btn.textContent='▶ Start Game'; help.textContent='Add at least 3 players to start.'; }
+  else if(speakerRound >= maxRounds && log.length){ btn.textContent='↻ New game'; help.textContent='Last game complete.'; }
+  else if(round > 0){ btn.textContent='▶ Continue: Round '+(round+1); help.textContent='Resume from where you left off.'; }
+  else { btn.textContent='▶ Start Game · '+teams.length+(teams.length===1?' team':' teams'); help.textContent=$('estTime')?.textContent+' total · '+maxRounds+' rounds'; }
+}
+
+function renderSnapshot(){
+  $('teamCount').textContent = teams.length;
+  const maxRounds = Math.max(0, teams.length * roundsPerSpeaker);
+  $('roundCount').textContent = round + ' / ' + (maxRounds || '—');
+  $('speakersDone').textContent = speakerRound;
+  document.body.dataset.teams = String(teams.length);
+  document.body.dataset.roundsPlayed = String(log.length);
+  const leader = [...teams].sort((a,b)=>b.score-a.score)[0];
+  $('leaderName').textContent = leader?.name || 'No teams yet';
+  $('leaderScoreSnap').textContent = (leader?.score||0) + ' points';
+  $('leaderCoins').textContent = leader?.coins || 50;
+}
+
+function render(){
+  renderSnapshot();
+  renderTeams();
+  renderStmtEditor();
+  renderJudge();
+  renderPlay();
+  renderLeaderboard();
+  renderReview();
+  renderAwards();
+  renderLog();
+  renderTemplates();
+  setPhase(phase);
+  updateEstimator();
+  updateRosterCount();
+  updateStartCta();
+}
+
+/* ---------- Tabs (with Judge gate) ---------- */
+function switchView(v){
+  if(v === 'judge' && !judgeUnlocked){
+    $('judgeGateOverlay').classList.add('show');
+    return;
+  }
+  ['play','submit','judge','leaderboard','review','awards','log'].forEach(x => $(x+'View').classList.toggle('hidden', x !== v));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === v));
+  // Auto-lock judge whenever leaving it
+  if(v !== 'judge') judgeUnlocked = false;
+  if(v === 'awards') renderAwards();
+  if(v === 'judge') renderJudge();
+}
+
+function confirmJudge(yes){
+  $('judgeGateOverlay').classList.remove('show');
+  if(yes){ judgeUnlocked = true; switchView('judge'); announce('Judge view unlocked. Hide screen from players.'); }
+}
+
+/* ---------- Modals ---------- */
+function openHow(){ $('howOverlay').classList.add('show') }
+function closeHow(){ $('howOverlay').classList.remove('show') }
+function openCheat(){ $('cheatOverlay').classList.add('show') }
+function closeCheat(){ $('cheatOverlay').classList.remove('show') }
+function closeSummary(){ $('summaryOverlay').classList.remove('show') }
+function openShop(){ renderShop(); $('shopOverlay').classList.add('show') }
+function closeShop(){ $('shopOverlay').classList.remove('show') }
+
+function openSummary(speaker, correctVoters, fooledCount){
+  if(!speaker) return;
+  const ranked = [...teams].sort((a,b)=>b.score-a.score);
+  const winners = correctVoters.map(id => teams.find(t=>t.id===id)).filter(Boolean);
+  const winnerName = fooledCount > correctVoters.length ? speaker.name + ' (fooled the room)' : winners.length ? winners[0].name : 'Tied round';
+  const winnerScore = fooledCount > correctVoters.length ? `${fooledCount} fooled · +${fooledCount*5} pts` : `${correctVoters.length} caught the lie`;
+  $('summaryWinnerName').textContent = winnerName;
+  $('summaryWinnerScore').textContent = winnerScore;
+  $('summaryGrid').innerHTML = ranked.map((p,i)=>{
+    const isWinner = i===0;
+    const delta = correctVoters.includes(p.id) ? '+10 caught' : p.id===speaker.id ? `+${fooledCount*5} fooled` : '—';
+    return `<div class="summary-row-final">
+      <span class="rank">${i+1}</span>
+      <div class="team-avatar" style="background:${p.color};width:34px;height:34px;font-size:16px;border-radius:11px">${p.avatar}</div>
+      <div><div class="team-name">${safe(p.name)}${isWinner?' 👑':''}</div><div class="team-meta">${p.score} total · 💰 ${p.coins}</div></div>
+      <span class="delta">${delta}</span>
+    </div>`;
+  }).join('');
+  $('summaryOverlay').classList.add('show');
+}
+
+function openFinalWinner(){
+  const ranked = [...teams].sort((a,b)=>b.score-a.score);
+  const champ = ranked[0]; if(!champ) return;
+  champ.badges = [...new Set([...(champ.badges||[]), 'champion'])];
+  saveState();
+  $('summaryWinnerName').textContent = `🏆 ${champ.name} wins the game`;
+  $('summaryWinnerScore').textContent = `${champ.score} total points · ${champ.correct||0} caught · ${champ.fooled||0} fooled`;
+  $('summaryGrid').innerHTML = ranked.map((p,i)=>`<div class="summary-row-final"><span class="rank">${i+1}</span><div class="team-avatar" style="background:${p.color};width:34px;height:34px;font-size:16px;border-radius:11px">${p.avatar}</div><div><div class="team-name">${safe(p.name)}</div><div class="team-meta">${safe(p.members||'Player')} · 💰 ${p.coins}</div></div><span class="delta">${p.score} pts</span></div>`).join('');
+  $('summaryOverlay').classList.add('show');
+  fireConfetti(); setTimeout(fireConfetti, 850);
+  announce(`${champ.name} wins the game with ${champ.score} points.`);
+}
+
+/* ---------- Shop ---------- */
+function renderShop(){
+  const sel = $('shopTeam'); sel.innerHTML = teams.map(t => `<option value="${t.id}">${safe(t.name)} · 💰 ${t.coins}</option>`).join('');
+  if(currentSpeakerId) sel.value = voterQueue[currentVoterIndex] || currentSpeakerId;
+  const tid = sel.value;
+  const t = teams.find(x => x.id === tid);
+  $('shopGrid').innerHTML = POWER_UPS.map(p => {
+    const canAfford = t && t.coins >= p.cost;
+    return `<div class="shop-card ${canAfford?'':'locked'}">
+      <div class="ico">${p.icon}</div>
+      <div class="nm">${p.name}</div>
+      <div class="cs">${p.cost} coins · ${p.desc}</div>
+      <button class="btn ${canAfford?'success':'ghost'} btn-sm" ${canAfford?'':'disabled'} onclick="buyPowerUp('${tid}','${p.id}')">Buy · ${p.cost}c</button>
+    </div>`;
+  }).join('');
+}
+function buyPowerUp(tid, pid){
+  const t = teams.find(x => x.id === tid); const p = POWER_UPS.find(x => x.id === pid);
+  if(!t || !p) return;
+  if(t.coins < p.cost) return showToast('Not enough coins','warning');
+  t.coins -= p.cost;
+  if(pid === 'random'){ const idx = Math.floor(Math.random()*currentStatements.length); votes[tid] = idx; }
+  saveState(); renderShop(); renderPlay(); showToast(`${p.name} activated for ${t.name}`, 'success');
+}
+
+/* ---------- Share ---------- */
+function buildShareLink(){
+  // Strip statements/lie for privacy
+  const state = {
+    teams: teams.map(t => ({...t, statements:['','',''], liePosition:2})),
+    log, language: currentLanguage, round, speakerRound, roundsPerSpeaker,
+    hasHiddenInfo: true
+  };
+  const enc = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+  return location.origin + location.pathname + '#s=' + enc;
+}
+function buildSlackCard(){
+  const ranked = [...teams].sort((a,b)=>(b.score||0)-(a.score||0));
+  const champ = ranked[0];
+  const head = ':detective: *Two Truths and a Lie - Edstellar Engage*';
+  const lead = champ ? `Leader: *${champ.name}* with *${champ.score} pts*` : 'Game in progress';
+  const stats = `Rounds: ${log.length} · Best deceiver: ${[...teams].sort((a,b)=>(b.fooled||0)-(a.fooled||0))[0]?.name || '—'}`;
+  return `${head}\n${lead}\n${stats}\nReplay (state-only, statements stripped): ${buildShareLink()}`;
+}
+function buildEmbed(){ return `<iframe src="${location.origin}${location.pathname}?mode=present" width="600" height="800" frameborder="0" allow="fullscreen"></iframe>`; }
+function openShare(){ $('shareUrl').value = buildShareLink(); $('slackCard').textContent = buildSlackCard(); $('embedSnippet').value = buildEmbed(); $('shareOverlay').classList.add('show'); }
+function closeShare(){ $('shareOverlay').classList.remove('show') }
+function copyToClipboard(text){ navigator.clipboard?.writeText(text).then(()=>showToast('Copied!','success'),()=>showToast('Copy failed','warning')) }
+function loadFromHash(){
+  if(!location.hash.startsWith('#s=')) return false;
+  try{
+    const enc = location.hash.slice(3);
+    const s = JSON.parse(decodeURIComponent(escape(atob(enc))));
+    teams = s.teams || teams;
+    log = s.log || [];
+    currentLanguage = s.language || 'en';
+    round = s.round || 0; speakerRound = s.speakerRound || 0;
+    roundsPerSpeaker = s.roundsPerSpeaker || 1;
+    showToast('Loaded shared session', 'success');
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ---------- Exports ---------- */
+function download(filename, content, mime='application/json'){
+  const blob = new Blob([content], {type: mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+function exportReport(){
+  const report = { game:'Two Truths and a Lie - Edstellar Engage', exportedAt: new Date().toISOString(), teams, log, language: currentLanguage };
+  download('two-truths-and-a-lie-report.json', JSON.stringify(report, null, 2));
+  showToast('Report exported', 'success');
+}
+function exportCsv(){
+  const rows = [['round','speaker','lie','correctVotes','fooled','twist','time']];
+  log.forEach(x => rows.push([x.round, x.speaker, x.lie, x.correctVotes, x.fooled, x.twist||'', x.time]));
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  download('two-truths-and-a-lie-log.csv', csv, 'text/csv');
+  showToast('CSV exported', 'success');
+}
+
+/* ---------- Reminder ---------- */
+function downloadIcs(days=14){
+  const start = new Date(Date.now() + days*24*60*60*1000); start.setHours(10,0,0,0);
+  const end = new Date(start.getTime() + 30*60*1000);
+  const fmt = d => d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/, '');
+  const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Edstellar Engage//Two Truths and a Lie//EN','BEGIN:VEVENT','UID:'+makeId()+'@edstellar.com','DTSTAMP:'+fmt(new Date()),'DTSTART:'+fmt(start),'DTEND:'+fmt(end),'SUMMARY:Two Truths and a Lie - Reinforcement Session','DESCRIPTION:Replay with the same teams. Beat the forgetting curve.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  download('two-truths-and-a-lie-reminder.ics', ics, 'text/calendar');
+  showToast('Reminder downloaded', 'success');
+}
+
+/* ---------- Modes / Streak / Language / Templates ---------- */
+function detectMode(){
+  const params = new URLSearchParams(location.search);
+  const mode = params.get('mode');
+  if(mode==='present'){ document.body.classList.add('mode-present'); $('modeBanner').innerHTML = '📺 Presenter mode · <a href="?">exit</a>'; }
+  else if(mode==='play'){ document.body.classList.add('mode-play'); $('modeBanner').innerHTML = '📱 Player mode · <a href="?">exit</a>'; }
+}
+function updateStreak(){
+  const last = Number(localStorage.getItem('edstellarTwoTruthsLieLastSession') || 0);
+  let streak = Number(localStorage.getItem('edstellarTwoTruthsLieStreak') || 0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if(last){ const lastDay = new Date(last); lastDay.setHours(0,0,0,0); const days = Math.floor((today-lastDay)/(1000*60*60*24)); if(days===0){} else if(days===1) streak += 1; else streak = 1; }
+  else streak = 1;
+  localStorage.setItem('edstellarTwoTruthsLieStreak', String(streak));
+  localStorage.setItem('edstellarTwoTruthsLieLastSession', String(Date.now()));
+  if(streak >= 2){ $('streakPill').style.display = 'inline-flex'; $('streakDays').textContent = streak; }
+}
+function setLanguage(lang){ currentLanguage = lang; document.documentElement.lang = lang; document.body.dir = lang==='ar'?'rtl':'ltr'; const sel=$('langSelect'); if(sel) sel.value=lang; saveState(); }
+function saveSessionTemplate(){
+  const name = prompt('Template name?', 'Quick Game'); if(!name) return;
+  sessionTemplates.push({ id:makeId(), name, time:$('timeSelect').value, rps:$('rpsSelect').value, language:currentLanguage });
+  saveState(); renderTemplates(); showToast('Template saved', 'success');
+}
+function loadSessionTemplate(id){
+  const t = sessionTemplates.find(x => x.id === id); if(!t) return;
+  $('timeSelect').value = t.time; if(t.rps) $('rpsSelect').value = t.rps; if(t.language) setLanguage(t.language);
+  saveState(); updateEstimator(); showToast('Loaded: '+t.name);
+}
+function deleteSessionTemplate(id){ sessionTemplates = sessionTemplates.filter(t => t.id !== id); saveState(); renderTemplates(); }
+function renderTemplates(){
+  const host = $('templateList'); if(!host) return;
+  host.innerHTML = sessionTemplates.length ? sessionTemplates.map(t => `<span class="template-pill" onclick="loadSessionTemplate('${t.id}')">${safe(t.name)}<span class="x" onclick="event.stopPropagation();deleteSessionTemplate('${t.id}')">×</span></span>`).join('') : '<span class="hint" style="margin:0">No saved templates yet.</span>';
+}
+
+/* ---------- Undo ---------- */
+function showUndoBanner(msg){
+  $('undoText').textContent = msg;
+  $('undoBanner').classList.add('show');
+  clearTimeout(showUndoBanner._t);
+  showUndoBanner._t = setTimeout(() => $('undoBanner').classList.remove('show'), 12000);
+}
+function undoLastReveal(){
+  if(!undoSnapshot) return showToast('Nothing to undo','warning');
+  try{
+    const s = JSON.parse(undoSnapshot);
+    teams = s.teams; log = s.log; round = s.round; speakerRound = s.speakerRound; speakerIndex = s.speakerIndex; currentSpeakerId = s.currentSpeakerId;
+    undoSnapshot = null;
+    setPhase('vote');
+    saveState(); render();
+    $('undoBanner').classList.remove('show');
+    showToast('Last reveal undone', 'success'); announce('Last reveal undone.');
+  }catch(e){ showToast('Undo failed','warning'); }
+}
+
+/* ---------- High contrast ---------- */
+function applyHc(on){ document.body.classList.toggle('hc', !!on); const t=$('hcToggle'); if(t) t.checked=!!on; localStorage.setItem('edstellarTwoTruthsLieHC', on?'1':'0'); }
+
+/* ---------- Confetti / beep ---------- */
+function fireConfetti(){
+  const c = $('confetti'); if(!c) return;
+  const ctx = c.getContext('2d'); c.width = window.innerWidth; c.height = window.innerHeight;
+  const colors = ['#0B3C5D','#2563EB','#10B981','#F59E0B','#7C3AED','#EC4899','#38BDF8'];
+  const parts = Array.from({length:120}, () => ({x:c.width/2+(Math.random()-.5)*120,y:c.height/2+(Math.random()-.5)*60,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,g:.35+Math.random()*.2,s:4+Math.random()*6,r:Math.random()*Math.PI,vr:(Math.random()-.5)*.3,color:colors[Math.floor(Math.random()*colors.length)],life:80+Math.random()*60}));
+  function tick(){ ctx.clearRect(0,0,c.width,c.height); let alive=false; parts.forEach(p=>{ if(p.life--<=0)return; alive=true; p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.r+=p.vr; ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.color;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.4);ctx.restore(); }); if(alive)requestAnimationFrame(tick); else ctx.clearRect(0,0,c.width,c.height); }
+  tick();
+}
+window.addEventListener('resize', () => { const c=$('confetti'); if(c){ c.width=window.innerWidth; c.height=window.innerHeight; }});
+function beep(freq=760, ms=220){ try{ const a=new(window.AudioContext||window.webkitAudioContext)(); const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=freq;g.gain.setValueAtTime(.08,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+ms/1000);o.start();setTimeout(()=>{o.stop();a.close()},ms); }catch(e){} }
+async function fullscreenMode(){ try{ if(!document.fullscreenElement && document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen(); }catch(e){} }
+
+/* ---------- Reset ---------- */
+function reset(){
+  if(!confirm('Reset all game state? This clears teams, statements, rounds, and saved progress.')) return;
+  clearInterval(timer);
+  teams = []; speakerIndex = 0; currentSpeakerId = null; currentStatements = []; lieIndex = null;
+  voterQueue = []; currentVoterIndex = 0; votes = {}; round = 0; speakerRound = 0;
+  phase = 'setup'; log = []; currentTwist = null; undoSnapshot = null; editingTeamId = null;
+  judgeUnlocked = false;
+  localStorage.removeItem(STORAGE_KEY);
+  $('timer').textContent = '⏱ 00:00';
+  $('statusTitle').textContent = 'Ready to play';
+  $('statusSub').textContent = 'Click Play Demo Now or add players.';
+  $('resultBanner').classList.remove('show');
+  render(); switchView('play');
+  showToast('Game reset', 'success'); announce('Game reset.');
+}
+
+/* ===========================================================
+   WIRE UP
+=========================================================== */
+$('demoBtn').onclick = () => { fullscreenMode(); if(teams.length < 3) loadSampleTeams(false); startRound(); showToast('Demo started','success'); };
+$('setupBtn').onclick = () => { $('setupPanel').scrollIntoView({behavior:'smooth'}); setPhase('setup'); };
+$('howBtn').onclick = openHow;
+$('closeHow').onclick = closeHow;
+$('howClose2').onclick = closeHow;
+$('howDemo').onclick = () => { closeHow(); fullscreenMode(); if(teams.length<3) loadSampleTeams(false); startRound(); };
+$('howOverlay').onclick = e => { if(e.target.id==='howOverlay') closeHow(); };
+
+$('sampleBtn').onclick = () => loadSampleTeams(true);
+$('addTeamBtn').onclick = addTeam;
+$('teamName').addEventListener('keydown', e => { if(e.key==='Enter') addTeam(); });
+$('resetBtn').onclick = reset;
+$('saveTemplateBtn').onclick = saveSessionTemplate;
+$('langSelect').addEventListener('change', e => setLanguage(e.target.value));
+['timeSelect','rpsSelect'].forEach(id => $(id).addEventListener('change', () => { updateEstimator(); updateStartCta(); saveState(); }));
+
+$('startRoundBtn').onclick = startRound;
+$('twistBtn').onclick = applyTwist;
+$('revealBtn').onclick = reveal;
+$('nextSpeakerBtn').onclick = nextSpeaker;
+$('shuffleBtn').onclick = shuffleStatements;
+$('skipVoterBtn').onclick = skipVoter;
+$('shopBtn').onclick = openShop;
+$('shopClose').onclick = closeShop;
+$('shopTeam').onchange = renderShop;
+$('shopOverlay').onclick = e => { if(e.target.id==='shopOverlay') closeShop(); };
+
+$('startGameBtn').onclick = () => {
+  if(teams.length < 3){ showToast('Add at least 3 players','warning'); return; }
+  const maxRounds = teams.length * roundsPerSpeaker;
+  if(speakerRound >= maxRounds && log.length){ reset(); return; }
+  startRound();
+};
+
+$('exportBtn').onclick = exportReport;
+$('exportCsvBtn').onclick = exportCsv;
+$('shareBtn').onclick = openShare;
+$('reminderBtn').onclick = () => downloadIcs(14);
+
+$('cheatBtn').onclick = openCheat;
+$('cheatClose').onclick = closeCheat;
+$('cheatCloseBottom').onclick = closeCheat;
+$('cheatOverlay').onclick = e => { if(e.target.id==='cheatOverlay') closeCheat(); };
+
+$('shareClose').onclick = closeShare;
+$('shareOverlay').onclick = e => { if(e.target.id==='shareOverlay') closeShare(); };
+$('copyShareUrl').onclick = () => copyToClipboard($('shareUrl').value);
+$('copySlackCard').onclick = () => copyToClipboard($('slackCard').textContent);
+$('copyEmbed').onclick = () => copyToClipboard($('embedSnippet').value);
+$('presenterModeBtn').onclick = () => window.open(location.pathname+'?mode=present','_blank');
+$('playerModeBtn').onclick = () => window.open(location.pathname+'?mode=play','_blank');
+
+$('summaryClose').onclick = closeSummary;
+$('summaryNext').onclick = () => { closeSummary(); nextSpeaker(); };
+$('undoBtn').onclick = undoLastReveal;
+
+$('judgeGateConfirm').onclick = () => confirmJudge(true);
+$('judgeGateCancel').onclick = () => confirmJudge(false);
+$('judgeGateOverlay').onclick = e => { if(e.target.id==='judgeGateOverlay') confirmJudge(false); };
+
+$('hcToggle').addEventListener('change', e => applyHc(e.target.checked));
+
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => switchView(t.dataset.view));
+
+document.addEventListener('keydown', e => {
+  if(e.target.matches('input,textarea,select')) return;
+  if(e.key==='Escape'){ closeHow(); closeCheat(); closeShare(); closeSummary(); closeShop(); $('judgeGateOverlay').classList.remove('show'); return; }
+  if(e.key==='?' || (e.shiftKey && e.key==='/')){ e.preventDefault(); openCheat(); }
+  if(e.key===' '){ e.preventDefault(); startRound(); }
+  const k = e.key.toLowerCase();
+  if(k==='d') reveal();
+  if(k==='t') applyTwist();
+  if(k==='n') nextSpeaker();
+  if(k==='v') skipVoter();
+  if(k==='p') switchView('play');
+  if(k==='s') switchView('submit');
+  if(k==='j') switchView('judge');
+  if(k==='l') switchView('leaderboard');
+  if(k==='r') switchView('review');
+  if(k==='a') switchView('awards');
+});
+
+/* Boot */
+detectMode();
+loadFromHash();
+loadState();
+updateStreak();
+setLanguage(currentLanguage);
+render();
+applyHc(localStorage.getItem('edstellarTwoTruthsLieHC')==='1');
+if(!localStorage.getItem('edstellarTwoTruthsLieHowSeen') && !document.body.classList.contains('mode-present') && !document.body.classList.contains('mode-play')){
+  setTimeout(openHow, 450);
+  localStorage.setItem('edstellarTwoTruthsLieHowSeen', '1');
+}
+</script>
+</body>
+</html>

@@ -9318,80 +9318,71 @@
     {
       "id": "g126",
       "slug": "egg-drop",
-      "title": "Egg Drop Challenge Pro",
+      "title": "Egg Drop",
       "category": "Critical Thinking",
       "audience": [
         "All employees"
       ],
       "format": "Live",
-      "duration": "30-60 min",
-      "durationBucket": "30-60",
-      "team": "4-20",
-      "teamBucket": "10-50",
+      "duration": "20-45 minutes",
+      "durationBucket": "15-30",
+      "team": "3-6 participants per team",
+      "teamBucket": "2-10",
       "difficulty": "Medium",
       "facilitator": "Optional",
       "reinforcesTraining": false,
-      "concept": "Teams design a protective structure for a raw egg, manage a 100-budget across 10 materials, navigate 6 random events, and run 3 escalating drop tests (Desk - Balcony - Building). Drag-and-drop build interface, auto-generated review per drop, 10 achievement badges, podium-style leaderboard. 14 languages, presenter & player modes, sharable session URL.",
+      "concept": "Protective structure for egg drops",
       "businessPurpose": "Collaboration; creative engineering",
       "skills": [
-        "Design Thinking",
-        "Resource Allocation",
-        "Iteration under Pressure",
-        "Trade-off Analysis",
-        "Team Collaboration"
+        "Collaboration",
+        "Critical Thinking",
+        "Creativity"
       ],
       "materials": "Eggs, tape, straws, paper, rubber bands, cotton balls, balloons, newspapers, drop area.",
       "howToPlay": [
-        "Each team starts with 100 budget. Pick a category, difficulty, and round count.",
-        "Drag materials (straws, tape, cotton, balloon, etc.) onto the egg. Placement matters - cushion at bottom, drag on top, structure on sides.",
-        "Build timer counts down (60-180s configurable). A random event fires when time runs out (Strong Wind, Tape Shortage, Higher Drop, etc.).",
-        "Run the drop test - watch the egg fall with animation. Survival depends on protection vs difficulty.",
-        "Auto-generated review explains what worked. Run rounds 2 and 3 from Balcony then Building Level.",
-        "Final winner overlay crowns the champion with double confetti and a badge gallery."
+        "Introduce the activity goal and connect it to collaboration, critical thinking.",
+        "Split participants into the recommended format: 3-6 participants per team.",
+        "Give the group the core challenge: protective structure for egg drops.",
+        "Run the activity within the time limit while the facilitator observes teamwork, decision quality, and participation.",
+        "Debrief using reflection questions and capture workplace applications or commitments."
       ],
       "reviewQuestions": [
-        "Where did budget pressure force the hardest trade-offs?",
-        "Did teams over-engineer or under-engineer their designs?",
-        "How did the random events change team strategy?"
+        "What did the activity reveal about collaboration in the team?",
+        "Where did the team lose time, clarity, or alignment?",
+        "How can the same behavior be applied to real workplace projects?"
       ],
-      "keyTakeaway": "Egg Drop Pro trains design thinking under real constraints. The auto-review surfaces the same trade-offs you face in real projects: scope, cost, quality, risk. Use the debrief to map design choices to actual workplace decisions.",
+      "keyTakeaway": "Egg Drop helps employees practice collaboration, critical thinking, creativity through a structured workplace activity. The value comes from the debrief: teams should connect what happened in the game to how they plan, communicate, decide, and improve at work.",
       "sourceContext": "14 Critical Thinking Exercises, Games, And Activities - Critical thinking games and activities",
       "sourceBlog": "https://www.edstellar.com/blog/critical-thinking-activities-games-for-employees",
       "sourceBlogTitle": "Blog 9: 14 Critical Thinking Exercises, Games, And Activities",
       "type": "Game/Activity",
       "walkthrough": [
         {
-          "title": "What is Egg Drop Pro?",
-          "body": "Teams build a protective structure for a raw egg using 10 materials and a 100-budget, then survive 3 escalating drop tests."
+          "title": "What is this game?",
+          "body": "Protective structure for egg drops"
         },
         {
           "title": "How a round plays out",
-          "body": "Pick materials, place them (cushion bottom, drag top, structure sides). Build timer runs. Random event fires. Drop test scores integrity, budget efficiency, placement."
+          "body": "Step 1: Introduce the activity goal and connect it to collaboration, critical thinking. Step 2: Split participants into the recommended format: 3-6 participants per team. Step 3: Give the group the core challenge: protective structure for egg drops."
         },
         {
           "title": "Questions you'll discuss after",
-          "body": "Where did budget pressure force trade-offs? Did teams over- or under-engineer? How did events change strategy?"
+          "body": "• What did the activity reveal about collaboration in the team? • Where did the team lose time, clarity, or alignment? • How can the same behavior be applied to real workplace projects?"
         },
         {
           "title": "Why this game matters",
-          "body": "Egg Drop trains design thinking under real constraints. The auto-review maps design choices to workplace decisions on scope, cost, quality, risk."
+          "body": "Egg Drop helps employees practice collaboration, critical thinking, creativity through a structured workplace activity. The value comes from the debrief: teams should connect what happened in the game to how they plan, communicate, decide, and improve at work."
         }
       ],
       "outcomes": [
         "Collaboration; creative engineering"
       ],
       "needs": {
-        "materials": "Browser. Optional: projector for in-room display. Audio for timer cues.",
-        "platform": "Drag-and-drop build zone, 10-material library, 6 random events, drop animation, auto-review engine, 10-badge system, podium leaderboard, share modal, .ics reminder.",
-        "facilitator": "Recommended for groups over 12."
+        "materials": "Eggs, tape, straws, paper, rubber bands, cotton balls, balloons, newspapers, drop area.",
+        "platform": "Engage facilitator console, timer, team rooms.",
+        "facilitator": "Optional."
       },
-      "variations": [
-        "Demo mode: instant play with 3 sample teams.",
-        "Custom setup: add 2-6 teams, pick mode (3-round progressive OR single drop), set build time.",
-        "Presenter mode (?mode=present): big drop zone for in-room facilitation.",
-        "Player mode (?mode=play): phone-friendly for distributed teams.",
-        "Custom material packs: extend the 10 materials with your own (future)."
-      ],
+      "variations": [],
       "economy": {
         "currency": "EngageCoins",
         "starting": 200,
@@ -9467,83 +9458,71 @@
     {
       "id": "g127",
       "slug": "improv",
-      "title": "Improv Challenge",
+      "title": "Improv",
       "category": "Critical Thinking",
       "audience": [
         "All employees"
       ],
       "format": "Live",
-      "duration": "30-60 min",
-      "durationBucket": "30-60",
-      "team": "6-30",
-      "teamBucket": "10-50",
+      "duration": "15-30 minutes",
+      "durationBucket": "15-30",
+      "team": "3-6 participants per team",
+      "teamBucket": "2-10",
       "difficulty": "Medium",
       "facilitator": "Optional",
       "reinforcesTraining": false,
-      "concept": "Workplace improv with stakes. Teams respond to 28 unexpected scenarios using 'Yes, and...' thinking. Spend EngageCoins on power-ups (Re-roll, Reveal Examples, Double Down, Steal, Plot Twist), survive random plot twists, and score across 6 criteria. Live leaderboard, round-summary celebrations with confetti, and JSON + CSV debrief exports.",
-      "businessPurpose": "Build adaptability, communication, fast decision-making, and collaborative thinking.",
+      "concept": "Build scenarios one sentence at a time",
+      "businessPurpose": "Rapid problem-solving; adaptability",
       "skills": [
-        "Adaptability",
-        "Communication",
-        "Decision-Making",
-        "Collaboration",
-        "Active Listening",
-        "Resilience under pressure"
+        "Problem Solving",
+        "Critical Thinking",
+        "Time Management"
       ],
       "materials": "Scenario cards, role briefs, timer, observer checklist, debrief sheet.",
       "howToPlay": [
-        "Form 2-6 teams (or use the 3 demo teams). Each starts with 50 EngageCoins.",
-        "Pick a category and difficulty (Easy / Medium / Hard).",
-        "Read the prompt - difficulty tag and skill focus are shown.",
-        "Start the 30s-3min timer. Teams improvise responses using 'Yes, and...'.",
-        "Spend coins on power-ups: re-roll the prompt, reveal examples, double next score, steal 3 pts, or unleash a plot twist.",
-        "Score across 6 criteria (Builds, Clarity, Creativity, Speed, Solution, Teamwork) - use +/- or quick presets.",
-        "Round winner earns +15 bonus coins. Confetti fires. Open the summary, then go again."
+        "Introduce the activity goal and connect it to problem solving, critical thinking.",
+        "Split participants into the recommended format: 3-6 participants per team.",
+        "Give the group the core challenge: build scenarios one sentence at a time.",
+        "Run the activity within the time limit while the facilitator observes teamwork, decision quality, and participation.",
+        "Debrief using reflection questions and capture workplace applications or commitments."
       ],
       "reviewQuestions": [
-        "Did the team build on ideas or block them?",
-        "How did the team handle plot twists - reactively or with intent?",
-        "Where can the \"Yes, and...\" behavior apply back at work?"
+        "What did the activity reveal about problem solving in the team?",
+        "Where did the team lose time, clarity, or alignment?",
+        "How can the same behavior be applied to real workplace projects?"
       ],
-      "keyTakeaway": "Improv Challenge trains the 'Yes, and...' habit under pressure. The currency and twist mechanics surface how teams really behave when stakes change: who blocks, who builds, who spends to win, who collaborates. The debrief is where the lesson lands.",
+      "keyTakeaway": "Improv helps employees practice problem solving, critical thinking, time management through a structured workplace activity. The value comes from the debrief: teams should connect what happened in the game to how they plan, communicate, decide, and improve at work.",
       "sourceContext": "14 Critical Thinking Exercises, Games, And Activities - Critical thinking games and activities",
       "sourceBlog": "https://www.edstellar.com/blog/critical-thinking-activities-games-for-employees",
       "sourceBlogTitle": "Blog 9: 14 Critical Thinking Exercises, Games, And Activities",
       "type": "Game/Activity",
       "walkthrough": [
         {
-          "title": "What is Improv Challenge v2?",
-          "body": "Workplace improv with stakes. Teams respond to unexpected scenarios using 'Yes, and...' thinking. EngageCoins, power-ups, and plot twists make every round different."
+          "title": "What is this game?",
+          "body": "Build scenarios one sentence at a time"
         },
         {
           "title": "How a round plays out",
-          "body": "Pick a category and difficulty. Read the prompt with its skill tag. Start the timer. Teams improvise. Spend coins on power-ups for an edge. Score across 6 criteria when time's up."
+          "body": "Step 1: Introduce the activity goal and connect it to problem solving, critical thinking. Step 2: Split participants into the recommended format: 3-6 participants per team. Step 3: Give the group the core challenge: build scenarios one sentence at a time."
         },
         {
           "title": "Questions you'll discuss after",
-          "body": "Did the team build or block? How did they handle the plot twists? Where does 'Yes, and...' apply back at work?"
+          "body": "• What did the activity reveal about problem solving in the team? • Where did the team lose time, clarity, or alignment? • How can the same behavior be applied to real workplace projects?"
         },
         {
           "title": "Why this game matters",
-          "body": "It surfaces real behavior under pressure: who blocks, who builds, who collaborates, who spends to win. The debrief is where the lesson lands."
+          "body": "Improv helps employees practice problem solving, critical thinking, time management through a structured workplace activity. The value comes from the debrief: teams should connect what happened in the game to how they plan, communicate, decide, and improve at work."
         }
       ],
       "outcomes": [
         "Rapid problem-solving; adaptability"
       ],
       "needs": {
-        "materials": "Browser. Optional: projector for in-room. Audio for timer cues. Local storage for state persistence.",
-        "platform": "Prompt engine (28 prompts), power-up economy (5 power-ups + EngageCoins), plot twist injector (10 twists), round timer with audio cues, 6-criteria scoring, live leaderboard with score breakdown, round-summary modal with canvas confetti, JSON + CSV exports.",
-        "facilitator": "Recommended for groups over 12. Optional for small teams - shortcuts let one host run it."
+        "materials": "Scenario cards, role briefs, timer, observer checklist, debrief sheet.",
+        "platform": "Engage facilitator console, timer, team rooms.",
+        "facilitator": "Optional."
       },
-      "variations": [
-        "Demo mode: instant play with 3 sample teams, full power-up economy active.",
-        "Custom setup: add 2-6 teams, pick category + difficulty + round length (30s-3min).",
-        "Tournament mode: run 5 rounds back-to-back, use leaderboard for final ranking.",
-        "Power-ups disabled: drop the currency layer for a pure skill-only game.",
-        "Async-friendly: capture responses in the response field and score after.",
-        "Fullscreen mode for in-room facilitation. Print-friendly debrief."
-      ],
+      "variations": [],
       "playable": true,
       "playUrl": "./play/improv-challenge.html"
     },
@@ -10021,7 +10000,56 @@
         "platform": "Engage facilitator console, timer, team rooms.",
         "facilitator": "Optional."
       },
-      "variations": []
+      "variations": [],
+      "economy": {
+        "currency": "EngageCoins",
+        "starting": 50,
+        "explainer": "Each player starts with 50 coins. Earn by catching the lie or fooling the room. Spend on mid-round power-ups to bend the odds without breaking the format.",
+        "earnRules": [
+          "Catch the lie as a voter: +10 coins",
+          "Fool a single voter as speaker: +3 coins",
+          "Fool the entire room (perfect lie): +30 coins bonus"
+        ],
+        "shop": [
+          {
+            "id": "ttl-hint",
+            "name": "Hint Peek",
+            "cost": 40,
+            "effect": "Reveal one TRUTH for this voter only (eliminates a wrong answer).",
+            "icon": "🔍"
+          },
+          {
+            "id": "ttl-double",
+            "name": "Double Down",
+            "cost": 50,
+            "effect": "Double the points scored on your next vote.",
+            "icon": "✌️"
+          },
+          {
+            "id": "ttl-relisten",
+            "name": "Re-listen",
+            "cost": 30,
+            "effect": "Ask the speaker to re-read their three statements.",
+            "icon": "🔄"
+          },
+          {
+            "id": "ttl-shield",
+            "name": "Vote Shield",
+            "cost": 60,
+            "effect": "Opt out of this round with no penalty.",
+            "icon": "🛡"
+          },
+          {
+            "id": "ttl-random",
+            "name": "Random Vote",
+            "cost": 15,
+            "effect": "Cast a random guess — fun-only, no double penalty.",
+            "icon": "🎰"
+          }
+        ]
+      },
+      "playable": true,
+      "playUrl": "./play/two-truths-and-a-lie.html"
     },
     {
       "id": "g135",

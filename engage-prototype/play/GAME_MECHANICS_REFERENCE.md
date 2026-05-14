@@ -51,7 +51,8 @@ Layered radial-gradient page background, Inter font stack, system fallbacks, no 
 - Eyebrow pill: `Edstellar Engage · Workplace Game`
 - H1: game title, max 46px on desktop
 - 1-paragraph description (≤ 2 lines)
-- 4 actions max: **Play Demo Now** (success), **Setup Custom Game** (primary), **How to Play** (secondary), **Reset** (tertiary)
+- 4 actions, **all required**: **Play Demo Now** (success), **Setup Custom Game** (primary), **How to Play** (secondary), **Reset** (tertiary)
+- The **Reset** button is mandatory on every playable game — it must clear teams, rounds, log, and the `localStorage` state key, then return the UI to the setup phase. Show a `confirm()` before destroying state.
 - Decorative radial blob top-right inside `.hero-card::after`
 
 ---
@@ -224,6 +225,8 @@ body[data-rounds-played="0"] .tab[data-view="analytics"],
 body[data-rounds-played="0"] .tab[data-view="awards"],
 body[data-rounds-played="0"] .tab[data-view="log"] { display:none }
 ```
+
+**Hidden-information games** add a `🛡 Judge` tab gated behind a confirm prompt — see **§34**.
 
 ---
 
@@ -474,6 +477,42 @@ A playable game v1 ships when **all of the following are green**:
 - [ ] Undo works and recomputes totals correctly
 - [ ] 14 language dropdown switches at least the dropdown labels and `body.dir` (RTL on Arabic)
 - [ ] Custom content (prompts/materials) can be added and survives reload
+- [ ] Reset button in the hero row clears all state (teams, rounds, log, storage key) after a confirm
+- [ ] If the game has hidden information, the Judge tab gates behind a confirm and auto-locks on leave (§34)
+
+---
+
+---
+
+## 34. Facilitator / Judge view (optional, when game has hidden information)
+
+Some games hide information from the rest of the room that exactly one person — the facilitator or host — must be able to verify. The lie in **Two Truths and a Lie**, the secret role in a Werewolf-style round, the hidden card in a deception game, the answer key in a quiz. When a game has this pattern, the host needs a private answer surface that's part of the same screen but kept away from players' eyes.
+
+When your game has hidden information, add a dedicated **Judge** tab in the tabs row (§14) that:
+
+- Sits between the shared `Statements` / equivalent tab and `Review` in the tab order
+- Is **gated behind an explicit confirm**: clicking the tab triggers a modal — _"Open Judge view? This screen reveals every speaker's flagged answer. Hide your screen from other players before continuing."_ — that must be acknowledged before the answer key renders
+- Shows the **answer key** for every active speaker/round (each player's flagged lie, the hidden role, the correct answer) using private-answer styling: `revealed lie` / `revealed truth` ribbons on each card and a `Private answer · do not show players` banner at the top
+- **Auto-locks every time the user leaves the tab and returns** — the confirm modal re-fires. Never persist `judgeUnlocked = true` across tab switches.
+- **Never** writes the answer key to the shared `#s=` share-URL state. Strip statements / flags before base64-encoding. You may set a `hasHiddenInfo: true` marker in the shared state so the receiving session knows to re-collect locally.
+- Uses a distinct gradient on the tab (purple `#7C3AED` works well — visually separates it from the brand-blue active tab so the host always knows which mode they're in)
+
+```js
+function switchView(v){
+  if(v === 'judge' && !judgeUnlocked){
+    $('judgeGateOverlay').classList.add('show');
+    return;
+  }
+  // ... swap tab visibility
+  if(v !== 'judge') judgeUnlocked = false; // auto-lock on leave
+}
+function confirmJudge(yes){
+  $('judgeGateOverlay').classList.remove('show');
+  if(yes){ judgeUnlocked = true; switchView('judge'); }
+}
+```
+
+Reference implementation: [`two-truths-and-a-lie.html`](two-truths-and-a-lie.html) — see `renderJudge()`, `confirmJudge()`, and the `#judgeGateOverlay` modal.
 
 ---
 
@@ -481,5 +520,6 @@ A playable game v1 ships when **all of the following are green**:
 
 - [`improv-challenge.html`](improv-challenge.html) — prompt-based, criterion scoring, EngageCoins economy, plot twists
 - [`egg-drop.html`](egg-drop.html) — build-based, drag-and-drop placement, budget-per-round, random events, drop animation
+- [`two-truths-and-a-lie.html`](two-truths-and-a-lie.html) — hidden-information game with Judge view, voter queue, coin-based power-ups, plot twists, private statement editor
 
-Read those files end-to-end before starting a new game. Every infrastructure pattern in this document has a working example in one or both.
+Read those files end-to-end before starting a new game. Every infrastructure pattern in this document has a working example in one or more of them.

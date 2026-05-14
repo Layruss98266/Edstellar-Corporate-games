@@ -192,6 +192,7 @@ def derive_reinforces(category: str, title: str, biz_purpose: str) -> bool:
 PLAYABLE = {
     "improv": "./play/improv-challenge.html",
     "egg-drop": "./play/egg-drop.html",
+    "two-truths-and-a-lie": "./play/two-truths-and-a-lie.html",
 }
 
 # Special hand-tuned economies for marquee games.
@@ -215,6 +216,23 @@ ECONOMY_OVERRIDES = {
             {"id":"ed-straws","name":"Pack of Straws","cost":25,"effect":"Build a lightweight frame around the egg.","icon":"🥤"},
             {"id":"ed-popsicle","name":"Popsicle Sticks","cost":35,"effect":"Stiff frame material. Pair with tape.","icon":"🪵"},
             {"id":"ed-balloon","name":"Helium Balloon","cost":90,"effect":"Cuts effective drop speed by ~30%. Premium item.","icon":"🎈"}
+        ]
+    },
+    "two-truths-and-a-lie": {
+        "currency": "EngageCoins",
+        "starting": 50,
+        "explainer": "Each player starts with 50 coins. Earn by catching the lie or fooling the room. Spend on mid-round power-ups to bend the odds without breaking the format.",
+        "earnRules": [
+            "Catch the lie as a voter: +10 coins",
+            "Fool a single voter as speaker: +3 coins",
+            "Fool the entire room (perfect lie): +30 coins bonus"
+        ],
+        "shop": [
+            {"id":"ttl-hint","name":"Hint Peek","cost":40,"effect":"Reveal one TRUTH for this voter only (eliminates a wrong answer).","icon":"🔍"},
+            {"id":"ttl-double","name":"Double Down","cost":50,"effect":"Double the points scored on your next vote.","icon":"✌️"},
+            {"id":"ttl-relisten","name":"Re-listen","cost":30,"effect":"Ask the speaker to re-read their three statements.","icon":"🔄"},
+            {"id":"ttl-shield","name":"Vote Shield","cost":60,"effect":"Opt out of this round with no penalty.","icon":"🛡"},
+            {"id":"ttl-random","name":"Random Vote","cost":15,"effect":"Cast a random guess — fun-only, no double penalty.","icon":"🎰"}
         ]
     },
     "sales-jeopardy": {
