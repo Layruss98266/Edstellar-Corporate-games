@@ -51,6 +51,10 @@ Two fully playable workplace games. Both ship the same infrastructure layer (14 
 
 Both: client-side only, state persists in `localStorage`, opens from `file://`.
 
+### Building the next playable game
+
+See [`play/GAME_MECHANICS_REFERENCE.md`](play/GAME_MECHANICS_REFERENCE.md) — the standardised infrastructure every playable game should implement (33 sections, marked Required vs Optional). Use `improv-challenge.html` and `egg-drop.html` as the two reference implementations.
+
 ## Theming
 
 All design tokens live as CSS variables at the top of `assets/styles.css`:
