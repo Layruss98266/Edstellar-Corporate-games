@@ -731,6 +731,107 @@ body.mode-present .mode-banner,body.mode-play .mode-banner{display:inline-flex}
 [dir="rtl"] .toast{transform:translateX(50%) translateY(20px)}
 [dir="rtl"] .toast.show{transform:translateX(50%) translateY(0)}
 
+/* Auto-save indicator */
+.autosave{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;color:var(--muted);
+  margin-left:auto;
+}
+.autosave::before{
+  content:"";width:8px;height:8px;border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 0 3px rgba(16,185,129,.18);
+}
+.autosave.saving::before{background:var(--warning);animation:pulseIcon 1s ease infinite}
+
+/* Undo banner (transient action toast) */
+.undo-banner{
+  position:fixed;left:50%;bottom:80px;
+  transform:translateX(-50%) translateY(20px);
+  background:#0F172A;color:#fff;padding:10px 14px;border-radius:14px;
+  box-shadow:var(--shadow);opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;z-index:998;
+  display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;
+}
+.undo-banner.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.undo-banner button{
+  background:var(--warning);color:#3a2700;border:none;border-radius:10px;
+  padding:6px 12px;font-weight:900;font-size:12px;cursor:pointer;
+}
+.undo-banner button:hover{filter:brightness(1.05)}
+
+/* Round log edit form */
+.log-edit{
+  background:#F8FAFC;border:1px solid var(--border);border-radius:12px;
+  padding:12px;margin-top:8px;
+}
+.log-edit-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:6px;font-size:12.5px}
+.log-edit input{width:80px;text-align:center;padding:6px 8px;font-weight:900}
+.log-edit .edit-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:8px}
+
+/* Help cheat-sheet */
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:14px}
+.cheat-section{background:#F8FAFC;border:1px solid var(--border);border-radius:14px;padding:14px}
+.cheat-section h4{margin:0 0 10px;color:var(--heading);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.cheat-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px}
+.cheat-row:last-child{border-bottom:none}
+.cheat-row .lbl{color:var(--body);flex:1}
+.cheat-row kbd{
+  background:#fff;border:1px solid var(--border);border-radius:6px;
+  padding:2px 7px;font-family:inherit;font-size:11px;font-weight:900;color:var(--heading);
+}
+
+/* Collapsible section */
+.collapsible-head{
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;user-select:none;padding:8px 0;
+}
+.collapsible-head h3{margin:0;font-size:13px}
+.collapsible-head .chev{
+  display:inline-block;transition:transform .2s ease;font-weight:900;
+}
+.collapsible[open] .collapsible-head .chev{transform:rotate(90deg)}
+.collapsible-body{display:none;padding-top:10px}
+.collapsible[open] .collapsible-body{display:block}
+
+/* Hide-only-for-AT screen-reader text */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+.skip-link{
+  position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;
+}
+.skip-link:focus{
+  position:fixed;left:16px;top:16px;width:auto;height:auto;
+  background:var(--brand-blue);color:#fff;padding:10px 16px;border-radius:10px;
+  z-index:2000;font-weight:900;
+}
+
+/* High-contrast mode */
+body.hc{
+  --brand-deep:#000000;
+  --brand-blue:#0033CC;
+  --brand-blue-dark:#001F8B;
+  --heading:#000000;
+  --body:#1F2937;
+  --muted:#374151;
+  --border:#000000;
+  --bg:#FFFFFF;
+  background:#FFFFFF !important;
+}
+body.hc .panel,body.hc .hero-card,body.hc .mini-card,body.hc .toast,body.hc .badge,body.hc .team-item{border-width:2px;border-color:#000}
+body.hc .btn,body.hc .timer{box-shadow:none}
+body.hc .hint,body.hc .team-meta{color:#1F2937}
+body.hc::before{display:none}
+
+/* Hide-coaching outside perform phase */
+body[data-phase="setup"] .coaching-bar,
+body[data-phase="prompt"] .coaching-bar{display:none}
+
+/* Hide-twist after round saved */
+body[data-phase="setup"] .twist-banner{display:none !important}
+
 /* Player join mini-view */
 .player-mini{display:none}
 body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
@@ -744,6 +845,8 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
 </style>
 </head>
 <body>
+<a class="skip-link" href="#gameArea">Skip to game</a>
+<div class="sr-only" id="ariaAnnouncer" role="status" aria-live="polite" aria-atomic="true"></div>
 <a class="back-pill" href="../game.html?id=improv">← Back to Engage</a>
 <div class="mode-banner" id="modeBanner"></div>
 <canvas id="confetti" aria-hidden="true"></canvas>
@@ -791,7 +894,14 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
           <span><kbd>Space</kbd> start/pause</span>
           <span><kbd>N</kbd> next prompt</span>
           <span><kbd>T</kbd> twist</span>
-          <span><kbd>F</kbd> fullscreen</span>
+          <span><kbd>?</kbd> all shortcuts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap">
+          <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer;font-weight:700">
+            <input type="checkbox" id="hcToggle"/> High-contrast
+          </label>
+          <button class="btn ghost btn-sm" id="cheatBtn" aria-label="Open keyboard cheat sheet">⌨ Shortcuts</button>
+          <span class="autosave" id="autosaveLabel" aria-live="polite">Saved just now</span>
         </div>
       </div>
     </aside>
@@ -810,13 +920,23 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
 
       <div class="form-row">
         <label>Language</label>
-        <div class="lang-row" id="langRow">
-          <button class="lang-pick active" data-lang="en">EN</button>
-          <button class="lang-pick" data-lang="hi">हिं</button>
-          <button class="lang-pick" data-lang="ar">ع</button>
-          <button class="lang-pick" data-lang="es">ES</button>
+        <div class="lang-row" id="langRow" style="overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px">
+          <button class="lang-pick active" data-lang="en" title="English">EN</button>
+          <button class="lang-pick" data-lang="hi" title="हिन्दी">हिं</button>
+          <button class="lang-pick" data-lang="ar" title="العربية">ع</button>
+          <button class="lang-pick" data-lang="es" title="Español">ES</button>
+          <button class="lang-pick" data-lang="fr" title="Français">FR</button>
+          <button class="lang-pick" data-lang="de" title="Deutsch">DE</button>
+          <button class="lang-pick" data-lang="pt" title="Português">PT</button>
+          <button class="lang-pick" data-lang="ja" title="日本語">日</button>
+          <button class="lang-pick" data-lang="ko" title="한국어">한</button>
+          <button class="lang-pick" data-lang="zh" title="中文">中</button>
+          <button class="lang-pick" data-lang="ru" title="Русский">RU</button>
+          <button class="lang-pick" data-lang="it" title="Italiano">IT</button>
+          <button class="lang-pick" data-lang="id" title="Bahasa Indonesia">ID</button>
+          <button class="lang-pick" data-lang="tr" title="Türkçe">TR</button>
         </div>
-        <p class="hint">EN: 28 prompts. HI / AR / ES: 10 prompts each (compact pack). RTL auto-applied for Arabic.</p>
+        <p class="hint">EN: 28 prompts. 13 other languages: 8-10 prompts each. RTL auto-applied for Arabic. Use Custom Prompts to extend any language.</p>
       </div>
 
       <div class="form-row">
@@ -886,8 +1006,12 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
       <h3>Teams</h3>
       <div class="team-list" id="teamList"><div class="empty-state">No teams added yet.</div></div>
 
-      <div class="custom-prompts-box">
-        <h3>+ Custom Prompts <small style="font-weight:600;color:var(--muted)">(your own scenarios)</small></h3>
+      <details class="collapsible custom-prompts-box">
+        <summary class="collapsible-head" style="list-style:none;cursor:pointer">
+          <h3 style="margin:0">+ Custom Prompts <small style="font-weight:600;color:var(--muted)">(your own scenarios)</small></h3>
+          <span class="chev">▸</span>
+        </summary>
+        <div class="collapsible-body" style="display:block">
         <div id="cpList" class="cp-list"></div>
         <div class="cp-form-row">
           <select id="cpCategory">
@@ -919,7 +1043,8 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
           <button class="btn ghost btn-sm" id="importCpBtn">📤 Import Pack</button>
           <input type="file" id="importCpInput" accept="application/json" style="display:none"/>
         </div>
-      </div>
+        </div>
+      </details>
     </aside>
 
     <main class="game-board" id="gameArea">
@@ -1130,6 +1255,98 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
       </div>
     </div>
   </div>
+</div>
+
+<!-- Cheat sheet modal -->
+<div class="overlay" id="cheatOverlay" role="dialog" aria-modal="true" aria-labelledby="cheatTitle">
+  <div class="overlay-modal">
+    <div class="overlay-header">
+      <div>
+        <h2 id="cheatTitle">⌨ Keyboard & Power-Up Cheat Sheet</h2>
+        <p>All shortcuts, coaching tags, power-ups, and badges in one screen. Press <strong>?</strong> anytime to reopen.</p>
+      </div>
+      <button class="overlay-close" id="cheatClose" aria-label="Close cheat sheet">×</button>
+    </div>
+    <div class="overlay-body">
+      <div class="cheat-grid">
+        <div class="cheat-section">
+          <h4>Keyboard shortcuts</h4>
+          <div class="cheat-row"><span class="lbl">Start round / pause timer</span><kbd>Space</kbd></div>
+          <div class="cheat-row"><span class="lbl">Next prompt</span><kbd>N</kbd></div>
+          <div class="cheat-row"><span class="lbl">Trigger plot twist</span><kbd>T</kbd></div>
+          <div class="cheat-row"><span class="lbl">Fullscreen</span><kbd>F</kbd></div>
+          <div class="cheat-row"><span class="lbl">Play tab</span><kbd>P</kbd></div>
+          <div class="cheat-row"><span class="lbl">Leaderboard tab</span><kbd>L</kbd></div>
+          <div class="cheat-row"><span class="lbl">Reflection tab</span><kbd>R</kbd></div>
+          <div class="cheat-row"><span class="lbl">Analytics tab</span><kbd>A</kbd></div>
+          <div class="cheat-row"><span class="lbl">Badges tab</span><kbd>B</kbd></div>
+          <div class="cheat-row"><span class="lbl">Open this cheat sheet</span><kbd>?</kbd></div>
+          <div class="cheat-row"><span class="lbl">Close modal</span><kbd>Esc</kbd></div>
+        </div>
+
+        <div class="cheat-section">
+          <h4>Power-ups (EngageCoins)</h4>
+          <div class="cheat-row"><span class="lbl">🎲 Re-roll Prompt</span><kbd>20 🪙</kbd></div>
+          <div class="cheat-row"><span class="lbl">💡 Reveal Examples</span><kbd>15 🪙</kbd></div>
+          <div class="cheat-row"><span class="lbl">✕2 Double Down</span><kbd>40 🪙</kbd></div>
+          <div class="cheat-row"><span class="lbl">⚡ Steal 3 pts</span><kbd>30 🪙</kbd></div>
+          <div class="cheat-row"><span class="lbl">🌀 Plot Twist</span><kbd>25 🪙</kbd></div>
+        </div>
+
+        <div class="cheat-section">
+          <h4>Live coaching tags</h4>
+          <div class="cheat-row"><span class="lbl">✓ Strong build</span><kbd>+1 Builds</kbd></div>
+          <div class="cheat-row"><span class="lbl">🛑 Block</span><kbd>-1 Builds</kbd></div>
+          <div class="cheat-row"><span class="lbl">💎 Crystal clear</span><kbd>+1 Clarity</kbd></div>
+          <div class="cheat-row"><span class="lbl">🤔 Unclear</span><kbd>-1 Clarity</kbd></div>
+          <div class="cheat-row"><span class="lbl">💡 Novel angle</span><kbd>+1 Creativity</kbd></div>
+          <div class="cheat-row"><span class="lbl">⚡ Quick recovery</span><kbd>+1 Speed</kbd></div>
+          <div class="cheat-row"><span class="lbl">🎯 Moved to outcome</span><kbd>+1 Solution</kbd></div>
+          <div class="cheat-row"><span class="lbl">👥 Whole team in</span><kbd>+1 Teamwork</kbd></div>
+        </div>
+
+        <div class="cheat-section">
+          <h4>Badges (10 total)</h4>
+          <div class="cheat-row"><span class="lbl">🥇 First Win</span><kbd>Win 1</kbd></div>
+          <div class="cheat-row"><span class="lbl">🎩 Hat-Trick</span><kbd>3 in a row</kbd></div>
+          <div class="cheat-row"><span class="lbl">🌟 All-Rounder</span><kbd>6+ each</kbd></div>
+          <div class="cheat-row"><span class="lbl">🏗 Master Builder</span><kbd>10 Builds</kbd></div>
+          <div class="cheat-row"><span class="lbl">🎯 Solution Closer</span><kbd>10 Solution</kbd></div>
+          <div class="cheat-row"><span class="lbl">📈 Comeback Kid</span><kbd>last → first</kbd></div>
+          <div class="cheat-row"><span class="lbl">💰 Coin Hoarder</span><kbd>100+ coins</kbd></div>
+          <div class="cheat-row"><span class="lbl">⚡ Lightning Round</span><kbd>50+ fast</kbd></div>
+          <div class="cheat-row"><span class="lbl">📖 Storyteller</span><kbd>5+ responses</kbd></div>
+          <div class="cheat-row"><span class="lbl">👑 Champion</span><kbd>win game</kbd></div>
+        </div>
+
+        <div class="cheat-section">
+          <h4>Modes</h4>
+          <div class="cheat-row"><span class="lbl">Standard</span><kbd>./</kbd></div>
+          <div class="cheat-row"><span class="lbl">Presenter (big screen)</span><kbd>?mode=present</kbd></div>
+          <div class="cheat-row"><span class="lbl">Player (phone)</span><kbd>?mode=play</kbd></div>
+          <div class="cheat-row"><span class="lbl">Embed iframe</span><kbd>via Share modal</kbd></div>
+        </div>
+
+        <div class="cheat-section">
+          <h4>Accessibility</h4>
+          <div class="cheat-row"><span class="lbl">High-contrast mode</span><kbd>toggle in snapshot</kbd></div>
+          <div class="cheat-row"><span class="lbl">Reduced motion</span><kbd>OS-respected</kbd></div>
+          <div class="cheat-row"><span class="lbl">Skip to game (focus)</span><kbd>Tab once</kbd></div>
+          <div class="cheat-row"><span class="lbl">Screen-reader announces</span><kbd>round events</kbd></div>
+          <div class="cheat-row"><span class="lbl">Languages</span><kbd>14 packs</kbd></div>
+        </div>
+      </div>
+      <div class="howto-actions">
+        <button class="btn ghost" id="cheatCloseBottom">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Undo banner -->
+<div class="undo-banner" id="undoBanner" role="status" aria-live="polite">
+  <span id="undoText">Round saved.</span>
+  <button id="undoBtn">↶ Undo</button>
 </div>
 
 <div class="toast" id="toast">Ready</div>
@@ -1356,12 +1573,26 @@ function showToast(message, kind=''){
   setTimeout(()=> t.classList.remove('show'), 1800);
 }
 
+let lastSaveAt = 0;
 function saveState(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
     teams, currentRound, roundLog, phase, activePowerups, maxRounds,
     customPrompts, sessionTemplates, coachingTags, currentLanguage
   }));
+  lastSaveAt = Date.now();
+  updateAutosaveLabel();
 }
+function updateAutosaveLabel(){
+  const el = document.getElementById('autosaveLabel');
+  if(!el) return;
+  if(!lastSaveAt){ el.textContent = 'Not saved yet'; return; }
+  const s = Math.floor((Date.now() - lastSaveAt)/1000);
+  if(s < 2) el.textContent = 'Saved just now';
+  else if(s < 60) el.textContent = `Saved ${s}s ago`;
+  else if(s < 3600) el.textContent = `Saved ${Math.floor(s/60)}m ago`;
+  else el.textContent = `Saved ${Math.floor(s/3600)}h ago`;
+}
+setInterval(updateAutosaveLabel, 5000);
 function loadState(){
   try{
     const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
@@ -1388,11 +1619,19 @@ function loadState(){
 
 function setPhase(next){
   phase = next;
+  document.body.dataset.phase = phase;
   ['setup','prompt','perform','score'].forEach(item => {
     $('flow-'+item).classList.toggle('active', item===phase);
   });
   $('phaseStat').textContent = phase.charAt(0).toUpperCase()+phase.slice(1);
   saveState();
+}
+
+function announce(msg){
+  const el = document.getElementById('ariaAnnouncer');
+  if(!el) return;
+  el.textContent = ''; // reset to trigger SR even if same message
+  setTimeout(()=>{ el.textContent = msg; }, 50);
 }
 
 function updateStats(){
@@ -1593,15 +1832,66 @@ function updateRoundLog(){
     c.innerHTML = '<div class="empty-state">No completed rounds yet.</div>';
     return;
   }
-  c.innerHTML = roundLog.slice().reverse().map(log => `
+  c.innerHTML = roundLog.slice().reverse().map(log => {
+    const idx = roundLog.indexOf(log);
+    return `
     <div class="log-item">
-      <div class="team-name">Round ${log.round}: ${escapeHtml(log.prompt)}</div>
-      <div class="team-meta">${escapeHtml(log.category)} · ${log.difficulty || 'Medium'} · ${new Date(log.time).toLocaleString()}${log.twist ? ' · 🌀 ' + escapeHtml(log.twist) : ''}</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:0">
+          <div class="team-name">Round ${log.round}: ${escapeHtml(log.prompt)}</div>
+          <div class="team-meta">${escapeHtml(log.category)} · ${log.difficulty || 'Medium'} · ${new Date(log.time).toLocaleString()}${log.twist ? ' · 🌀 ' + escapeHtml(log.twist) : ''}</div>
+        </div>
+        <button class="team-btn" onclick="toggleEditRound(${idx})">✎ Edit</button>
+      </div>
       <ul style="margin:10px 0 0;padding-left:18px;line-height:1.7">
         ${log.scores.map(s => `<li><strong>${escapeHtml(s.team)}</strong>: ${s.points} points${s.response ? ' - ' + escapeHtml(s.response) : ''}</li>`).join('')}
       </ul>
+      ${editingLogIdx === idx ? renderRoundEditor(log, idx) : ''}
+    </div>`;
+  }).join('');
+}
+
+let editingLogIdx = null;
+function toggleEditRound(idx){
+  editingLogIdx = editingLogIdx === idx ? null : idx;
+  updateRoundLog();
+}
+
+function renderRoundEditor(log, idx){
+  return `
+  <div class="log-edit">
+    <strong style="display:block;margin-bottom:6px;color:var(--brand-deep);font-size:13px">Adjust this round's scores</strong>
+    ${log.scores.map((s,i) => `
+      <div class="log-edit-row">
+        <span><strong>${escapeHtml(s.team)}</strong> · was ${s.points} pts</span>
+        <input type="number" min="0" max="200" id="edit-log-${idx}-${i}" value="${s.points}"/>
+      </div>
+    `).join('')}
+    <div class="edit-actions">
+      <button class="btn ghost btn-sm" onclick="toggleEditRound(${idx})">Cancel</button>
+      <button class="btn btn-sm" onclick="saveRoundEdits(${idx})">✓ Save changes</button>
     </div>
-  `).join('');
+  </div>`;
+}
+
+function saveRoundEdits(idx){
+  const log = roundLog[idx];
+  if(!log) return;
+  log.scores.forEach((s,i) => {
+    const el = document.getElementById(`edit-log-${idx}-${i}`);
+    const newVal = Math.max(0, Math.min(200, Number(el?.value || 0)));
+    const delta = newVal - s.points;
+    s.points = newVal;
+    // Recompute the affected team's running total
+    const team = teams.find(t => t.id === s.teamId || t.name === s.team);
+    if(team){
+      team.score = (team.score || 0) + delta;
+    }
+  });
+  editingLogIdx = null;
+  saveState(); updateUI();
+  showToast('Round adjusted', 'success');
+  announce(`Round ${log.round} scores updated.`);
 }
 
 function updateUI(){
@@ -1780,11 +2070,14 @@ function startRound(){
   $('statusSub').textContent = 'Teams respond using "Yes, and..." thinking.';
   setPhase('perform');
   updateTimerDisplay();
+  const first = teams[0]?.name || 'first team';
+  announce(`Round ${currentRound} of ${maxRounds} starting. ${remainingSeconds} seconds on the timer. ${first} goes first.`);
   timer = setInterval(()=>{
     if(!isPaused){
       remainingSeconds -= 1;
       updateTimerDisplay();
-      if(remainingSeconds === 10) playBeep(700, 80);
+      if(remainingSeconds === 30){ playBeep(600, 80); announce('30 seconds remaining.'); }
+      if(remainingSeconds === 10){ playBeep(700, 80); announce('10 seconds remaining.'); }
       if(remainingSeconds === 5)  playBeep(800, 100);
       if(remainingSeconds <= 0){
         clearInterval(timer);
@@ -1792,6 +2085,7 @@ function startRound(){
         $('statusSub').textContent = 'Score team responses, then finish and save the round.';
         setPhase('score');
         playBeep(880, 240);
+        announce(`Round ${currentRound} complete. Score the responses.`);
       }
     }
   }, 1000);
@@ -1824,8 +2118,16 @@ function getRoundScores(){
   });
 }
 
+let undoSnapshot = null;
 function finishRound(){
   if(!currentPrompt) return showToast('Start a prompt first', 'warning');
+  // Snapshot before mutation (for Undo)
+  undoSnapshot = JSON.stringify({
+    teams: JSON.parse(JSON.stringify(teams)),
+    roundLog: JSON.parse(JSON.stringify(roundLog)),
+    coachingTags: JSON.parse(JSON.stringify(coachingTags)),
+    activePowerups: JSON.parse(JSON.stringify(activePowerups))
+  });
   clearInterval(timer);
   const scores = getRoundScores();
 
@@ -1912,10 +2214,44 @@ function finishRound(){
   showSummary(sortedRound, winner);
   fireConfetti();
   switchView('leaderboard');
+  announce(`Round ${currentRound} saved. ${winner.team} won with ${winner.points} points.`);
+
+  // Show Undo banner for 12 seconds
+  showUndoBanner(`Round ${currentRound} saved · ${winner.team} +${winner.points} pts`);
 
   // After the last round, transition to the final-winner overlay
   if(isFinal){
     setTimeout(showFinalWinner, 700);
+    announce('Game complete. Final standings ready.');
+  }
+}
+
+function showUndoBanner(msg){
+  const b = document.getElementById('undoBanner');
+  $('undoText').textContent = msg;
+  b.classList.add('show');
+  clearTimeout(showUndoBanner._t);
+  showUndoBanner._t = setTimeout(()=> b.classList.remove('show'), 12000);
+}
+
+function undoLastSave(){
+  if(!undoSnapshot){ showToast('Nothing to undo', 'warning'); return; }
+  try{
+    const s = JSON.parse(undoSnapshot);
+    teams = s.teams;
+    roundLog = s.roundLog;
+    coachingTags = s.coachingTags;
+    activePowerups = s.activePowerups;
+    currentRound = Math.max(0, currentRound - 1);
+    undoSnapshot = null;
+    saveState(); updateUI();
+    document.getElementById('undoBanner').classList.remove('show');
+    closeSummary();
+    setPhase('prompt');
+    showToast('Last save undone', 'success');
+    announce('Last round undone. Scores and coins restored.');
+  }catch(e){
+    showToast('Undo failed', 'warning');
   }
 }
 
@@ -2300,6 +2636,106 @@ const PROMPTS_LANG = {
     { category:'mixed', difficulty:'Easy', skill:'Inclusión', text:'Un nuevo empleado se une remoto y se siente desconectado.', instruction:'Enfócate en inclusión, comunicación y vínculo.', strong:'Sí, y te pondré con dos personas la primera semana - un par y un mentor. Reservaremos 15 minutos diarios para guiarte.', weak:'Bienvenido. Avísanos si necesitas algo.' },
     { category:'leadership', difficulty:'Hard', skill:'Coaching', text:'Un colaborador estrella perdió motivación tras recibir feedback duro. Continúa la conversación.', instruction:'Practica empatía, coaching y responsabilidad.', strong:'Sí, y el feedback fue difícil de oír - gracias por procesarlo. ¿Qué apoyo te ayudaría a actuar sobre las partes con las que estás de acuerdo?', weak:'Difícil. El feedback fue justo. Sigamos.' },
     { category:'communication', difficulty:'Medium', skill:'Facilitación de reuniones', text:'Una reunión se está desviando. Alguien debe traer la conversación de vuelta sin sonar grosero.', instruction:'Intervención concisa y respetuosa.', strong:'Sí, y estos temas paralelos merecen su propia reunión. Aparquémoslos y volvamos a la decisión que debemos para las cinco.', weak:'¿Pueden dejar de hablar y mantenerse en tema?' }
+  ],
+  fr: [
+    { category:'communication', difficulty:'Easy', skill:'Écoute active', text:"Un manager donne des instructions floues pour un projet urgent. Continuez et amenez l'équipe vers la clarté.", instruction:'Posez de meilleures questions, confirmez les attentes, évitez les suppositions.', strong:'Oui, et pour confirmer : résultat A pour vendredi, avec des check-ins quotidiens. J\'envoie un brief d\'une page dans 30 minutes.', weak:"D'accord, je m'en charge." },
+    { category:'leadership', difficulty:'Medium', skill:'Responsabilité', text:'Votre équipe vient de manquer une échéance majeure. Vous avez deux minutes pour leur parler.', instruction:'Montrez de la responsabilité, du calme et de la planification.', strong:"Oui, et le retard est de ma faute - j'ai sous-estimé le travail d'intégration. Voici le nouveau plan et ce qu'on fera différemment cette semaine.", weak:"Vous avez tous laissé tomber. Ne recommencez pas." },
+    { category:'sales', difficulty:'Medium', skill:'Cadrage de valeur', text:'Un prospect dit que votre solution est trop chère et que le concurrent est moins cher.', instruction:'Concentrez-vous sur la valeur, la découverte et la gestion des objections.', strong:"Oui, et le prix compte - regardons les trois résultats que vous avez mentionnés et voyons si l'option moins chère les délivre vraiment.", weak:"On est cher parce que notre qualité est meilleure." },
+    { category:'customer-service', difficulty:'Easy', skill:'Empathie', text:'Un client est en colère car une livraison promise a été manquée. Répondez.', instruction:'Empathie, responsabilité, résolution pratique.', strong:"Oui, et je m'excuse - c'est notre erreur. Le remplacement est expédié aujourd'hui en priorité, et voici un crédit. Que puis-je réparer d'autre ?", weak:"Désolé. On a eu des problèmes d'entrepôt." },
+    { category:'change-management', difficulty:'Medium', skill:'Message d\'adoption', text:'La société migre vers un nouveau système de revue de performance le mois prochain. Les employés sont sceptiques.', instruction:'Bâtissez la confiance en expliquant le but, les bénéfices et le soutien.', strong:"Oui, et l'ancien système récompensait les mauvaises choses. Le nouveau est construit autour des trois comportements qu'on veut encourager.", weak:"Ça arrive, il faut s'adapter." },
+    { category:'critical-thinking', difficulty:'Hard', skill:'Décision sous incertitude', text:"L'équipe a des données incomplètes mais doit donner une recommandation en fin de journée.", instruction:'Pratiquez les hypothèses, le cadrage du risque et la logique de décision.', strong:"Oui, et sur la base des trois points de données fiables, la recommandation est X. On validera les deux hypothèses ouvertes d'ici mercredi.", weak:"Il faut plus de données avant de décider." },
+    { category:'conflict', difficulty:'Medium', skill:'Médiation', text:"Deux membres de l'équipe sont fortement en désaccord sur comment résoudre un problème.", instruction:'Utilisez la facilitation, les preuves et le défi respectueux.', strong:"Oui, et vous défendez tous les deux le même résultat - livrer plus vite. Listons les hypothèses derrière chaque approche et testons la plus risquée en premier.", weak:"Choisissez-en un et avancez." },
+    { category:'mixed', difficulty:'Easy', skill:'Inclusion', text:"Un nouvel employé rejoint l'équipe à distance et se sent déconnecté.", instruction:'Concentrez-vous sur inclusion, communication et lien.', strong:"Oui, et je vais te jumeler avec deux personnes la première semaine - un pair et un mentor. On bloquera 15 minutes par jour.", weak:"Bienvenue. Dis-nous si tu as besoin de quelque chose." }
+  ],
+  de: [
+    { category:'communication', difficulty:'Easy', skill:'Aktives Zuhören', text:'Ein Manager gibt unklare Anweisungen für ein dringendes Projekt. Führen Sie das Team zur Klarheit.', instruction:'Bessere Fragen stellen, Erwartungen bestätigen, Annahmen vermeiden.', strong:'Ja, und zur Bestätigung: Ergebnis A bis Freitag, mit täglichen Check-ins. Ich sende in 30 Minuten ein einseitiges Briefing.', weak:'Okay, mache ich.' },
+    { category:'leadership', difficulty:'Medium', skill:'Verantwortung', text:'Ihr Team hat gerade eine wichtige Deadline verpasst. Sie haben zwei Minuten, um sie anzusprechen.', instruction:'Verantwortung, ruhige Kommunikation, vorausschauende Planung zeigen.', strong:'Ja, und der Fehler liegt bei mir - ich habe die Integrationsarbeit unterschätzt. Hier ist der neue Plan und was wir diese Woche anders machen.', weak:'Ihr habt alle versagt. Lasst das nicht wieder passieren.' },
+    { category:'sales', difficulty:'Medium', skill:'Wertrahmung', text:'Ein Interessent sagt, Ihre Lösung sei zu teuer und die Konkurrenz günstiger.', instruction:'Fokus auf Wert, Entdeckung und Einwandbehandlung.', strong:'Ja, und Preis ist wichtig - schauen wir uns die drei Ergebnisse an, die Sie genannt haben, und prüfen, ob die billigere Option diese wirklich liefert.', weak:'Wir sind unseren Preis wert, weil unsere Qualität besser ist.' },
+    { category:'customer-service', difficulty:'Easy', skill:'Empathie', text:'Ein Kunde ist wütend, weil eine zugesagte Lieferung verpasst wurde. Antworten Sie.', instruction:'Empathie, Verantwortung, praktische Lösung.', strong:'Ja, und es tut mir leid - das ist unser Fehler. Der Ersatz wird heute mit Priorität versandt, und hier ist ein Guthaben. Was kann ich noch reparieren?', weak:'Entschuldigung. Wir hatten Lagerprobleme.' },
+    { category:'change-management', difficulty:'Medium', skill:'Adoption-Botschaft', text:'Das Unternehmen wechselt nächsten Monat zu einem neuen Leistungsbeurteilungssystem. Die Mitarbeiter sind skeptisch.', instruction:'Vertrauen aufbauen durch Erklärung von Zweck, Vorteilen und Unterstützung.', strong:'Ja, und das alte System belohnte die falschen Dinge. Das neue ist um die drei Verhaltensweisen aufgebaut, die wir fördern wollen.', weak:'Es passiert, wir müssen uns anpassen.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'Entscheidung unter Unsicherheit', text:'Das Team hat unvollständige Daten, muss aber bis Tagesende eine Empfehlung geben.', instruction:'Annahmen, Risikorahmen und Entscheidungslogik üben.', strong:'Ja, und basierend auf den drei Datenpunkten, denen wir vertrauen, lautet die Empfehlung X. Die zwei offenen Annahmen validieren wir bis Mittwoch.', weak:'Wir brauchen mehr Daten, bevor wir entscheiden.' },
+    { category:'conflict', difficulty:'Medium', skill:'Mediation', text:'Zwei Teammitglieder sind sich stark uneinig, wie ein Problem zu lösen ist.', instruction:'Moderation, Belege und respektvolle Herausforderung verwenden.', strong:'Ja, und ihr verteidigt beide dasselbe Ergebnis - schnellere Lieferung. Listen wir die Annahmen hinter jedem Ansatz auf und testen zuerst die riskanteste.', weak:'Wählt einen und macht weiter.' },
+    { category:'mixed', difficulty:'Easy', skill:'Inklusion', text:'Ein neuer Mitarbeiter tritt aus der Ferne bei und fühlt sich isoliert.', instruction:'Fokus auf Inklusion, Kommunikation und Bindung.', strong:'Ja, und ich werde dich in der ersten Woche mit zwei Personen zusammenbringen - einem Peer und einem Mentor. Wir blockieren 15 Minuten täglich.', weak:'Willkommen. Sag uns, wenn du etwas brauchst.' }
+  ],
+  pt: [
+    { category:'communication', difficulty:'Easy', skill:'Escuta ativa', text:'Um gerente dá instruções pouco claras para um projeto urgente. Continue e leve a equipe à clareza.', instruction:'Faça perguntas melhores, confirme expectativas, evite suposições.', strong:'Sim, e para confirmar: resultado A até sexta-feira, com check-ins diários. Envio um brief de uma página em 30 minutos.', weak:'Ok, vou fazer.' },
+    { category:'leadership', difficulty:'Medium', skill:'Responsabilidade', text:'Sua equipe acabou de perder um prazo importante. Você tem dois minutos para falar com eles.', instruction:'Demonstre responsabilidade, calma e planejamento.', strong:'Sim, e o erro foi meu - subestimei o trabalho de integração. Aqui está o novo plano e o que faremos diferente esta semana.', weak:'Todos vocês falharam. Que não se repita.' },
+    { category:'sales', difficulty:'Medium', skill:'Enquadramento de valor', text:'Um prospect diz que sua solução é muito cara e a concorrência cobra menos.', instruction:'Foque em valor, descoberta e tratamento de objeções.', strong:'Sim, e preço importa - vamos olhar os três resultados que você mencionou e ver se a opção mais barata realmente os entrega.', weak:'Valemos o que cobramos porque nossa qualidade é melhor.' },
+    { category:'customer-service', difficulty:'Easy', skill:'Empatia', text:'Um cliente está irritado porque uma entrega prometida foi perdida. Responda.', instruction:'Empatia, responsabilidade, solução prática.', strong:'Sim, e me desculpe - o erro é nosso. A substituição sai hoje com prioridade, e aqui está um crédito. O que mais posso resolver?', weak:'Desculpa. Tivemos problemas no armazém.' },
+    { category:'change-management', difficulty:'Medium', skill:'Mensagem de adoção', text:'A empresa está migrando para um novo sistema de avaliação no próximo mês. Os funcionários estão céticos.', instruction:'Construa confiança explicando propósito, benefícios e suporte.', strong:'Sim, e o sistema antigo recompensava as coisas erradas. O novo é construído em torno dos três comportamentos que queremos incentivar.', weak:'Está acontecendo, temos que nos adaptar.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'Decisão sob incerteza', text:'A equipe tem dados incompletos mas precisa dar uma recomendação até o fim do dia.', instruction:'Pratique premissas, enquadramento de risco e lógica de decisão.', strong:'Sim, e com base nos três pontos de dados confiáveis, a recomendação é X. Validaremos as duas premissas abertas até quarta-feira.', weak:'Precisamos de mais dados antes de decidir.' },
+    { category:'conflict', difficulty:'Medium', skill:'Mediação', text:'Dois membros da equipe discordam fortemente sobre como resolver um problema.', instruction:'Use facilitação, evidência e desafio respeitoso.', strong:'Sim, e os dois defendem o mesmo resultado - entrega mais rápida. Vamos listar as premissas de cada abordagem e testar a mais arriscada primeiro.', weak:'Escolham uma e sigam em frente.' },
+    { category:'mixed', difficulty:'Easy', skill:'Inclusão', text:'Um novo funcionário entra remotamente e se sente desconectado.', instruction:'Foque em inclusão, comunicação e vínculo.', strong:'Sim, e vou te emparelhar com duas pessoas na primeira semana - um par e um mentor. Bloquearemos 15 minutos por dia.', weak:'Bem-vindo. Avise se precisar de algo.' }
+  ],
+  ja: [
+    { category:'communication', difficulty:'Easy', skill:'積極的傾聴', text:'マネージャーが緊急プロジェクトについて曖昧な指示を出します。チームを明確さへ導いてください。', instruction:'より良い質問をし、期待を確認し、仮定を避ける。', strong:'はい、そして確認させてください。金曜日までに成果A、毎日チェックイン。30分以内に1ページの概要を送ります。', weak:'はい、わかりました。' },
+    { category:'leadership', difficulty:'Medium', skill:'責任感', text:'チームが重要な期限を逃しました。2分で話して立て直してください。', instruction:'責任、冷静なコミュニケーション、前向きな計画を示す。', strong:'はい、そしてこのミスは私の責任です。統合作業を過小評価しました。これが新しい計画と今週変えることです。', weak:'みんな失敗した。次は許さない。' },
+    { category:'sales', difficulty:'Medium', skill:'価値の枠組み', text:'見込み客が「あなたの解決策は高すぎる、競合の方が安い」と言います。', instruction:'価値、発見、反論処理に焦点を当てる。', strong:'はい、そして価格は大事です。あなたが挙げた3つの成果を見て、安い選択肢が本当にそれを実現するか確認しましょう。', weak:'品質が良いので、その値段に見合います。' },
+    { category:'customer-service', difficulty:'Easy', skill:'共感', text:'約束した配送が遅れて顧客が怒っています。応答してください。', instruction:'共感、責任、実用的な解決。', strong:'はい、申し訳ありません。これは私たちのミスです。代替品を本日優先発送し、補償クレジットも用意しました。他に何を直しましょうか。', weak:'すみません、倉庫の問題がありました。' },
+    { category:'change-management', difficulty:'Medium', skill:'導入メッセージ', text:'来月から新しい人事評価制度に移行します。社員は懐疑的です。', instruction:'目的、利点、サポートを説明して信頼を築く。', strong:'はい、そして古い制度は間違ったことを評価していました。新しい制度は、私たちが奨励したい3つの行動を中心に作られています。', weak:'決まったことだから、適応するしかない。' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'不確実下の意思決定', text:'チームのデータは不完全ですが、今日中に推奨を出す必要があります。', instruction:'仮定、リスクの枠組み、意思決定の論理を実践する。', strong:'はい、信頼できる3つのデータポイントに基づくと、推奨はXです。残る2つの仮定は水曜までに検証します。', weak:'もっとデータがないと決められません。' },
+    { category:'conflict', difficulty:'Medium', skill:'仲裁', text:'チームメンバー2人が問題解決方法で激しく対立しています。', instruction:'進行、証拠、敬意ある挑戦を使う。', strong:'はい、お二人とも同じ結果を求めています—より早い納品。各アプローチの前提を並べ、最もリスクの高いものから検証しましょう。', weak:'どっちか選んで進めてください。' },
+    { category:'mixed', difficulty:'Easy', skill:'インクルージョン', text:'新入社員がリモートで参加し、孤立感を感じています。', instruction:'インクルージョン、コミュニケーション、絆を重視。', strong:'はい、そして最初の週は2人とペアを組ませます—同僚とメンターを。毎日15分のオンボーディング時間を確保します。', weak:'ようこそ。何かあれば言ってください。' }
+  ],
+  ko: [
+    { category:'communication', difficulty:'Easy', skill:'적극적 경청', text:'관리자가 긴급 프로젝트에 대해 모호한 지시를 합니다. 팀을 명확함으로 이끄세요.', instruction:'더 나은 질문, 기대치 확인, 추측 피하기.', strong:'네, 그리고 확인하자면: 금요일까지 결과 A, 매일 체크인. 30분 안에 1페이지 요약을 보내드리겠습니다.', weak:'네, 알겠습니다.' },
+    { category:'leadership', difficulty:'Medium', skill:'책임감', text:'팀이 방금 중요한 마감일을 놓쳤습니다. 2분 안에 그들과 이야기하고 분위기를 다잡으세요.', instruction:'책임감, 차분한 소통, 앞을 보는 계획을 보여라.', strong:'네, 그리고 이 실수는 제 책임입니다 - 통합 작업을 과소평가했어요. 이 새 계획과 이번 주에 다르게 할 일을 공유합니다.', weak:'모두 실패했어. 다시는 일어나지 마.' },
+    { category:'sales', difficulty:'Medium', skill:'가치 프레이밍', text:'잠재 고객이 솔루션이 너무 비싸고 경쟁사가 더 싸다고 합니다.', instruction:'가치, 탐색, 이의 처리에 집중.', strong:'네, 그리고 가격은 중요하죠 - 말씀하신 세 가지 결과를 보고 저렴한 옵션이 실제로 그걸 제공하는지 확인해보죠.', weak:'우리는 품질이 더 좋으니까 그 가격이 맞습니다.' },
+    { category:'customer-service', difficulty:'Easy', skill:'공감', text:'약속된 배송이 늦어져 고객이 화났습니다. 응답하세요.', instruction:'공감, 책임감, 실용적 해결.', strong:'네, 죄송합니다 - 저희 잘못입니다. 교체품을 오늘 우선 배송하고 보상 크레딧도 드립니다. 다른 무엇을 해결할까요?', weak:'죄송합니다. 창고 문제가 있었어요.' },
+    { category:'change-management', difficulty:'Medium', skill:'도입 메시지', text:'회사가 다음 달부터 새로운 성과 평가 시스템으로 전환합니다. 직원들은 회의적입니다.', instruction:'목적, 혜택, 지원을 설명하며 신뢰를 쌓아라.', strong:'네, 그리고 이전 시스템은 잘못된 것을 보상했어요. 새 시스템은 우리가 장려하고 싶은 세 가지 행동을 중심으로 만들어졌습니다.', weak:'그렇게 됐으니 적응해야죠.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'불확실성 하의 결정', text:'팀에 데이터가 부족하지만 오늘 안에 권고를 내야 합니다.', instruction:'가정, 위험 프레이밍, 의사결정 논리를 연습.', strong:'네, 신뢰할 수 있는 세 데이터 포인트로 권고는 X입니다. 남은 두 가정은 수요일까지 검증하겠습니다.', weak:'결정 전에 더 많은 데이터가 필요합니다.' },
+    { category:'conflict', difficulty:'Medium', skill:'중재', text:'팀원 두 명이 문제 해결 방법에서 강하게 의견 충돌합니다.', instruction:'촉진, 증거, 존중하는 도전을 사용.', strong:'네, 두 분 모두 같은 결과를 원하고 있어요 - 빠른 납품. 각 접근의 가정을 나열하고 가장 위험한 것부터 테스트하죠.', weak:'하나 골라서 진행하세요.' },
+    { category:'mixed', difficulty:'Easy', skill:'포용', text:'신입사원이 원격으로 합류해 단절감을 느낍니다.', instruction:'포용, 소통, 유대에 집중.', strong:'네, 첫 주에 두 사람과 짝지어 드릴게요 - 동료와 멘토. 매일 15분 온보딩 시간을 잡습니다.', weak:'환영합니다. 필요한 거 있으면 알려주세요.' }
+  ],
+  zh: [
+    { category:'communication', difficulty:'Easy', skill:'积极倾听', text:'经理就紧急项目给出不清晰的指示。请继续场景，引导团队走向清晰。', instruction:'提更好的问题，确认期望，避免假设。', strong:'是的，确认一下：周五前交付成果A，每日同步。30分钟内我会发一份单页摘要。', weak:'好的，我来做。' },
+    { category:'leadership', difficulty:'Medium', skill:'责任感', text:'团队刚错过重要截止日期。你有两分钟来面对他们并重整旗鼓。', instruction:'展现责任感、冷静沟通和前瞻规划。', strong:'是的，这次失误在我——我低估了集成工作。这是新计划和本周要改变的事情。', weak:'你们都搞砸了，别再发生。' },
+    { category:'sales', difficulty:'Medium', skill:'价值定位', text:'潜在客户说你的方案太贵，竞争对手更便宜。', instruction:'专注于价值、探索和异议处理。', strong:'是的，价格很重要——我们来看看您提到的三个成果，看看更便宜的方案是否真的能交付。', weak:'我们贵是因为质量更好。' },
+    { category:'customer-service', difficulty:'Easy', skill:'共情', text:'客户因承诺的交付延误而生气。请回应并继续。', instruction:'共情、负责、实用解决方案。', strong:'是的，非常抱歉——这是我们的错。今天优先发出替代品，并提供赔偿额度。还有什么我能修复的？', weak:'对不起，仓库出了问题。' },
+    { category:'change-management', difficulty:'Medium', skill:'采纳沟通', text:'公司下月将切换到新的绩效评估系统。员工持怀疑态度。', instruction:'通过解释目的、好处和支持来建立信任。', strong:'是的，旧系统奖励了错误的东西。新系统围绕我们想要鼓励的三种行为而建。', weak:'已经决定了，得适应。' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'不确定下的决策', text:'团队数据不完整，但必须在今天内给出建议。', instruction:'练习假设、风险框架和决策逻辑。', strong:'是的，基于三个可信数据点，建议是X。两个未决假设我们周三前验证。', weak:'决定前需要更多数据。' },
+    { category:'conflict', difficulty:'Medium', skill:'调解', text:'两位团队成员对如何解决问题强烈分歧。', instruction:'使用引导、证据和尊重的挑战。', strong:'是的，你们俩追求同一个结果——更快交付。我们列出每种方法的假设，先测试风险最高的。', weak:'选一个，往前走。' },
+    { category:'mixed', difficulty:'Easy', skill:'包容', text:'新员工远程入职，感到与团队脱节。', instruction:'专注于包容、沟通和联结。', strong:'是的，第一周我会安排你与两个人配对——一位同伴和一位导师。每天预留15分钟入职时间。', weak:'欢迎，有需要请告诉我们。' }
+  ],
+  ru: [
+    { category:'communication', difficulty:'Easy', skill:'Активное слушание', text:'Менеджер даёт нечёткие инструкции по срочному проекту. Продолжите и приведите команду к ясности.', instruction:'Задавайте лучшие вопросы, подтверждайте ожидания, избегайте предположений.', strong:'Да, и для подтверждения: результат A к пятнице, ежедневные чек-ины. Я пришлю одностраничный бриф через 30 минут.', weak:'Ок, сделаю.' },
+    { category:'leadership', difficulty:'Medium', skill:'Ответственность', text:'Ваша команда только что упустила важный дедлайн. У вас две минуты, чтобы поговорить с ними.', instruction:'Покажите ответственность, спокойную коммуникацию и план движения вперёд.', strong:'Да, и срыв на мне - я недооценил работу по интеграции. Вот новый план и что мы изменим на этой неделе.', weak:'Вы все провалились. Чтобы больше не повторялось.' },
+    { category:'sales', difficulty:'Medium', skill:'Рамка ценности', text:'Клиент говорит, что ваше решение слишком дорогое, у конкурента дешевле.', instruction:'Фокус на ценности, исследовании и обработке возражений.', strong:'Да, и цена важна - давайте посмотрим на три результата, которые вы упомянули, и проверим, действительно ли более дешёвый вариант их обеспечит.', weak:'Мы стоим своих денег, потому что качество выше.' },
+    { category:'customer-service', difficulty:'Easy', skill:'Эмпатия', text:'Клиент недоволен из-за пропущенной доставки. Ответьте и продолжите.', instruction:'Эмпатия, ответственность, практическое решение.', strong:'Да, прошу прощения - это наша ошибка. Замена отправляется сегодня с приоритетом, и вот вам компенсация. Что ещё могу исправить?', weak:'Извините, проблемы на складе.' },
+    { category:'change-management', difficulty:'Medium', skill:'Сообщение о принятии', text:'Компания переходит на новую систему оценки в следующем месяце. Сотрудники скептичны.', instruction:'Создавайте доверие, объясняя цель, выгоды и поддержку.', strong:'Да, и старая система поощряла не то. Новая построена вокруг трёх моделей поведения, которые мы хотим развивать.', weak:'Это происходит, нужно адаптироваться.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'Решение в условиях неопределённости', text:'У команды неполные данные, но рекомендация нужна сегодня.', instruction:'Тренируйте допущения, рамки рисков и логику решения.', strong:'Да, и на основе трёх надёжных точек данных рекомендация - X. Два открытых допущения проверим к среде.', weak:'Нужно больше данных, прежде чем решать.' },
+    { category:'conflict', difficulty:'Medium', skill:'Медиация', text:'Двое в команде сильно расходятся в том, как решать проблему.', instruction:'Используйте фасилитацию, доказательства и уважительный вызов.', strong:'Да, и вы оба отстаиваете один и тот же результат - быстрее доставить. Перечислим допущения за каждым подходом и проверим самое рискованное первым.', weak:'Выберите одно и двигайтесь дальше.' },
+    { category:'mixed', difficulty:'Easy', skill:'Инклюзия', text:'Новый сотрудник присоединяется удалённо и чувствует разрыв с командой.', instruction:'Фокус на инклюзии, коммуникации и связи.', strong:'Да, и я поставлю тебя в пару с двумя людьми на первой неделе - коллегой и ментором. Заблокируем 15 минут в день.', weak:'Добро пожаловать. Скажи, если что-то нужно.' }
+  ],
+  it: [
+    { category:'communication', difficulty:'Easy', skill:'Ascolto attivo', text:'Un manager dà istruzioni poco chiare per un progetto urgente. Continua e porta il team verso la chiarezza.', instruction:'Fai domande migliori, conferma le aspettative, evita supposizioni.', strong:"Sì, e per confermare: risultato A entro venerdì, con check-in giornalieri. Invio un brief di una pagina in 30 minuti.", weak:'Ok, lo farò.' },
+    { category:'leadership', difficulty:'Medium', skill:'Responsabilità', text:'Il tuo team ha appena mancato una scadenza importante. Hai due minuti per parlare con loro.', instruction:'Mostra responsabilità, calma e pianificazione.', strong:"Sì, e l'errore è mio - ho sottovalutato il lavoro di integrazione. Ecco il nuovo piano e cosa cambieremo questa settimana.", weak:'Avete fallito tutti. Che non si ripeta.' },
+    { category:'sales', difficulty:'Medium', skill:'Inquadramento del valore', text:'Un prospect dice che la tua soluzione è troppo cara e il concorrente costa meno.', instruction:'Concentrati su valore, scoperta e gestione delle obiezioni.', strong:"Sì, e il prezzo conta - vediamo i tre risultati che hai menzionato e capiamo se l'opzione più economica li consegna davvero.", weak:'Valiamo i nostri prezzi perché la qualità è migliore.' },
+    { category:'customer-service', difficulty:'Easy', skill:'Empatia', text:'Un cliente è arrabbiato perché una consegna promessa è stata persa. Rispondi.', instruction:'Empatia, responsabilità, risoluzione pratica.', strong:"Sì, e mi scuso - è colpa nostra. La sostituzione parte oggi in priorità, ed ecco un credito. Cos'altro posso sistemare?", weak:'Mi scusi. Abbiamo avuto problemi in magazzino.' },
+    { category:'change-management', difficulty:'Medium', skill:"Messaggio di adozione", text:'Il mese prossimo passiamo a un nuovo sistema di valutazione. I dipendenti sono scettici.', instruction:'Costruisci fiducia spiegando scopo, benefici e supporto.', strong:"Sì, e il vecchio sistema premiava le cose sbagliate. Il nuovo è costruito attorno ai tre comportamenti che vogliamo incoraggiare.", weak:'Sta succedendo, dobbiamo adattarci.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:"Decisione nell'incertezza", text:'Il team ha dati incompleti ma deve dare una raccomandazione entro fine giornata.', instruction:'Allena assunzioni, inquadramento del rischio e logica decisionale.', strong:"Sì, e in base ai tre dati affidabili la raccomandazione è X. Le due assunzioni aperte le validiamo entro mercoledì.", weak:'Servono più dati prima di decidere.' },
+    { category:'conflict', difficulty:'Medium', skill:'Mediazione', text:'Due membri del team sono in forte disaccordo su come risolvere un problema.', instruction:'Usa facilitazione, evidenze e sfida rispettosa.', strong:"Sì, e state difendendo lo stesso risultato - consegnare più velocemente. Elenchiamo le assunzioni dietro ogni approccio e testiamo prima quella più rischiosa.", weak:'Sceglietene uno e andate avanti.' },
+    { category:'mixed', difficulty:'Easy', skill:'Inclusione', text:'Un nuovo dipendente si unisce da remoto e si sente disconnesso.', instruction:"Concentrati su inclusione, comunicazione e legame.", strong:"Sì, e ti affianco con due persone la prima settimana - un pari e un mentor. Blocchiamo 15 minuti al giorno.", weak:'Benvenuto. Facci sapere se hai bisogno.' }
+  ],
+  id: [
+    { category:'communication', difficulty:'Easy', skill:'Mendengarkan aktif', text:'Seorang manajer memberi instruksi tidak jelas untuk proyek mendesak. Lanjutkan dan bawa tim menuju kejelasan.', instruction:'Ajukan pertanyaan lebih baik, konfirmasi ekspektasi, hindari asumsi.', strong:'Ya, dan untuk konfirmasi: hasil A pada Jumat, dengan check-in harian. Saya akan kirim brief satu halaman dalam 30 menit.', weak:'Oke, akan saya kerjakan.' },
+    { category:'leadership', difficulty:'Medium', skill:'Tanggung jawab', text:'Tim Anda baru saja melewatkan deadline besar. Anda punya dua menit untuk bicara dengan mereka.', instruction:'Tunjukkan tanggung jawab, komunikasi tenang dan perencanaan ke depan.', strong:'Ya, dan kesalahan ada pada saya - saya meremehkan pekerjaan integrasi. Ini rencana baru dan apa yang akan kita ubah minggu ini.', weak:'Kalian semua gagal. Jangan terulang.' },
+    { category:'sales', difficulty:'Medium', skill:'Pembingkaian nilai', text:'Prospek mengatakan solusi Anda terlalu mahal dan kompetitor lebih murah.', instruction:'Fokus pada nilai, eksplorasi dan penanganan keberatan.', strong:'Ya, dan harga itu penting - mari lihat tiga hasil yang Anda sebutkan dan periksa apakah opsi lebih murah benar-benar memberikannya.', weak:'Harga kami sesuai karena kualitas lebih baik.' },
+    { category:'customer-service', difficulty:'Easy', skill:'Empati', text:'Pelanggan marah karena pengiriman yang dijanjikan terlewat. Tanggapi dan lanjutkan.', instruction:'Empati, tanggung jawab, solusi praktis.', strong:'Ya, mohon maaf - ini kesalahan kami. Pengganti dikirim hari ini dengan prioritas, dan ini kredit kompensasi. Apa lagi yang bisa saya perbaiki?', weak:'Maaf, kami ada masalah di gudang.' },
+    { category:'change-management', difficulty:'Medium', skill:'Pesan adopsi', text:'Perusahaan beralih ke sistem penilaian baru bulan depan. Karyawan skeptis.', instruction:'Bangun kepercayaan dengan menjelaskan tujuan, manfaat dan dukungan.', strong:'Ya, dan sistem lama menghargai hal yang salah. Sistem baru dibangun di sekitar tiga perilaku yang ingin kita dorong.', weak:'Sudah diputuskan, harus menyesuaikan.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'Keputusan dalam ketidakpastian', text:'Tim punya data tidak lengkap tapi harus memberi rekomendasi hari ini.', instruction:'Latih asumsi, kerangka risiko dan logika keputusan.', strong:'Ya, dan berdasarkan tiga titik data terpercaya, rekomendasinya X. Dua asumsi terbuka akan kami validasi pada Rabu.', weak:'Butuh lebih banyak data sebelum memutuskan.' },
+    { category:'conflict', difficulty:'Medium', skill:'Mediasi', text:'Dua anggota tim sangat berbeda pendapat tentang cara menyelesaikan masalah.', instruction:'Gunakan fasilitasi, bukti dan tantangan yang hormat.', strong:'Ya, dan kalian berdua memperjuangkan hasil yang sama - pengiriman lebih cepat. Mari daftar asumsi setiap pendekatan dan uji yang paling berisiko dulu.', weak:'Pilih satu dan lanjutkan.' },
+    { category:'mixed', difficulty:'Easy', skill:'Inklusi', text:'Karyawan baru bergabung secara remote dan merasa terputus.', instruction:'Fokus pada inklusi, komunikasi dan keterikatan.', strong:'Ya, dan minggu pertama saya pasangkan kamu dengan dua orang - rekan dan mentor. Kita blok 15 menit setiap hari.', weak:'Selamat bergabung. Beritahu kalau butuh apa-apa.' }
+  ],
+  tr: [
+    { category:'communication', difficulty:'Easy', skill:'Aktif dinleme', text:'Bir yönetici acil bir proje için belirsiz talimatlar veriyor. Devam edin ve takımı netliğe yönlendirin.', instruction:'Daha iyi sorular sorun, beklentileri onaylayın, varsayımlardan kaçının.', strong:'Evet, ve onaylamak için: Cuma\'ya kadar A sonucu, günlük check-in. 30 dakika içinde tek sayfalık özet gönderiyorum.', weak:'Tamam, yaparım.' },
+    { category:'leadership', difficulty:'Medium', skill:'Sahiplenme', text:'Takımınız büyük bir tarihi kaçırdı. Onlara konuşmak için iki dakikanız var.', instruction:'Sahiplenme, sakin iletişim ve ileri planlama gösterin.', strong:'Evet, ve hata bende - entegrasyon işini hafife aldım. İşte yeni plan ve bu hafta neyi farklı yapacağız.', weak:'Hepiniz başarısız oldunuz. Bir daha olmasın.' },
+    { category:'sales', difficulty:'Medium', skill:'Değer çerçeveleme', text:'Bir potansiyel müşteri çözümünüzün çok pahalı, rakibinizin daha ucuz olduğunu söylüyor.', instruction:'Değer, keşif ve itiraz yönetimine odaklanın.', strong:'Evet, ve fiyat önemli - bahsettiğiniz üç sonuca bakalım ve daha ucuz seçeneğin onları gerçekten sunup sunmadığını görelim.', weak:'Kalitemiz daha iyi olduğu için fiyatımıza değeriz.' },
+    { category:'customer-service', difficulty:'Easy', skill:'Empati', text:'Müşteri vaat edilen teslimatın kaçırılması nedeniyle kızgın. Yanıtlayın.', instruction:'Empati, sahiplenme, pratik çözüm.', strong:'Evet, özür dilerim - bu bizim hatamız. Yedek bugün öncelikli olarak gönderiliyor ve işte bir kredi. Başka neyi düzeltebilirim?', weak:'Pardon. Depoda sorun yaşadık.' },
+    { category:'change-management', difficulty:'Medium', skill:'Benimseme mesajı', text:'Şirket önümüzdeki ay yeni performans değerlendirme sistemine geçiyor. Çalışanlar şüpheci.', instruction:'Amaç, faydalar ve destekle güven inşa edin.', strong:'Evet, ve eski sistem yanlış şeyleri ödüllendiriyordu. Yeni sistem, teşvik etmek istediğimiz üç davranış etrafında kurulu.', weak:'Oluyor, uyum sağlamalıyız.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'Belirsizlik altında karar', text:'Takımın eksik verisi var ama gün sonuna kadar tavsiye vermesi gerekiyor.', instruction:'Varsayımlar, risk çerçevelemesi ve karar mantığını çalıştırın.', strong:'Evet, ve güvenilen üç veri noktasına dayanarak tavsiye X. Açık iki varsayımı Çarşamba\'ya kadar doğrularız.', weak:'Karar vermeden önce daha fazla veri lazım.' },
+    { category:'conflict', difficulty:'Medium', skill:'Arabuluculuk', text:'Takımdan iki kişi bir sorunu nasıl çözeceği konusunda şiddetle anlaşamıyor.', instruction:'Kolaylaştırma, kanıt ve saygılı meydan okuma kullanın.', strong:'Evet, ve ikiniz de aynı sonucu savunuyorsunuz - daha hızlı teslimat. Her yaklaşımın varsayımlarını listeleyelim ve en riskli olanı önce test edelim.', weak:'Birini seçin ve devam edin.' },
+    { category:'mixed', difficulty:'Easy', skill:'Kapsayıcılık', text:'Yeni bir çalışan uzaktan katılıyor ve kopuk hissediyor.', instruction:'Kapsayıcılık, iletişim ve bağa odaklanın.', strong:'Evet, ve ilk hafta seni iki kişiyle eşleştireceğim - bir akran ve bir mentor. Günde 15 dakika ayıracağız.', weak:'Hoş geldin. Bir şeye ihtiyacın olursa söyle.' }
   ]
 };
 
@@ -2868,7 +3304,37 @@ document.addEventListener('keydown', e => {
   if(e.target.matches('input,textarea,select')) return;
   if(e.key.toLowerCase() === 'a'){ switchView('analytics'); }
   if(e.key.toLowerCase() === 'b'){ switchView('badges'); }
+  if(e.key === '?' || (e.shiftKey && e.key === '/')){ e.preventDefault(); openCheatSheet(); }
+  if(e.key === 'Escape'){ closeCheatSheet(); }
 });
+
+// Cheat sheet wiring
+function openCheatSheet(){ document.getElementById('cheatOverlay').classList.add('show'); }
+function closeCheatSheet(){ document.getElementById('cheatOverlay').classList.remove('show'); }
+document.getElementById('cheatBtn').addEventListener('click', openCheatSheet);
+document.getElementById('cheatClose').addEventListener('click', closeCheatSheet);
+document.getElementById('cheatCloseBottom').addEventListener('click', closeCheatSheet);
+document.getElementById('cheatOverlay').addEventListener('click', e => { if(e.target.id === 'cheatOverlay') closeCheatSheet(); });
+
+// Undo banner button
+document.getElementById('undoBtn').addEventListener('click', undoLastSave);
+
+// High-contrast toggle
+const hcToggle = document.getElementById('hcToggle');
+function applyHc(on){
+  document.body.classList.toggle('hc', !!on);
+  if(hcToggle) hcToggle.checked = !!on;
+  localStorage.setItem('edstellarImprovHC', on ? '1' : '0');
+}
+hcToggle.addEventListener('change', e => applyHc(e.target.checked));
+applyHc(localStorage.getItem('edstellarImprovHC') === '1');
+
+// Twist banner ARIA
+const _origTriggerTwist = triggerTwist;
+triggerTwist = function(){
+  _origTriggerTwist.apply(this, arguments);
+  announce('Plot twist: ' + document.getElementById('twistText').textContent);
+};
 
 // Boot
 detectMode();
