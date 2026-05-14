@@ -37,7 +37,7 @@ Static HTML/CSS/JS prototype of the planned `engage.edstellar.com` product surfa
 | Compare | `compare.html` | Engage vs Kahoot / Mentimeter / Gametize. |
 | Case Studies | `case-studies.html` | Three long-form case studies with before/after metrics. |
 | About | `about.html` | Mission, numbers, roadmap. |
-| **Improv Challenge (playable)** | `play/improv-challenge.html` | Fully playable in-browser game. 25 workplace prompts, team setup, round timer, 6-criteria scoring, leaderboard, JSON export. State persists in localStorage. |
+| **Improv Challenge v2 (playable)** | `play/improv-challenge.html` | Fully playable in-browser game. 28 prompts × 8 categories with difficulty + skill tags, strong/weak examples per prompt. EngageCoins economy with 5 power-ups (Re-roll, Reveal, Double Down, Steal, Plot Twist). 10 plot twists. Team avatars + colors. Color-state timer with audio cues. Round-summary modal with canvas confetti. Keyboard shortcuts. JSON + CSV exports. Print-friendly. localStorage persistence. |
 
 #### Run it
 

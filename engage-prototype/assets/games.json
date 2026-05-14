@@ -9469,65 +9469,69 @@
       "difficulty": "Medium",
       "facilitator": "Optional",
       "reinforcesTraining": false,
-      "concept": "Teams respond to workplace scenarios using 'Yes, and...' thinking. Build on each other's ideas instead of blocking them. 25 prompts across Communication, Leadership, Sales, Customer Service, Change Management, and Critical Thinking. Live host, timer, scoring across six criteria, leaderboard, and a JSON debrief report.",
+      "concept": "Workplace improv with stakes. Teams respond to 28 unexpected scenarios using 'Yes, and...' thinking. Spend EngageCoins on power-ups (Re-roll, Reveal Examples, Double Down, Steal, Plot Twist), survive random plot twists, and score across 6 criteria. Live leaderboard, round-summary celebrations with confetti, and JSON + CSV debrief exports.",
       "businessPurpose": "Build adaptability, communication, fast decision-making, and collaborative thinking.",
       "skills": [
         "Adaptability",
         "Communication",
         "Decision-Making",
         "Collaboration",
-        "Active Listening"
+        "Active Listening",
+        "Resilience under pressure"
       ],
       "materials": "Scenario cards, role briefs, timer, observer checklist, debrief sheet.",
       "howToPlay": [
-        "Form teams of 3-6 (or use the demo teams).",
-        "Pick a prompt category (Mixed, Communication, Leadership, Sales, CX, Change, Critical Thinking).",
-        "Read the prompt aloud and start the 30s-3min round timer.",
-        "Each team improvises a response using 'Yes, and...' to build on the scenario.",
-        "Score live across six criteria (Builds, Clarity, Creativity, Speed, Solution, Teamwork).",
-        "Run another round or open the Reflection tab for debrief and JSON export."
+        "Form 2-6 teams (or use the 3 demo teams). Each starts with 50 EngageCoins.",
+        "Pick a category and difficulty (Easy / Medium / Hard).",
+        "Read the prompt - difficulty tag and skill focus are shown.",
+        "Start the 30s-3min timer. Teams improvise responses using 'Yes, and...'.",
+        "Spend coins on power-ups: re-roll the prompt, reveal examples, double next score, steal 3 pts, or unleash a plot twist.",
+        "Score across 6 criteria (Builds, Clarity, Creativity, Speed, Solution, Teamwork) - use +/- or quick presets.",
+        "Round winner earns +15 bonus coins. Confetti fires. Open the summary, then go again."
       ],
       "reviewQuestions": [
         "Did the team build on ideas or block them?",
-        "How well did participants listen before responding?",
-        "Which workplace situations feel similar to this game?"
+        "How did the team handle plot twists - reactively or with intent?",
+        "Where can the \"Yes, and...\" behavior apply back at work?"
       ],
-      "keyTakeaway": "Improv Challenge trains the 'Yes, and...' habit. Teams that build on ideas instead of blocking them move faster in client calls, conflicts, and unexpected change.",
+      "keyTakeaway": "Improv Challenge trains the 'Yes, and...' habit under pressure. The currency and twist mechanics surface how teams really behave when stakes change: who blocks, who builds, who spends to win, who collaborates. The debrief is where the lesson lands.",
       "sourceContext": "14 Critical Thinking Exercises, Games, And Activities - Critical thinking games and activities",
       "sourceBlog": "https://www.edstellar.com/blog/critical-thinking-activities-games-for-employees",
       "sourceBlogTitle": "Blog 9: 14 Critical Thinking Exercises, Games, And Activities",
       "type": "Game/Activity",
       "walkthrough": [
         {
-          "title": "What is Improv Challenge?",
-          "body": "Workplace improv. Teams respond to unexpected scenarios using 'Yes, and...' thinking - build on each other's ideas instead of blocking them."
+          "title": "What is Improv Challenge v2?",
+          "body": "Workplace improv with stakes. Teams respond to unexpected scenarios using 'Yes, and...' thinking. EngageCoins, power-ups, and plot twists make every round different."
         },
         {
           "title": "How a round plays out",
-          "body": "Pick a category. Read the prompt. Start the timer (30s-3min). Each team improvises a response. Score across 6 criteria. Repeat."
+          "body": "Pick a category and difficulty. Read the prompt with its skill tag. Start the timer. Teams improvise. Spend coins on power-ups for an edge. Score across 6 criteria when time's up."
         },
         {
           "title": "Questions you'll discuss after",
-          "body": "Did the team build or block ideas? How well did people listen before responding? Where can the team apply this back at work?"
+          "body": "Did the team build or block? How did they handle the plot twists? Where does 'Yes, and...' apply back at work?"
         },
         {
           "title": "Why this game matters",
-          "body": "Improv Challenge trains the 'Yes, and...' habit. Teams that build on ideas instead of blocking them move faster in client calls, conflicts, and unexpected change."
+          "body": "It surfaces real behavior under pressure: who blocks, who builds, who collaborates, who spends to win. The debrief is where the lesson lands."
         }
       ],
       "outcomes": [
         "Rapid problem-solving; adaptability"
       ],
       "needs": {
-        "materials": "Browser. Optional: projector for live in-room facilitation.",
-        "platform": "Prompt engine, round timer, live scoring across 6 criteria, leaderboard, JSON export.",
-        "facilitator": "Recommended for groups over 12. Optional for small teams."
+        "materials": "Browser. Optional: projector for in-room. Audio for timer cues. Local storage for state persistence.",
+        "platform": "Prompt engine (28 prompts), power-up economy (5 power-ups + EngageCoins), plot twist injector (10 twists), round timer with audio cues, 6-criteria scoring, live leaderboard with score breakdown, round-summary modal with canvas confetti, JSON + CSV exports.",
+        "facilitator": "Recommended for groups over 12. Optional for small teams - shortcuts let one host run it."
       },
       "variations": [
-        "Demo mode: instant play with 3 sample teams.",
-        "Custom setup: add your own teams, pick a category, set round duration (30s-3min).",
+        "Demo mode: instant play with 3 sample teams, full power-up economy active.",
+        "Custom setup: add 2-6 teams, pick category + difficulty + round length (30s-3min).",
+        "Tournament mode: run 5 rounds back-to-back, use leaderboard for final ranking.",
+        "Power-ups disabled: drop the currency layer for a pure skill-only game.",
         "Async-friendly: capture responses in the response field and score after.",
-        "Fullscreen mode for in-room facilitation."
+        "Fullscreen mode for in-room facilitation. Print-friendly debrief."
       ],
       "playable": true,
       "playUrl": "./play/improv-challenge.html"

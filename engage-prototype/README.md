@@ -73,7 +73,7 @@ Currently playable:
 
 | Game | Path | What it does |
 |---|---|---|
-| **Improv Challenge** | `play/improv-challenge.html` | 25 workplace prompts across 7 categories, team setup, 30s-3min round timer, 6-criteria scoring, live leaderboard, reflection notes, JSON debrief export, fullscreen mode, How-to-Play modal. Fully client-side - state persists in `localStorage`. |
+| **Improv Challenge v2** | `play/improv-challenge.html` | 28 workplace prompts across 8 categories with difficulty (Easy/Medium/Hard) + skill-focus tags. Strong/weak example responses per prompt. **EngageCoins economy** with 5 power-ups (Re-roll, Reveal Examples, Double Down, Steal 3 pts, Plot Twist). **10 plot twists** that inject mid-round complications. Team avatars + colors. Auto round-summary modal with **canvas confetti**. Color-state timer with audio cues at 10s/5s/end. **Keyboard shortcuts** (Space, N, T, F, P/L/R, Esc). JSON + CSV exports. Print-friendly. Fully client-side - state persists in `localStorage`. |
 
 To add more playable games:
 1. Drop a self-contained HTML file under `play/<slug>.html` with a `← Back to Engage` link at the top.

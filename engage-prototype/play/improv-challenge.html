@@ -1,1331 +1,1683 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Edstellar Engage | Improv Challenge</title>
-  <style>
-    :root {
-      --brand-deep: #0B3C5D;
-      --brand-blue: #2563EB;
-      --brand-blue-dark: #1D4ED8;
-      --brand-sky: #38BDF8;
-      --bg: #F5F7FA;
-      --surface: #FFFFFF;
-      --surface-soft: #EEF2F7;
-      --border: #E5E7EB;
-      --heading: #111827;
-      --body: #4B5563;
-      --muted: #6B7280;
-      --success: #10B981;
-      --warning: #F59E0B;
-      --danger: #EF4444;
-      --shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
-      --radius: 22px;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--body);
-      background:
-        radial-gradient(circle at top left, rgba(56, 189, 248, 0.22), transparent 34%),
-        radial-gradient(circle at top right, rgba(37, 99, 235, 0.15), transparent 32%),
-        linear-gradient(180deg, #FFFFFF 0%, var(--bg) 45%, #EAF0F8 100%);
-    }
-
-    button, input, textarea, select { font: inherit; }
-    button { cursor: pointer; }
-
-    .app-shell {
-      max-width: 1260px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.3fr 0.7fr;
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 20px;
-    }
-
-    .hero-card, .panel, .mini-card, .toast {
-      background: rgba(255, 255, 255, 0.94);
-      border: 1px solid rgba(229, 231, 235, 0.95);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-card {
-      padding: 30px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      right: -80px;
-      top: -90px;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: rgba(56, 189, 248, 0.18);
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: #EFF6FF;
-      color: var(--brand-blue);
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 12px;
-    }
-
-    h1, h2, h3 {
-      color: var(--heading);
-      margin: 0;
-      line-height: 1.08;
-      letter-spacing: -0.035em;
-    }
-
-    h1 { font-size: clamp(34px, 5vw, 58px); max-width: 760px; }
-    h2 { font-size: 24px; margin-bottom: 10px; }
-    h3 { font-size: 17px; margin-bottom: 8px; }
-
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      max-width: 830px;
-      margin: 14px 0 0;
-      font-size: 16px;
-      line-height: 1.72;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 22px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 14px;
-      min-height: 44px;
-      padding: 11px 16px;
-      font-weight: 850;
-      color: #FFFFFF;
-      background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-dark));
-      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.24);
-      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
-    }
-
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 26px rgba(37, 99, 235, 0.30); }
-    .btn.secondary { color: var(--brand-deep); background: #FFFFFF; border: 1px solid #C7D2FE; box-shadow: none; }
-    .btn.ghost { color: var(--body); background: #F8FAFC; border: 1px solid var(--border); box-shadow: none; }
-    .btn.success { background: linear-gradient(135deg, var(--success), #059669); }
-    .btn.warning { background: linear-gradient(135deg, var(--warning), #D97706); }
-    .btn.danger { background: linear-gradient(135deg, var(--danger), #DC2626); }
-    .btn.full { width: 100%; }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-
-    .score-card {
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .stat-box {
-      padding: 14px;
-      border-radius: 16px;
-      background: #F8FAFC;
-      border: 1px solid var(--border);
-    }
-
-    .stat-label { display: block; font-size: 11px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
-    .stat-value { display: block; margin-top: 4px; color: var(--heading); font-size: 28px; font-weight: 900; letter-spacing: -0.04em; }
-
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .flow-step {
-      padding: 10px 12px;
-      border-radius: 16px;
-      background: #FFFFFF;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .flow-step.active {
-      background: var(--brand-blue);
-      color: #FFFFFF;
-      border-color: var(--brand-blue);
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 360px minmax(0, 1fr);
-      gap: 18px;
-      align-items: start;
-    }
-
-    .panel { padding: 22px; }
-
-    .form-row { display: grid; gap: 7px; margin-bottom: 14px; }
-    label { color: var(--heading); font-size: 13px; font-weight: 800; }
-
-    input, textarea, select {
-      width: 100%;
-      border: 1px solid #CBD5E1;
-      border-radius: 13px;
-      background: #FFFFFF;
-      color: var(--heading);
-      padding: 11px 12px;
-      outline: none;
-      transition: border-color 0.16s ease, box-shadow 0.16s ease;
-    }
-
-    textarea { min-height: 84px; resize: vertical; }
-    input:focus, textarea:focus, select:focus { border-color: var(--brand-blue); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
-
-    .hint { margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
-
-    .team-list, .leaderboard, .round-log { display: grid; gap: 10px; }
-
-    .team-item, .leader-item, .log-item, .prompt-card, .reflection-card {
-      border: 1px solid var(--border);
-      background: #FFFFFF;
-      border-radius: 16px;
-      padding: 14px;
-    }
-
-    .team-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .team-name { color: var(--heading); font-weight: 900; }
-    .team-meta { color: var(--muted); font-size: 12px; line-height: 1.45; }
-
-    .delete-team {
-      border: none;
-      background: #FEF2F2;
-      color: #B91C1C;
-      border-radius: 10px;
-      padding: 7px 9px;
-      font-weight: 900;
-    }
-
-    .game-board { display: grid; gap: 18px; }
-
-    .status-strip {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 14px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #0B3C5D, #1E40AF);
-      color: #FFFFFF;
-      box-shadow: var(--shadow);
-    }
-
-    .status-strip strong { font-size: 15px; }
-    .status-strip span { color: #DBEAFE; font-size: 13px; }
-
-    .timer {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-      color: #FFFFFF;
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .prompt-card {
-      padding: 24px;
-      background: linear-gradient(180deg, rgba(239, 246, 255, 0.95), rgba(255, 255, 255, 0.98));
-      border-color: #BFDBFE;
-    }
-
-    .prompt-category {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #DBEAFE;
-      color: #1D4ED8;
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
-    }
-
-    .prompt-text {
-      color: var(--heading);
-      font-size: clamp(22px, 3vw, 34px);
-      font-weight: 900;
-      line-height: 1.2;
-      letter-spacing: -0.035em;
-      margin: 0 0 14px;
-    }
-
-    .prompt-instruction { line-height: 1.65; margin: 0; }
-
-    .response-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .score-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .score-field input { text-align: center; font-weight: 900; }
-
-    .quick-score-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .quick-score {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: #F8FAFC;
-      color: var(--body);
-      padding: 7px 10px;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .leader-item {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .rank {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: #EFF6FF;
-      color: var(--brand-blue);
-      font-weight: 900;
-    }
-
-    .leader-score { color: var(--heading); font-size: 22px; font-weight: 900; }
-
-    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-
-    .tab {
-      border: 1px solid var(--border);
-      background: #FFFFFF;
-      color: var(--body);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .tab.active { color: #FFFFFF; background: var(--brand-blue); border-color: var(--brand-blue); }
-    .hidden { display: none !important; }
-
-    .empty-state {
-      padding: 20px;
-      border-radius: 16px;
-      border: 1px dashed #CBD5E1;
-      background: #F8FAFC;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.55;
-    }
-
-    .mini-card { padding: 16px; }
-    .mini-card p { margin: 0; line-height: 1.6; }
-
-    .footer-note {
-      margin-top: 22px;
-      padding: 16px;
-      border-radius: 18px;
-      background: #FFFFFF;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
-    }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%) translateY(20px);
-      padding: 12px 16px;
-      color: var(--heading);
-      font-weight: 900;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      z-index: 999;
-    }
-
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    .fullscreen-hint {
-      position: fixed;
-      top: 14px;
-      right: 14px;
-      z-index: 998;
-      display: none;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.88);
-      color: #FFFFFF;
-      font-size: 12px;
-      font-weight: 850;
-      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.22);
-    }
-
-    .fullscreen-hint.show { display: inline-flex; }
-
-    .howto-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 22px;
-      background: rgba(15, 23, 42, 0.58);
-      backdrop-filter: blur(8px);
-    }
-
-    .howto-overlay.show { display: flex; }
-
-    .howto-modal {
-      width: min(920px, 96vw);
-      max-height: 90vh;
-      overflow: auto;
-      background: #FFFFFF;
-      border: 1px solid rgba(229, 231, 235, 0.95);
-      border-radius: 28px;
-      box-shadow: 0 30px 90px rgba(15, 23, 42, 0.36);
-      animation: modalPop 0.34s ease both;
-    }
-
-    @keyframes modalPop {
-      from { opacity: 0; transform: translateY(20px) scale(0.96); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .howto-header {
-      padding: 24px 26px;
-      background: linear-gradient(135deg, #0B3C5D, #2563EB);
-      color: #FFFFFF;
-      border-radius: 28px 28px 0 0;
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .howto-header h2 { color: #FFFFFF; margin-bottom: 6px; }
-    .howto-header p { margin: 0; color: #DBEAFE; line-height: 1.55; }
-
-    .howto-close {
-      border: 1px solid rgba(255,255,255,0.22);
-      background: rgba(255,255,255,0.13);
-      color: #FFFFFF;
-      border-radius: 12px;
-      min-width: 40px;
-      height: 40px;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .howto-body { padding: 24px 26px 26px; }
-
-    .howto-steps {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .howto-step {
-      min-height: 136px;
-      padding: 16px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: #F8FAFC;
-      overflow: hidden;
-      animation: floatIn 0.5s ease both;
-    }
-
-    .howto-step:nth-child(2) { animation-delay: 0.08s; }
-    .howto-step:nth-child(3) { animation-delay: 0.16s; }
-    .howto-step:nth-child(4) { animation-delay: 0.24s; }
-
-    @keyframes floatIn {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .howto-icon {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: 16px;
-      background: #EFF6FF;
-      color: var(--brand-blue);
-      font-size: 22px;
-      margin-bottom: 10px;
-      animation: pulseIcon 1.8s ease infinite;
-    }
-
-    @keyframes pulseIcon {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
-
-    .howto-step strong { display: block; color: var(--heading); margin-bottom: 6px; }
-    .howto-step span { display: block; color: var(--muted); font-size: 13px; line-height: 1.48; }
-
-    .example-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .example-card {
-      border: 1px solid #BFDBFE;
-      background: #EFF6FF;
-      border-radius: 18px;
-      padding: 16px;
-      animation: floatIn 0.55s ease both;
-    }
-
-    .example-card strong { display: block; color: var(--brand-deep); margin-bottom: 8px; }
-    .example-card p { margin: 0; color: var(--body); line-height: 1.6; }
-
-    .howto-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: #ECFDF5;
-      color: #047857;
-      font-size: 11px;
-      font-weight: 900;
-      margin-left: 8px;
-    }
-
-    .live-badge::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #10B981;
-      box-shadow: 0 0 0 5px rgba(16,185,129,0.14);
-    }
-
-    .leader-score small {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 800;
-      text-align: right;
-    }
-
-    @media (max-width: 960px) {
-      .howto-steps, .example-box { grid-template-columns: 1fr; }
-      .howto-header { padding: 20px; }
-      .howto-body { padding: 20px; }
-    }
-
-    @media (max-width: 960px) {
-      .hero, .grid { grid-template-columns: 1fr; }
-      .response-grid, .score-grid, .flow { grid-template-columns: 1fr; }
-      .app-shell { padding: 14px; }
-      .hero-card, .panel { padding: 18px; }
-    }
-
-    @media print {
-      .btn, .hero-actions, .setup-panel, .status-strip, .footer-note, .toast { display: none !important; }
-      body { background: #FFFFFF; }
-      .app-shell { max-width: none; padding: 0; }
-      .panel, .hero-card, .mini-card { box-shadow: none; border-color: #D1D5DB; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Improv Challenge - Edstellar Engage</title>
+<style>
+:root{
+  --brand-deep:#0B3C5D;
+  --brand-blue:#2563EB;
+  --brand-blue-dark:#1D4ED8;
+  --brand-sky:#38BDF8;
+  --bg:#F5F7FA;
+  --surface:#FFFFFF;
+  --surface-soft:#EEF2F7;
+  --border:#E5E7EB;
+  --heading:#0F172A;
+  --body:#334155;
+  --muted:#64748B;
+  --success:#10B981;
+  --success-dark:#059669;
+  --warning:#F59E0B;
+  --warning-dark:#D97706;
+  --danger:#EF4444;
+  --gold:#F59E0B;
+  --coin-grad:linear-gradient(135deg,#FCD34D,#F59E0B);
+  --shadow:0 18px 45px rgba(15,23,42,.10);
+  --shadow-sm:0 6px 14px rgba(15,23,42,.06);
+  --radius:22px;
+  --radius-sm:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--body);
+  background:
+    radial-gradient(900px 600px at 0% -10%, rgba(56,189,248,.22), transparent 50%),
+    radial-gradient(900px 600px at 110% 0%, rgba(37,99,235,.20), transparent 55%),
+    linear-gradient(180deg,#FFFFFF 0%,var(--bg) 40%,#E6EEF8 100%);
+  overflow-x:hidden;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:1100}
+
+/* ---------- Layout ---------- */
+.app-shell{max-width:1320px;margin:0 auto;padding:24px}
+.back-pill{
+  position:fixed;top:16px;left:16px;z-index:1001;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 14px;border-radius:999px;
+  background:rgba(255,255,255,.94);border:1px solid var(--border);
+  color:var(--brand-deep);text-decoration:none;font-weight:800;font-size:13px;
+  box-shadow:var(--shadow-sm);backdrop-filter:blur(8px);
+  transition:transform .12s ease;
+}
+.back-pill:hover{transform:translateX(-2px)}
+
+.hero{display:grid;grid-template-columns:1.4fr .7fr;gap:18px;align-items:stretch;margin-bottom:20px;margin-top:8px}
+.hero-card,.panel,.mini-card,.toast{
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(229,231,235,.95);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.hero-card{padding:30px;overflow:hidden;position:relative}
+.hero-card::after{
+  content:"";position:absolute;right:-100px;top:-100px;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(56,189,248,.22),transparent 65%);
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 12px;border-radius:999px;
+  background:#EFF6FF;color:var(--brand-blue);
+  font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  margin-bottom:12px;
+}
+h1,h2,h3{color:var(--heading);margin:0;line-height:1.1;letter-spacing:-.035em}
+h1{font-size:clamp(34px,5vw,56px);max-width:760px}
+h2{font-size:24px;margin-bottom:10px}
+h3{font-size:17px;margin-bottom:8px}
+.hero-text{position:relative;z-index:2;max-width:830px;margin:14px 0 0;font-size:16px;line-height:1.72}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:2}
+
+/* ---------- Buttons ---------- */
+.btn{
+  border:none;border-radius:14px;min-height:44px;padding:11px 18px;
+  font-weight:850;color:#FFFFFF;
+  background:linear-gradient(135deg,var(--brand-blue),var(--brand-blue-dark));
+  box-shadow:0 10px 22px rgba(37,99,235,.24);
+  transition:transform .14s ease,box-shadow .14s ease,filter .14s ease;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(37,99,235,.32)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn.secondary{color:var(--brand-deep);background:#FFFFFF;border:1px solid #C7D2FE;box-shadow:none}
+.btn.ghost{color:var(--body);background:#F8FAFC;border:1px solid var(--border);box-shadow:none}
+.btn.success{background:linear-gradient(135deg,var(--success),var(--success-dark));box-shadow:0 10px 22px rgba(16,185,129,.28)}
+.btn.warning{background:linear-gradient(135deg,var(--warning),var(--warning-dark));box-shadow:0 10px 22px rgba(245,158,11,.28)}
+.btn.danger{background:linear-gradient(135deg,var(--danger),#DC2626)}
+.btn.full{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-sm{min-height:34px;padding:7px 12px;font-size:12.5px}
+
+/* ---------- Snapshot card ---------- */
+.score-card{padding:22px;display:flex;flex-direction:column;gap:14px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat-box{padding:14px;border-radius:16px;background:#F8FAFC;border:1px solid var(--border)}
+.stat-label{display:block;font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.stat-value{display:block;margin-top:4px;color:var(--heading);font-size:28px;font-weight:900;letter-spacing:-.04em}
+
+.coins-strip{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px;border-radius:16px;
+  background:linear-gradient(135deg,#0B3C5D,#1E40AF);color:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.coin-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+  padding:6px 12px;border-radius:999px;font-weight:900;font-size:13px;
+}
+.coin-dot{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--coin-grad);color:#3a2700;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:900;
+}
+
+/* ---------- Flow stepper ---------- */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.flow-step{
+  padding:10px 12px;border-radius:16px;
+  background:#fff;border:1px solid var(--border);
+  color:var(--muted);font-size:12px;font-weight:900;text-align:center;
+}
+.flow-step.active{
+  background:var(--brand-blue);color:#fff;border-color:var(--brand-blue);
+  box-shadow:0 10px 24px rgba(37,99,235,.22);
+}
+
+/* ---------- Main grid ---------- */
+.grid{display:grid;grid-template-columns:380px minmax(0,1fr);gap:18px;align-items:start}
+.panel{padding:22px}
+
+/* ---------- Setup ---------- */
+.form-row{display:grid;gap:7px;margin-bottom:14px}
+label{color:var(--heading);font-size:13px;font-weight:800}
+input,textarea,select{
+  width:100%;border:1px solid #CBD5E1;border-radius:13px;
+  background:#fff;color:var(--heading);padding:11px 12px;outline:none;
+  transition:border-color .14s ease,box-shadow .14s ease;
+}
+textarea{min-height:84px;resize:vertical}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--brand-blue);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+.hint{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
+
+/* ---------- Team list ---------- */
+.team-list,.leaderboard,.round-log{display:grid;gap:10px}
+.team-item,.leader-item,.log-item,.prompt-card,.reflection-card,.powerup-card{
+  border:1px solid var(--border);background:#fff;border-radius:16px;padding:14px;
+}
+.team-item{display:flex;align-items:center;gap:12px}
+.team-avatar{
+  width:42px;height:42px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:20px;
+  box-shadow:0 4px 10px rgba(15,23,42,.12);
+  background:var(--team-color,#0B3C5D);
+}
+.team-info{flex:1;min-width:0}
+.team-name{color:var(--heading);font-weight:900;font-size:15px}
+.team-meta{color:var(--muted);font-size:12px;line-height:1.45}
+.team-meta strong{color:var(--brand-deep);font-weight:800}
+.delete-team{
+  border:none;background:#FEF2F2;color:#B91C1C;
+  border-radius:10px;padding:7px 11px;font-weight:900;
+}
+
+/* ---------- Status / timer ---------- */
+.game-board{display:grid;gap:18px}
+.status-strip{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  padding:18px;border-radius:18px;
+  background:linear-gradient(135deg,#0B3C5D,#1E40AF);color:#fff;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.status-strip::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(600px 300px at 110% 0%,rgba(56,189,248,.24),transparent 60%);
+  pointer-events:none;
+}
+.status-strip strong{font-size:16px;position:relative}
+.status-strip span{color:#DBEAFE;font-size:13px;position:relative}
+.status-strip > div:first-child{position:relative}
+.timer{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:12px 18px;border-radius:999px;
+  background:rgba(255,255,255,.14);color:#fff;
+  font-weight:900;font-variant-numeric:tabular-nums;font-size:18px;
+  position:relative;transition:background .25s ease,color .25s ease,transform .15s ease;
+}
+.timer.warn{background:rgba(245,158,11,.95);color:#3a2700;animation:pulseWarn 1s ease-in-out infinite}
+.timer.danger{background:rgba(239,68,68,.95);color:#fff;animation:pulseDanger .6s ease-in-out infinite}
+@keyframes pulseWarn{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes pulseDanger{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+/* ---------- Power-ups bar ---------- */
+.powerups{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;
+  padding:14px;border-radius:18px;background:#fff;border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+.powerup-card{
+  padding:12px;display:flex;flex-direction:column;gap:6px;
+  background:#F8FAFC;border-radius:14px;text-align:center;cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;
+  position:relative;
+}
+.powerup-card:not(.disabled):hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);border-color:var(--brand-blue)}
+.powerup-card.disabled{opacity:.45;cursor:not-allowed}
+.powerup-icon{font-size:22px;line-height:1}
+.powerup-name{font-weight:900;color:var(--heading);font-size:13px}
+.powerup-cost{
+  display:inline-flex;align-items:center;gap:4px;justify-content:center;
+  background:var(--coin-grad);color:#3a2700;
+  padding:2px 8px;border-radius:999px;font-weight:900;font-size:11px;
+}
+.powerup-tooltip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:#0F172A;color:#fff;padding:8px 12px;border-radius:10px;font-size:11.5px;font-weight:600;
+  width:180px;line-height:1.4;opacity:0;pointer-events:none;
+  transition:opacity .15s ease;z-index:5;text-align:left;
+}
+.powerup-card:hover .powerup-tooltip{opacity:1}
+
+/* ---------- Prompt card ---------- */
+.prompt-card{
+  padding:28px;background:linear-gradient(180deg,rgba(239,246,255,.96),rgba(255,255,255,.99));
+  border-color:#BFDBFE;position:relative;overflow:hidden;
+}
+.prompt-card::after{
+  content:"";position:absolute;right:-60px;top:-60px;
+  width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle,rgba(56,189,248,.18),transparent 65%);
+  pointer-events:none;
+}
+.prompt-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;position:relative}
+.prompt-category{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;
+  background:#DBEAFE;color:#1D4ED8;font-size:12px;font-weight:900;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.prompt-tag{padding:4px 10px;border-radius:999px;background:#F1F5F9;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.prompt-tag.diff-Easy{background:#ECFDF5;color:#047857}
+.prompt-tag.diff-Medium{background:#FFFBEB;color:#92400E}
+.prompt-tag.diff-Hard{background:#FEF2F2;color:#991B1B}
+.prompt-text{color:var(--heading);font-size:clamp(22px,3vw,32px);font-weight:900;line-height:1.22;letter-spacing:-.035em;margin:0 0 14px;position:relative}
+.prompt-instruction{line-height:1.65;margin:0 0 12px;position:relative}
+
+.example-toggle{
+  background:none;border:none;color:var(--brand-blue);
+  font-weight:800;font-size:13px;cursor:pointer;padding:4px 0;text-decoration:underline;
+}
+.examples{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;position:relative}
+.examples.show{display:grid}
+.example-card{padding:12px 14px;border-radius:14px;font-size:13px;line-height:1.55}
+.example-card.weak{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+.example-card.strong{background:#F0FDF4;border:1px solid #BBF7D0;color:#047857}
+.example-card strong{display:block;margin-bottom:4px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
+
+/* ---------- Twist banner ---------- */
+.twist-banner{
+  display:none;align-items:center;gap:14px;
+  padding:14px 18px;border-radius:16px;
+  background:linear-gradient(135deg,#F59E0B,#DC2626);color:#fff;
+  box-shadow:0 12px 24px rgba(239,68,68,.25);
+  animation:twistPop .4s ease both;position:relative;
+}
+.twist-banner.show{display:flex}
+.twist-icon{font-size:30px;line-height:1}
+.twist-body strong{display:block;font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.twist-body p{margin:0;font-size:14px;line-height:1.4}
+.twist-close{
+  margin-left:auto;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+  color:#fff;border-radius:10px;padding:6px 10px;font-weight:900;
+}
+@keyframes twistPop{from{transform:translateY(-8px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ---------- Scoring panel ---------- */
+.response-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.team-score-card{
+  border:1px solid var(--border);background:#fff;border-radius:18px;padding:16px;
+  position:relative;transition:box-shadow .15s ease,border-color .15s ease;
+}
+.team-score-card.leader{border-color:var(--gold);box-shadow:0 12px 28px rgba(245,158,11,.18)}
+.team-score-card.leader::before{
+  content:"👑 Leading";position:absolute;top:-10px;right:14px;
+  background:var(--coin-grad);color:#3a2700;
+  padding:3px 10px;border-radius:999px;font-size:10.5px;font-weight:900;letter-spacing:.06em;
+}
+.team-score-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.team-score-head .team-avatar{width:36px;height:36px;font-size:17px;border-radius:11px}
+.team-score-head .team-name{font-size:15px}
+.team-score-running{
+  margin-left:auto;background:#F1F5F9;color:var(--brand-deep);
+  padding:4px 10px;border-radius:999px;font-weight:900;font-size:12px;
+}
+.quick-score-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.quick-score{
+  flex:1;min-width:0;border:1px solid var(--border);border-radius:10px;
+  background:#F8FAFC;color:var(--body);padding:7px 6px;font-size:11.5px;font-weight:900;
+  transition:all .12s ease;
+}
+.quick-score:hover{border-color:var(--brand-blue);color:var(--brand-blue);background:#EFF6FF}
+
+.criteria{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
+.criterion{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:6px 10px;background:#F8FAFC;border-radius:10px;
+  font-size:12px;border:1px solid transparent;
+}
+.criterion-label{color:var(--heading);font-weight:800;flex:1}
+.criterion-label small{display:block;color:var(--muted);font-weight:600;font-size:10px}
+.criterion-ctrl{display:flex;align-items:center;gap:4px}
+.score-btn{
+  width:24px;height:24px;border-radius:7px;border:1px solid var(--border);
+  background:#fff;color:var(--heading);font-weight:900;font-size:13px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.score-btn:hover{border-color:var(--brand-blue);color:var(--brand-blue)}
+.score-val{width:28px;text-align:center;font-weight:900;color:var(--brand-deep);font-variant-numeric:tabular-nums}
+
+.response-input{margin-top:10px}
+.response-input textarea{min-height:60px;font-size:13px}
+
+/* ---------- Leaderboard ---------- */
+.leader-item{
+  display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;
+}
+.rank{
+  width:34px;height:34px;border-radius:12px;display:grid;place-items:center;
+  background:#EFF6FF;color:var(--brand-blue);font-weight:900;font-size:14px;
+}
+.leader-item.rank-1 .rank{background:var(--coin-grad);color:#3a2700}
+.leader-item.rank-2 .rank{background:#E5E7EB;color:#374151}
+.leader-item.rank-3 .rank{background:#FED7AA;color:#9A3412}
+.leader-score{color:var(--heading);font-size:24px;font-weight:900;text-align:right;line-height:1}
+.leader-score small{display:block;margin-top:2px;color:var(--muted);font-size:10px;font-weight:800;text-align:right}
+.score-bar{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-top:6px;height:5px;
+}
+.score-bar span{background:#E5E7EB;border-radius:2px}
+.score-bar span.f{background:var(--brand-blue)}
+
+/* ---------- Tabs ---------- */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tab{
+  border:1px solid var(--border);background:#fff;color:var(--body);
+  padding:9px 14px;border-radius:999px;font-size:13px;font-weight:900;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.tab.active{color:#fff;background:var(--brand-blue);border-color:var(--brand-blue)}
+.tab .kbd{background:rgba(255,255,255,.2);border-radius:5px;padding:1px 6px;font-size:10px}
+.tab:not(.active) .kbd{background:#F1F5F9;color:var(--muted)}
+.hidden{display:none !important}
+
+.empty-state{
+  padding:20px;border-radius:16px;
+  border:1px dashed #CBD5E1;background:#F8FAFC;color:var(--muted);
+  text-align:center;line-height:1.55;
+}
+.mini-card{padding:14px 16px}
+.mini-card p{margin:0;line-height:1.55;font-size:13.5px}
+.kbd-help{
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:11px;color:var(--muted);
+}
+.kbd-help span{display:inline-flex;align-items:center;gap:4px;background:#F8FAFC;border:1px solid var(--border);padding:3px 7px;border-radius:6px}
+.kbd-help kbd{background:#fff;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-family:inherit;font-size:10px;font-weight:900;color:var(--heading)}
+
+.footer-note{
+  margin-top:24px;padding:16px;border-radius:18px;
+  background:#fff;border:1px solid var(--border);color:var(--muted);
+  font-size:12px;text-align:center;
+}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+  padding:12px 18px;color:var(--heading);font-weight:900;
+  opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;z-index:999;
+  border-radius:14px;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:#ECFDF5;border-color:#A7F3D0;color:#065F46}
+.toast.warning{background:#FFFBEB;border-color:#FDE68A;color:#92400E}
+
+/* ---------- Modals (HowTo + Summary) ---------- */
+.overlay{
+  position:fixed;inset:0;z-index:1000;display:none;
+  align-items:center;justify-content:center;padding:22px;
+  background:rgba(15,23,42,.62);backdrop-filter:blur(8px);
+}
+.overlay.show{display:flex;animation:fade .2s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.overlay-modal{
+  width:min(920px,96vw);max-height:90vh;overflow:auto;
+  background:#fff;border:1px solid rgba(229,231,235,.95);
+  border-radius:28px;box-shadow:0 30px 90px rgba(15,23,42,.36);
+  animation:pop .34s ease both;
+}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.overlay-header{
+  padding:24px 26px;background:linear-gradient(135deg,#0B3C5D,#2563EB);color:#fff;
+  border-radius:28px 28px 0 0;display:flex;justify-content:space-between;gap:16px;align-items:flex-start;
+}
+.overlay-header h2{color:#fff;margin-bottom:6px}
+.overlay-header p{margin:0;color:#DBEAFE;line-height:1.55}
+.overlay-close{
+  border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.13);
+  color:#fff;border-radius:12px;min-width:40px;height:40px;font-size:20px;font-weight:900;
+}
+.overlay-body{padding:24px 26px 26px}
+.howto-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.howto-step{
+  min-height:136px;padding:16px;border-radius:20px;
+  border:1px solid var(--border);background:#F8FAFC;overflow:hidden;
+  animation:floatIn .5s ease both;
+}
+.howto-step:nth-child(2){animation-delay:.08s}
+.howto-step:nth-child(3){animation-delay:.16s}
+.howto-step:nth-child(4){animation-delay:.24s}
+@keyframes floatIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.howto-icon{
+  width:42px;height:42px;display:grid;place-items:center;border-radius:16px;
+  background:#EFF6FF;color:var(--brand-blue);font-size:22px;margin-bottom:10px;
+  animation:pulseIcon 1.8s ease infinite;
+}
+@keyframes pulseIcon{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.howto-step strong{display:block;color:var(--heading);margin-bottom:6px}
+.howto-step span{display:block;color:var(--muted);font-size:13px;line-height:1.48}
+.howto-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+
+/* Round summary */
+.summary-winner{
+  text-align:center;padding:28px 24px;
+  background:linear-gradient(135deg,#FCD34D,#F59E0B);
+  border-radius:24px 24px 0 0;color:#3a2700;
+}
+.summary-winner h2{color:#3a2700;font-size:28px;margin:6px 0 4px}
+.summary-winner .crown{font-size:54px;line-height:1}
+.summary-grid{display:grid;gap:10px;padding:20px 24px}
+.summary-row{
+  display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;
+  padding:12px 14px;background:#F8FAFC;border-radius:14px;border:1px solid var(--border);
+}
+.summary-row .delta{
+  background:#ECFDF5;color:#047857;
+  padding:4px 10px;border-radius:999px;font-weight:900;font-size:12px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:980px){
+  .hero,.grid{grid-template-columns:1fr}
+  .response-grid,.flow{grid-template-columns:1fr}
+  .app-shell{padding:14px}
+  .hero-card,.panel{padding:18px}
+  .powerups{grid-template-columns:repeat(2,1fr)}
+  .howto-steps{grid-template-columns:1fr}
+  .examples{grid-template-columns:1fr !important}
+  .summary-row{grid-template-columns:auto 1fr auto}
+}
+@media print{
+  .btn,.hero-actions,.setup-panel,.status-strip,.footer-note,.toast,.back-pill,.powerups{display:none !important}
+  body{background:#fff}
+  .app-shell{max-width:none;padding:0}
+  .panel,.hero-card,.mini-card{box-shadow:none;border-color:#D1D5DB}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
 </head>
 <body>
-  <a href="../game.html?id=improv" style="position:fixed;top:16px;left:16px;z-index:1001;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.92);border:1px solid #E5E7EB;color:#0B3C5D;text-decoration:none;font-weight:800;font-size:13px;box-shadow:0 6px 16px rgba(15,23,42,.08);backdrop-filter:blur(6px)">
-    ← Back to Engage
-  </a>
+<a class="back-pill" href="../game.html?id=improv">← Back to Engage</a>
+<canvas id="confetti" aria-hidden="true"></canvas>
 
-  <div class="app-shell">
-    <section class="hero">
-      <div class="hero-card">
-        <div class="eyebrow">Edstellar Engage · Workplace Game</div>
-        <h1>Improv Challenge</h1>
-        <p class="hero-text">
-          A workplace game where teams respond to unexpected scenarios, build on each other's ideas, and practice adaptability, communication, rapid problem-solving, and collaborative thinking.
-        </p>
-        <div class="hero-actions">
-          <button class="btn success" id="demoBtn">Play Demo Now</button>
-          <button class="btn" id="setupGameBtn">Setup Custom Game</button>
-          <button class="btn secondary" id="howToPlayBtn">How to Play</button>
-          <button class="btn secondary" id="nextPromptHeroBtn">New Prompt</button>
-          <button class="btn ghost" id="resetBtn">Reset</button>
-        </div>
+<div class="app-shell">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">Edstellar Engage · Workplace Game</div>
+      <h1>Improv Challenge</h1>
+      <p class="hero-text">
+        Teams respond to unexpected workplace scenarios, build on each other's ideas, and practice
+        adaptability, communication, fast problem-solving, and collaborative thinking. Now with
+        EngageCoins power-ups, plot twists, live leaderboards, and a full debrief report.
+      </p>
+      <div class="hero-actions">
+        <button class="btn success" id="demoBtn">▶ Play Demo Now</button>
+        <button class="btn" id="setupGameBtn">⚙ Setup Custom Game</button>
+        <button class="btn secondary" id="howToPlayBtn">📖 How to Play</button>
+        <button class="btn secondary" id="nextPromptHeroBtn">🎲 New Prompt</button>
+        <button class="btn ghost" id="resetBtn">↺ Reset</button>
       </div>
-
-      <aside class="score-card">
-        <h2>Game Snapshot</h2>
-        <div class="stat-grid">
-          <div class="stat-box"><span class="stat-label">Teams</span><span class="stat-value" id="teamCount">0</span></div>
-          <div class="stat-box"><span class="stat-label">Round</span><span class="stat-value" id="roundStat">0</span></div>
-          <div class="stat-box"><span class="stat-label">Prompts</span><span class="stat-value" id="promptCount">25</span></div>
-          <div class="stat-box"><span class="stat-label">Phase</span><span class="stat-value" id="phaseStat" style="font-size:22px">Setup</span></div>
-        </div>
-        <div class="mini-card">
-          <p><strong style="color:var(--heading)">Core rule:</strong> Use “Yes, and...” thinking. Build on the previous idea instead of blocking it.</p>
-        </div>
-      </aside>
-    </section>
-
-    <div class="flow">
-      <div class="flow-step active" id="flow-setup">1. Setup</div>
-      <div class="flow-step" id="flow-prompt">2. Prompt</div>
-      <div class="flow-step" id="flow-perform">3. Perform</div>
-      <div class="flow-step" id="flow-score">4. Score</div>
     </div>
 
-    <section class="grid">
-      <aside class="panel setup-panel" id="setupPanel">
-        <h2>Custom Setup</h2>
-
-        <div class="form-row">
-          <label for="gameCategory">Prompt Category</label>
-          <select id="gameCategory">
-            <option value="mixed">Mixed Workplace Scenarios</option>
-            <option value="communication">Communication</option>
-            <option value="leadership">Leadership</option>
-            <option value="sales">Sales</option>
-            <option value="customer-service">Customer Service</option>
-            <option value="change-management">Change Management</option>
-            <option value="critical-thinking">Critical Thinking</option>
-          </select>
-        </div>
-
-        <div class="form-row">
-          <label for="roundDuration">Round Duration</label>
-          <select id="roundDuration">
-            <option value="30">30 seconds</option>
-            <option value="60">60 seconds</option>
-            <option value="90" selected>90 seconds</option>
-            <option value="120">2 minutes</option>
-            <option value="180">3 minutes</option>
-          </select>
-        </div>
-
-        <div class="form-row">
-          <label for="teamName">Add Team</label>
-          <input id="teamName" placeholder="Example: Team Phoenix" />
-          <textarea id="teamMembers" placeholder="Optional: Add members separated by commas"></textarea>
-          <button class="btn secondary" id="addTeamBtn">Add Team</button>
-          <button class="btn ghost" id="loadSampleBtn">Load Sample Teams</button>
-          <p class="hint">You can also skip setup and click “Play Demo Now.”</p>
-        </div>
-
-        <h3>Teams</h3>
-        <div class="team-list" id="teamList"><div class="empty-state">No teams added yet.</div></div>
-      </aside>
-
-      <main class="game-board" id="gameArea">
-        <div class="status-strip">
-          <div>
-            <strong id="statusTitle">Ready to play</strong><br />
-            <span id="statusSub">Click “Play Demo Now” for instant gameplay, or set up your own teams.</span>
-          </div>
-          <div class="timer" id="timerDisplay">⏱ 00:00</div>
-        </div>
-
-        <section class="panel" id="playPanel">
-          <div class="tabs">
-            <button class="tab active" data-view="play">Play</button>
-            <button class="tab" data-view="leaderboard">Leaderboard</button>
-            <button class="tab" data-view="reflection">Reflection</button>
-            <button class="tab" data-view="log">Round Log</button>
-          </div>
-
-          <div id="playView">
-            <div class="prompt-card" id="promptCard">
-              <div class="prompt-category" id="promptCategory">Prompt</div>
-              <p class="prompt-text" id="promptText">Click “Play Demo Now” to instantly start with sample teams and a workplace scenario.</p>
-              <p class="prompt-instruction" id="promptInstruction">No setup required for demo mode.</p>
-            </div>
-
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 0">
-              <button class="btn success" id="startRoundBtn">Start Round</button>
-              <button class="btn warning" id="nextPromptBtn">Next Prompt</button>
-              <button class="btn ghost" id="pauseTimerBtn">Pause Timer</button>
-              <button class="btn secondary" id="finishRoundBtn">Finish & Save Round</button>
-            </div>
-
-            <div class="response-grid" id="responseGrid" style="margin-top:16px"></div>
-          </div>
-
-          <div id="leaderboardView" class="hidden">
-            <h2>Leaderboard <span class="live-badge">Live</span></h2>
-            <div class="leaderboard" id="leaderboard"></div>
-          </div>
-
-          <div id="reflectionView" class="hidden">
-            <h2>Reflection</h2>
-            <div class="reflection-card">
-              <h3>Debrief Questions</h3>
-              <ol style="line-height:1.8; margin-top:8px">
-                <li>Did the team build on ideas or block ideas?</li>
-                <li>How well did participants listen before responding?</li>
-                <li>Which response showed the strongest adaptability?</li>
-                <li>Which workplace situations feel similar to this game?</li>
-                <li>What behavior should the team apply in real meetings, client calls, or project situations?</li>
-              </ol>
-            </div>
-            <div class="form-row" style="margin-top:14px">
-              <label for="reflectionNotes">Facilitator Notes</label>
-              <textarea id="reflectionNotes" placeholder="Capture lessons learned, team observations, and improvement areas."></textarea>
-            </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap">
-              <button class="btn" id="exportBtn">Export JSON Report</button>
-              <button class="btn secondary" id="printBtn">Print / Save PDF</button>
-            </div>
-          </div>
-
-          <div id="logView" class="hidden">
-            <h2>Round Log</h2>
-            <div class="round-log" id="roundLog"><div class="empty-state">No completed rounds yet.</div></div>
-          </div>
-        </section>
-      </main>
-    </section>
-
-    <div class="footer-note">
-      Standalone prototype. Runs fully in the browser. No backend, login, database, or internet connection required after download.
-    </div>
-  </div>
-
-  <div class="howto-overlay" id="howToOverlay" role="dialog" aria-modal="true" aria-labelledby="howToTitle">
-    <div class="howto-modal">
-      <div class="howto-header">
+    <aside class="score-card">
+      <h2>Game Snapshot</h2>
+      <div class="stat-grid">
+        <div class="stat-box"><span class="stat-label">Teams</span><span class="stat-value" id="teamCount">0</span></div>
+        <div class="stat-box"><span class="stat-label">Round</span><span class="stat-value" id="roundStat">0</span></div>
+        <div class="stat-box"><span class="stat-label">Prompts</span><span class="stat-value" id="promptCount">0</span></div>
+        <div class="stat-box"><span class="stat-label">Phase</span><span class="stat-value" id="phaseStat" style="font-size:20px">Setup</span></div>
+      </div>
+      <div class="coins-strip">
         <div>
-          <h2 id="howToTitle">How to Play Improv Challenge</h2>
-          <p>Use quick workplace scenarios to practice “Yes, and...” thinking, clear communication, fast decisions, and team collaboration.</p>
+          <small style="color:#cbd5e1;text-transform:uppercase;letter-spacing:.06em;font-size:10px;font-weight:800">Total EngageCoins</small>
+          <div style="font-size:24px;font-weight:900;color:#fff;line-height:1.2"><span id="totalCoins">0</span> 🪙</div>
         </div>
-        <button class="howto-close" id="howToClose" aria-label="Close how to play">×</button>
+        <div class="coin-badge"><span class="coin-dot">¢</span><span id="coinPool">Pool</span></div>
       </div>
-      <div class="howto-body">
-        <div class="howto-steps">
-          <div class="howto-step">
-            <div class="howto-icon">👥</div>
-            <strong>1. Form teams</strong>
-            <span>Use the demo teams or add your own teams with 3 to 6 participants each.</span>
+      <div class="mini-card">
+        <p><strong style="color:var(--heading)">Core rule:</strong> Use "Yes, and..." thinking. Build on the previous idea instead of blocking it.</p>
+        <div class="kbd-help">
+          <span><kbd>Space</kbd> start/pause</span>
+          <span><kbd>N</kbd> next prompt</span>
+          <span><kbd>T</kbd> twist</span>
+          <span><kbd>F</kbd> fullscreen</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="flow">
+    <div class="flow-step active" id="flow-setup">1. Setup</div>
+    <div class="flow-step" id="flow-prompt">2. Prompt</div>
+    <div class="flow-step" id="flow-perform">3. Perform</div>
+    <div class="flow-step" id="flow-score">4. Score</div>
+  </div>
+
+  <section class="grid">
+    <aside class="panel setup-panel" id="setupPanel">
+      <h2>Custom Setup</h2>
+
+      <div class="form-row">
+        <label for="gameCategory">Prompt Category</label>
+        <select id="gameCategory">
+          <option value="mixed">Mixed Workplace Scenarios</option>
+          <option value="communication">Communication</option>
+          <option value="leadership">Leadership</option>
+          <option value="sales">Sales</option>
+          <option value="customer-service">Customer Service</option>
+          <option value="change-management">Change Management</option>
+          <option value="critical-thinking">Critical Thinking</option>
+          <option value="conflict">Conflict Resolution</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="difficulty">Difficulty</label>
+        <select id="difficulty">
+          <option value="any">Any difficulty</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="roundDuration">Round Duration</label>
+        <select id="roundDuration">
+          <option value="30">30 seconds</option>
+          <option value="60">60 seconds</option>
+          <option value="90" selected>90 seconds</option>
+          <option value="120">2 minutes</option>
+          <option value="180">3 minutes</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="teamName">Add Team</label>
+        <input id="teamName" placeholder="Example: Team Phoenix" />
+        <textarea id="teamMembers" placeholder="Optional: Add members separated by commas"></textarea>
+        <button class="btn secondary" id="addTeamBtn">+ Add Team</button>
+        <button class="btn ghost" id="loadSampleBtn">↻ Load Sample Teams</button>
+        <p class="hint">Skip setup with "Play Demo Now". Each team starts with <strong>50 EngageCoins</strong> to spend on power-ups.</p>
+      </div>
+
+      <h3>Teams</h3>
+      <div class="team-list" id="teamList"><div class="empty-state">No teams added yet.</div></div>
+    </aside>
+
+    <main class="game-board" id="gameArea">
+      <div class="status-strip">
+        <div>
+          <strong id="statusTitle">Ready to play</strong><br />
+          <span id="statusSub">Click "Play Demo Now" for instant gameplay, or set up your own teams.</span>
+        </div>
+        <div class="timer" id="timerDisplay">⏱ 00:00</div>
+      </div>
+
+      <!-- Twist banner -->
+      <div class="twist-banner" id="twistBanner">
+        <div class="twist-icon">🌀</div>
+        <div class="twist-body">
+          <strong>Plot Twist</strong>
+          <p id="twistText"></p>
+        </div>
+        <button class="twist-close" id="twistClose">Dismiss</button>
+      </div>
+
+      <!-- Power-ups -->
+      <div class="powerups" id="powerups"></div>
+
+      <section class="panel" id="playPanel">
+        <div class="tabs">
+          <button class="tab active" data-view="play">▶ Play <span class="kbd">P</span></button>
+          <button class="tab" data-view="leaderboard">🏆 Leaderboard <span class="kbd">L</span></button>
+          <button class="tab" data-view="reflection">💬 Reflection <span class="kbd">R</span></button>
+          <button class="tab" data-view="log">📋 Round Log</button>
+        </div>
+
+        <div id="playView">
+          <div class="prompt-card" id="promptCard">
+            <div class="prompt-meta">
+              <span class="prompt-category" id="promptCategory">Prompt</span>
+              <span class="prompt-tag diff-Medium" id="promptDifficulty">Medium</span>
+              <span class="prompt-tag" id="promptSkill"></span>
+            </div>
+            <p class="prompt-text" id="promptText">Click "Play Demo Now" to instantly start with sample teams and a workplace scenario.</p>
+            <p class="prompt-instruction" id="promptInstruction">No setup required for demo mode.</p>
+            <button class="example-toggle" id="exampleToggle" hidden>Reveal strong / weak example responses ↓</button>
+            <div class="examples" id="examplesBox">
+              <div class="example-card weak"><strong>Weak response</strong><span id="weakExample"></span></div>
+              <div class="example-card strong"><strong>Strong response</strong><span id="strongExample"></span></div>
+            </div>
           </div>
-          <div class="howto-step">
-            <div class="howto-icon">🎯</div>
-            <strong>2. Read the prompt</strong>
-            <span>Each round gives a workplace scenario such as a client issue, team conflict, or urgent change.</span>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0">
+            <button class="btn success" id="startRoundBtn">▶ Start Round</button>
+            <button class="btn warning" id="nextPromptBtn">🎲 Next Prompt</button>
+            <button class="btn ghost" id="pauseTimerBtn">⏸ Pause</button>
+            <button class="btn secondary" id="twistBtn">🌀 Plot Twist</button>
+            <button class="btn" id="finishRoundBtn">✓ Finish &amp; Save Round</button>
           </div>
-          <div class="howto-step">
-            <div class="howto-icon">⚡</div>
-            <strong>3. Improvise</strong>
-            <span>Teams respond quickly using “Yes, and...” to build on ideas instead of blocking them.</span>
+
+          <div class="response-grid" id="responseGrid" style="margin-top:16px"></div>
+        </div>
+
+        <div id="leaderboardView" class="hidden">
+          <h2>Leaderboard</h2>
+          <div class="leaderboard" id="leaderboard"></div>
+        </div>
+
+        <div id="reflectionView" class="hidden">
+          <h2>Reflection</h2>
+          <div class="reflection-card">
+            <h3>Debrief Questions</h3>
+            <ol style="line-height:1.8;margin-top:8px">
+              <li>Did the team build on ideas or block ideas?</li>
+              <li>How well did participants listen before responding?</li>
+              <li>Which response showed the strongest adaptability?</li>
+              <li>How did the team handle the plot twists?</li>
+              <li>Which workplace situations feel similar to this game?</li>
+              <li>What behavior should the team apply in real meetings, client calls, or project situations?</li>
+            </ol>
           </div>
-          <div class="howto-step">
-            <div class="howto-icon">🏆</div>
-            <strong>4. Score live</strong>
-            <span>Score clarity, creativity, speed, solution thinking, teamwork, and idea-building. Leaderboard updates instantly.</span>
+          <div class="form-row" style="margin-top:14px">
+            <label for="reflectionNotes">Facilitator Notes</label>
+            <textarea id="reflectionNotes" placeholder="Capture lessons learned, team observations, and improvement areas."></textarea>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn" id="exportBtn">📥 Export JSON</button>
+            <button class="btn secondary" id="exportCsvBtn">📊 Export CSV</button>
+            <button class="btn ghost" id="printBtn">🖨 Print / PDF</button>
           </div>
         </div>
 
-        <div class="example-box">
-          <div class="example-card">
-            <strong>Example Prompt</strong>
-            <p>“A client changes the requirement after the work is nearly complete. Build the team response.”</p>
-          </div>
-          <div class="example-card">
-            <strong>Good Response Pattern</strong>
-            <p>“Yes, and we should first clarify the business reason, estimate the impact, then give the client two practical options.”</p>
-          </div>
+        <div id="logView" class="hidden">
+          <h2>Round Log</h2>
+          <div class="round-log" id="roundLog"><div class="empty-state">No completed rounds yet.</div></div>
         </div>
+      </section>
+    </main>
+  </section>
 
-        <div class="example-box">
-          <div class="example-card" style="border-color:#FECACA;background:#FEF2F2">
-            <strong style="color:#991B1B">Weak Response</strong>
-            <p>“No, that will not work.” This blocks the scenario and stops collaboration.</p>
-          </div>
-          <div class="example-card" style="border-color:#BBF7D0;background:#F0FDF4">
-            <strong style="color:#047857">Strong Response</strong>
-            <p>“Yes, and we can involve the client early so they understand the timeline, trade-offs, and next steps.”</p>
-          </div>
-        </div>
+  <div class="footer-note">
+    Standalone prototype · runs fully in the browser · no backend, login, or internet connection required after download.
+    Brand-aligned with Edstellar Engage. State persists in localStorage.
+  </div>
+</div>
 
-        <div class="howto-actions">
-          <button class="btn success" id="howToStartDemo">Start Demo in Fullscreen</button>
-          <button class="btn secondary" id="howToSetup">Setup Custom Game</button>
-          <button class="btn ghost" id="howToCloseBottom">Close Guide</button>
-        </div>
+<!-- How-to-play overlay -->
+<div class="overlay" id="howToOverlay" role="dialog" aria-modal="true" aria-labelledby="howToTitle">
+  <div class="overlay-modal">
+    <div class="overlay-header">
+      <div>
+        <h2 id="howToTitle">How to Play Improv Challenge</h2>
+        <p>Quick workplace scenarios that practice "Yes, and..." thinking, clear communication, fast decisions, and team collaboration.</p>
+      </div>
+      <button class="overlay-close" id="howToClose" aria-label="Close how to play">×</button>
+    </div>
+    <div class="overlay-body">
+      <div class="howto-steps">
+        <div class="howto-step"><div class="howto-icon">👥</div><strong>1. Form teams</strong><span>Use the demo teams or add 2-6 of your own. Each starts with 50 EngageCoins.</span></div>
+        <div class="howto-step"><div class="howto-icon">🎯</div><strong>2. Read the prompt</strong><span>Each round shows a workplace scenario with difficulty tag and skill focus.</span></div>
+        <div class="howto-step"><div class="howto-icon">⚡</div><strong>3. Improvise</strong><span>Teams respond using "Yes, and...". Spend coins on power-ups for an edge.</span></div>
+        <div class="howto-step"><div class="howto-icon">🏆</div><strong>4. Score &amp; win</strong><span>Score across 6 criteria. Round winner earns +25 bonus coins.</span></div>
+      </div>
+
+      <h3 style="margin-bottom:10px">Power-ups (cost in EngageCoins)</h3>
+      <div class="powerups" id="howToPowerups" style="box-shadow:none;border:none;padding:0;background:transparent"></div>
+
+      <h3 style="margin-top:16px">Scoring criteria (0-10 each, max 60 per round)</h3>
+      <ul style="line-height:1.8;color:var(--body)">
+        <li><strong>Builds</strong> - extended on previous idea rather than blocking</li>
+        <li><strong>Clarity</strong> - the response was concrete and easy to follow</li>
+        <li><strong>Creativity</strong> - novel angle or approach</li>
+        <li><strong>Speed</strong> - delivered confidently within the time limit</li>
+        <li><strong>Solution</strong> - moved toward an outcome, not just discussion</li>
+        <li><strong>Teamwork</strong> - the whole team participated, not just one voice</li>
+      </ul>
+
+      <div class="howto-actions">
+        <button class="btn success" id="howToStartDemo">▶ Start Demo</button>
+        <button class="btn secondary" id="howToSetup">⚙ Setup Custom Game</button>
+        <button class="btn ghost" id="howToCloseBottom">Close Guide</button>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="fullscreen-hint" id="fullscreenHint">⛶ Fullscreen game mode</div>
-  <div class="toast" id="toast">Ready</div>
+<!-- Round summary overlay -->
+<div class="overlay" id="summaryOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="summary-winner">
+      <div class="crown">👑</div>
+      <h2 id="summaryWinnerName">Round winner</h2>
+      <p style="margin:4px 0 0;color:#3a2700;font-weight:800" id="summaryWinnerScore">+0 points</p>
+    </div>
+    <div class="summary-grid" id="summaryGrid"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 24px 24px;justify-content:flex-end">
+      <button class="btn ghost" id="summaryClose">Close</button>
+      <button class="btn warning" id="summaryNext">🎲 Next Round</button>
+    </div>
+  </div>
+</div>
 
-  <script>
-    const prompts = [
-      { category: 'communication', text: 'A manager gives unclear instructions for an urgent project. Continue the scenario and move the team toward clarity.', instruction: 'Focus on asking better questions, confirming expectations, and avoiding assumptions.' },
-      { category: 'communication', text: 'Two departments misunderstood each other and duplicated the same work. Build a solution through dialogue.', instruction: 'Use active listening and constructive communication.' },
-      { category: 'communication', text: 'A team meeting is going off-track. One person must bring the conversation back without sounding rude.', instruction: 'Practice concise, respectful intervention.' },
-      { category: 'leadership', text: 'Your team just missed a major deadline. You have two minutes to address them and reset momentum.', instruction: 'Show ownership, calm communication, and forward planning.' },
-      { category: 'leadership', text: 'A high-performing employee is demotivated after receiving tough feedback. Continue the conversation.', instruction: 'Practice empathy, coaching, and accountability.' },
-      { category: 'leadership', text: 'Leadership announces a sudden change that your team dislikes. Respond as the team lead.', instruction: 'Balance honesty, reassurance, and action.' },
-      { category: 'sales', text: 'A prospect says your solution is too expensive and competitor pricing is lower. Continue the sales conversation.', instruction: 'Focus on value, discovery, and objection handling.' },
-      { category: 'sales', text: 'A product demo fails midway during an important client call. Build the recovery response.', instruction: 'Practice composure, transparency, and next-step control.' },
-      { category: 'sales', text: 'A buyer says they are interested but need approval from three stakeholders. Continue the scenario.', instruction: 'Practice stakeholder mapping and next-step planning.' },
-      { category: 'customer-service', text: 'A customer is angry because a promised delivery was missed. Respond and continue the scenario.', instruction: 'Use empathy, ownership, and practical resolution.' },
-      { category: 'customer-service', text: 'A customer misunderstood the service terms and blames the support team. Continue the conversation.', instruction: 'Explain clearly without sounding defensive.' },
-      { category: 'customer-service', text: 'A customer keeps interrupting and refuses to listen. Continue the service interaction.', instruction: 'Practice calm tone, boundaries, and resolution.' },
-      { category: 'change-management', text: 'The company is moving to a new performance review system next month. Employees are skeptical.', instruction: 'Build trust by explaining purpose, benefits, and support.' },
-      { category: 'change-management', text: 'A new tool is being introduced, but the team prefers the old process. Continue the scenario.', instruction: 'Practice adoption messaging and resistance handling.' },
-      { category: 'change-management', text: 'A restructuring has changed team responsibilities overnight. Build the team conversation.', instruction: 'Clarify roles, reduce anxiety, and create next steps.' },
-      { category: 'critical-thinking', text: 'The team receives incomplete project data but must make a recommendation by end of day.', instruction: 'Practice assumptions, risk framing, and decision logic.' },
-      { category: 'critical-thinking', text: 'A project has three urgent problems, but the team can only solve one today. Continue the decision-making process.', instruction: 'Prioritize based on impact, urgency, and dependencies.' },
-      { category: 'critical-thinking', text: 'A client changes the requirement after the work is nearly complete. Build the team response.', instruction: 'Practice trade-off analysis and stakeholder communication.' },
-      { category: 'mixed', text: 'A new employee joins remotely and feels disconnected from the team. Continue the scenario.', instruction: 'Focus on inclusion, communication, and team bonding.' },
-      { category: 'mixed', text: 'A team member makes a mistake but tries to hide it. Continue the workplace conversation.', instruction: 'Practice accountability without blame.' },
-      { category: 'mixed', text: 'A meeting ends with no clear owner for the next steps. Continue the scenario.', instruction: 'Create clarity, ownership, and follow-through.' },
-      { category: 'mixed', text: 'A senior leader asks for an update, but the team does not have all the answers yet.', instruction: 'Practice transparent communication and structured response.' },
-      { category: 'mixed', text: 'Two team members strongly disagree about how to solve a problem. Continue the discussion.', instruction: 'Use facilitation, evidence, and respectful challenge.' },
-      { category: 'mixed', text: 'The team has ten minutes to prepare for an unexpected client presentation.', instruction: 'Practice role clarity, quick planning, and confidence under pressure.' },
-      { category: 'mixed', text: 'A customer, manager, and teammate all need different things at the same time. Continue the prioritization conversation.', instruction: 'Practice calm decision-making and communication.' }
-    ];
+<div class="toast" id="toast">Ready</div>
 
-    let teams = [];
-    let currentPrompt = null;
-    let currentRound = 0;
-    let timer = null;
-    let remainingSeconds = 0;
-    let isPaused = false;
-    let roundLog = [];
-    let phase = 'setup';
-    let lastPromptIndex = -1;
+<script>
+/* ===========================================================
+   IMPROV CHALLENGE - Edstellar Engage v2
+   Prompts, power-ups, twists, scoring, leaderboard, confetti.
+=========================================================== */
 
-    const $ = (id) => document.getElementById(id);
+// ---------- Data ----------
+const PROMPTS = [
+  // Communication
+  { category:'communication', difficulty:'Easy', skill:'Active listening',
+    text:'A manager gives unclear instructions for an urgent project. Continue and move the team toward clarity.',
+    instruction:'Focus on asking better questions, confirming expectations, and avoiding assumptions.',
+    strong:'Yes, and to confirm: outcome A by Friday, with daily check-ins. I will send a one-page brief in 30 minutes.',
+    weak:'OK, will do.' },
+  { category:'communication', difficulty:'Medium', skill:'Conflict reframing',
+    text:'Two departments misunderstood each other and duplicated the same work. Build a solution through dialogue.',
+    instruction:'Use active listening and constructive communication.',
+    strong:'Yes, and the fastest path is to take what each side built, pick the strongest pieces, and ship one combined version with a shared owner.',
+    weak:'Whose fault was that? We need to find who messed up.' },
+  { category:'communication', difficulty:'Medium', skill:'Meeting facilitation',
+    text:'A team meeting is going off-track. One person must bring the conversation back without sounding rude.',
+    instruction:'Practice concise, respectful intervention.',
+    strong:'Yes, and these side topics are worth their own meeting. Let us park them and refocus on the decision we owe by 5pm.',
+    weak:'Can everyone just stop talking and stay on topic?' },
+  { category:'communication', difficulty:'Hard', skill:'Difficult conversations',
+    text:'You need to tell a teammate their work has slipped in quality. Continue the conversation.',
+    instruction:'Lead with curiosity, share specifics, and end with a clear next step.',
+    strong:'Yes, and I noticed the last two reports missed the QA pass. Can we walk through what changed and how I can help?',
+    weak:'Your work has been bad lately. You need to fix it.' },
 
-    function showToast(message) {
-      const toast = $('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 1800);
-    }
+  // Leadership
+  { category:'leadership', difficulty:'Medium', skill:'Ownership',
+    text:'Your team just missed a major deadline. You have two minutes to address them and reset momentum.',
+    instruction:'Show ownership, calm communication, and forward planning.',
+    strong:'Yes, and the slip is on me - I underestimated the integration work. Here is the new plan and what we will do differently this week.',
+    weak:'You all dropped the ball. Do not let it happen again.' },
+  { category:'leadership', difficulty:'Hard', skill:'Coaching',
+    text:'A high-performer is demotivated after tough feedback. Continue the conversation.',
+    instruction:'Practice empathy, coaching, and accountability.',
+    strong:'Yes, and the feedback was hard to hear - thank you for sitting with it. What support would help you act on the parts you agree with?',
+    weak:'Tough. The feedback was fair. Move on.' },
+  { category:'leadership', difficulty:'Medium', skill:'Change leadership',
+    text:'Leadership announces a sudden change your team dislikes. Respond as the team lead.',
+    instruction:'Balance honesty, reassurance, and action.',
+    strong:'Yes, and I understand the frustration. Here is what is changing, what is not, and what I am pushing back on.',
+    weak:'I do not love it either but we have to do it.' },
+  { category:'leadership', difficulty:'Easy', skill:'Recognition',
+    text:'A junior teammate just delivered a small but impressive win. Build a recognition moment.',
+    instruction:'Make it specific, public, and tied to a behavior worth repeating.',
+    strong:'Yes, and what stood out was how Priya unblocked the API issue by pairing with the vendor team - that is the move we want everyone to copy.',
+    weak:'Good job, Priya.' },
 
-    async function enterFullscreenMode() {
-      try {
-        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-          await document.documentElement.requestFullscreen();
-        }
-        const hint = $('fullscreenHint');
-        hint.classList.add('show');
-        setTimeout(() => hint.classList.remove('show'), 2000);
-      } catch (error) {
-        showToast('Fullscreen blocked by browser. Use F11 if needed.');
-      }
-    }
+  // Sales
+  { category:'sales', difficulty:'Medium', skill:'Value framing',
+    text:'A prospect says your solution is too expensive and competitor pricing is lower. Continue.',
+    instruction:'Focus on value, discovery, and objection handling.',
+    strong:'Yes, and price matters - let us look at the three outcomes you mentioned and see whether the cheaper option actually delivers them.',
+    weak:'We are worth it because our quality is better.' },
+  { category:'sales', difficulty:'Hard', skill:'Composure under pressure',
+    text:'A product demo fails midway during an important client call. Build the recovery response.',
+    instruction:'Practice composure, transparency, and next-step control.',
+    strong:'Yes, and let me pause the demo. I will send you a recorded walkthrough today and set up a working session Friday so you can drive it yourself.',
+    weak:'This never happens. Let me restart everything.' },
+  { category:'sales', difficulty:'Medium', skill:'Stakeholder mapping',
+    text:'A buyer says they need approval from three stakeholders. Continue.',
+    instruction:'Practice stakeholder mapping and next-step planning.',
+    strong:'Yes, and to make their job easy, I can put together a one-pager per stakeholder - finance, security, and ops. What does each one need to say yes?',
+    weak:'OK, let me know when you have approval.' },
+  { category:'sales', difficulty:'Hard', skill:'Negotiation',
+    text:'A long-term client wants a 30% discount or they say they will leave. Continue.',
+    instruction:'Trade value for value. Do not give without getting.',
+    strong:'Yes, and I want to make this work. If we do 15% in exchange for a two-year commitment and a case study, here is what that unlocks.',
+    weak:'I will check with my manager.' },
 
-    function openHowToPlay() {
-      $('howToOverlay').classList.add('show');
-    }
+  // Customer service
+  { category:'customer-service', difficulty:'Easy', skill:'Empathy',
+    text:'A customer is angry because a promised delivery was missed. Respond and continue.',
+    instruction:'Use empathy, ownership, and practical resolution.',
+    strong:'Yes, and I am sorry - this is on us. Your replacement ships today on priority, and here is a credit for the trouble. What else can I fix?',
+    weak:'Sorry. We had warehouse issues.' },
+  { category:'customer-service', difficulty:'Medium', skill:'De-escalation',
+    text:'A customer misunderstood the service terms and blames the support team. Continue.',
+    instruction:'Explain clearly without sounding defensive.',
+    strong:'Yes, and I can see why this felt confusing. Here is what was promised, what was delivered, and here are two options to make it right.',
+    weak:'You should have read the terms.' },
+  { category:'customer-service', difficulty:'Hard', skill:'Boundary setting',
+    text:'A customer keeps interrupting and refuses to listen. Continue.',
+    instruction:'Practice calm tone, boundaries, and resolution.',
+    strong:'Yes, and I want to fix this for you. Give me 30 seconds to confirm what I have, and then the next 30 seconds are yours to add anything I missed.',
+    weak:'Sir, please stop interrupting me.' },
 
-    function closeHowToPlay() {
-      $('howToOverlay').classList.remove('show');
-    }
+  // Change management
+  { category:'change-management', difficulty:'Medium', skill:'Adoption messaging',
+    text:'The company is moving to a new performance review system next month. Employees are skeptical.',
+    instruction:'Build trust by explaining purpose, benefits, and support.',
+    strong:'Yes, and the old system rewarded the wrong things. The new one is built around the three behaviors we said we want more of. Here is what it changes for you.',
+    weak:'It is happening, we have to adapt.' },
+  { category:'change-management', difficulty:'Hard', skill:'Resistance handling',
+    text:'A new tool is being introduced but the team prefers the old process. Continue.',
+    instruction:'Practice adoption messaging and resistance handling.',
+    strong:'Yes, and the old process works for what you do today. Let me show you what the new tool unlocks for the three things you have been asking for.',
+    weak:'It is mandatory, sorry.' },
+  { category:'change-management', difficulty:'Medium', skill:'Restructure clarity',
+    text:'A restructuring has changed team responsibilities overnight. Build the team conversation.',
+    instruction:'Clarify roles, reduce anxiety, and create next steps.',
+    strong:'Yes, and I will be candid about what changed, what did not, and what I am still figuring out. Here are your three new touchpoints.',
+    weak:'Things are changing. We will figure it out.' },
 
-    function saveState() {
-      localStorage.setItem('edstellarImprovGameV2', JSON.stringify({ teams, currentRound, roundLog, phase }));
-    }
+  // Critical thinking
+  { category:'critical-thinking', difficulty:'Hard', skill:'Decision under uncertainty',
+    text:'The team has incomplete project data but must make a recommendation by end of day.',
+    instruction:'Practice assumptions, risk framing, and decision logic.',
+    strong:'Yes, and based on the three data points we trust, the recommendation is X. The two open assumptions are A and B - we will validate them by Wednesday.',
+    weak:'We need more data before deciding.' },
+  { category:'critical-thinking', difficulty:'Medium', skill:'Prioritization',
+    text:'Three urgent problems, only one solvable today. Continue the decision-making.',
+    instruction:'Prioritize based on impact, urgency, and dependencies.',
+    strong:'Yes, and problem 2 blocks the other two. If we solve it today, problems 1 and 3 unlock tomorrow.',
+    weak:'Let us split up and try all three.' },
+  { category:'critical-thinking', difficulty:'Hard', skill:'Scope negotiation',
+    text:'A client changes the requirement after the work is nearly complete. Build the team response.',
+    instruction:'Practice trade-off analysis and stakeholder communication.',
+    strong:'Yes, and to give them what they want we need to either move the date or cut feature X. Here are the trade-offs in plain language - which do they prefer?',
+    weak:'We will work weekends to fit it in.' },
 
-    function loadState() {
-      try {
-        const saved = JSON.parse(localStorage.getItem('edstellarImprovGameV2') || '{}');
-        teams = saved.teams || [];
-        currentRound = saved.currentRound || 0;
-        roundLog = saved.roundLog || [];
-        phase = saved.phase || 'setup';
-      } catch (e) {
-        teams = [];
-        currentRound = 0;
-        roundLog = [];
-        phase = 'setup';
-      }
-      updateUI();
-    }
+  // Conflict resolution
+  { category:'conflict', difficulty:'Medium', skill:'Mediation',
+    text:'Two team members strongly disagree about how to solve a problem. Continue.',
+    instruction:'Use facilitation, evidence, and respectful challenge.',
+    strong:'Yes, and you are both arguing for the same outcome - faster shipping. Let us list the assumptions behind each approach and test the riskiest one first.',
+    weak:'Just pick one and move on.' },
+  { category:'conflict', difficulty:'Hard', skill:'Accountability without blame',
+    text:'A team member made a mistake but tries to hide it. Continue.',
+    instruction:'Practice accountability without blame.',
+    strong:'Yes, and I get why this is uncomfortable. The fix is fast if we are open about it now - what did happen?',
+    weak:'I know you messed up. Just admit it.' },
+  { category:'conflict', difficulty:'Easy', skill:'Quick reset',
+    text:'A meeting ends with no clear owner for next steps. Continue.',
+    instruction:'Create clarity, ownership, and follow-through.',
+    strong:'Yes, and before we drop off: actions are X owned by Y by Friday, Z owned by me by Tuesday. I will send the recap in five minutes.',
+    weak:'Someone should follow up on this.' },
 
-    function setPhase(nextPhase) {
-      phase = nextPhase;
-      ['setup', 'prompt', 'perform', 'score'].forEach(item => {
-        $('flow-' + item).classList.toggle('active', item === phase);
-      });
-      $('phaseStat').textContent = phase.charAt(0).toUpperCase() + phase.slice(1);
-      saveState();
-    }
+  // Mixed
+  { category:'mixed', difficulty:'Easy', skill:'Inclusion',
+    text:'A new employee joins remotely and feels disconnected. Continue.',
+    instruction:'Focus on inclusion, communication, and team bonding.',
+    strong:'Yes, and let me pair you with two people for the first week - one peer, one mentor. We will also block 15 minutes daily to walk you through how we work.',
+    weak:'Welcome aboard. Let us know if you need anything.' },
+  { category:'mixed', difficulty:'Medium', skill:'Cross-team prioritization',
+    text:'A customer, manager, and teammate all need different things at the same time. Continue.',
+    instruction:'Practice calm decision-making and communication.',
+    strong:'Yes, and let me be honest with each of you about what I can do in the next hour and what slips to tomorrow. Here is my call and why.',
+    weak:'I will get to it all somehow.' },
+  { category:'mixed', difficulty:'Hard', skill:'Executive update',
+    text:'A senior leader asks for an update but the team does not have all the answers yet.',
+    instruction:'Practice transparent communication and structured response.',
+    strong:'Yes, and here is what we know, what we are checking by Thursday, and what we will need from you to unblock the rest.',
+    weak:'We are still working on it.' },
+  { category:'mixed', difficulty:'Medium', skill:'Last-minute prep',
+    text:'The team has ten minutes to prepare for an unexpected client presentation.',
+    instruction:'Practice role clarity, quick planning, and confidence under pressure.',
+    strong:'Yes, and in ten minutes: Asha takes context, Ravi takes solution, I take next steps. Each of us has two slides. Go.',
+    weak:'Let us wing it.' }
+];
 
-    function updateStats() {
-      $('teamCount').textContent = teams.length;
-      $('roundStat').textContent = currentRound;
-      $('promptCount').textContent = prompts.length;
-      $('phaseStat').textContent = phase.charAt(0).toUpperCase() + phase.slice(1);
-    }
+const TWISTS = [
+  "The client just emailed and wants the answer in 5 minutes.",
+  "A senior leader just joined the call unexpectedly.",
+  "The budget for this just got cut in half.",
+  "Half the team is unavailable - you have to deliver with the people in the room.",
+  "Legal flagged a compliance concern. You can't share the original plan.",
+  "The customer goes silent for 30 seconds - what do you say next?",
+  "A competitor just announced something similar an hour ago.",
+  "Your most senior teammate disagrees with the plan, loudly.",
+  "You just realized the data you've been using is from last quarter.",
+  "The deadline just moved from next month to tomorrow."
+];
 
-    function updateTeamList() {
-      const list = $('teamList');
-      if (!teams.length) {
-        list.innerHTML = '<div class="empty-state">No teams added yet. Use “Play Demo Now” or load sample teams.</div>';
-        return;
-      }
-      list.innerHTML = teams.map(team => `
-        <div class="team-item">
-          <div>
-            <div class="team-name">${escapeHtml(team.name)}</div>
-            <div class="team-meta">${team.members.length ? escapeHtml(team.members.join(', ')) : 'No members listed'} · ${team.score} points</div>
+const POWERUPS = [
+  { id:'reroll',    name:'Re-roll Prompt',  icon:'🎲', cost:20, tip:"Discard the current prompt and pull a fresh one." },
+  { id:'reveal',    name:'Reveal Examples', icon:'💡', cost:15, tip:"Unlock the strong / weak response cards on this prompt." },
+  { id:'double',    name:'Double Down',     icon:'✕2', cost:40, tip:"Doubles your team's score for the next round only." },
+  { id:'steal',     name:'Steal 3 pts',     icon:'⚡', cost:30, tip:"Take 3 points from the current leader on the next save." },
+  { id:'twist',     name:'Plot Twist',      icon:'🌀', cost:25, tip:"Inject a random complication mid-round." }
+];
+
+const TEAM_COLORS = ['#0B3C5D','#2563EB','#10B981','#F59E0B','#7C3AED','#EC4899','#0EA5E9','#F97316'];
+const TEAM_AVATARS = ['🦅','⚡','🔥','🌟','🚀','🛡','🎯','🦄'];
+
+const CRITERIA = [
+  { key:'builds',     label:'Builds',     hint:'Built on prior idea' },
+  { key:'clarity',    label:'Clarity',    hint:'Concrete & easy to follow' },
+  { key:'creativity', label:'Creativity', hint:'Novel angle' },
+  { key:'speed',      label:'Speed',      hint:'Delivered confidently in time' },
+  { key:'solution',   label:'Solution',   hint:'Moves toward outcome' },
+  { key:'teamwork',   label:'Teamwork',   hint:'Whole team participated' }
+];
+
+// ---------- State ----------
+let teams = [];
+let currentPrompt = null;
+let currentRound = 0;
+let timer = null;
+let remainingSeconds = 0;
+let isPaused = false;
+let roundLog = [];
+let phase = 'setup';
+let lastPromptIndex = -1;
+let activePowerups = {}; // { teamId: { double:true, ... } }
+let exampleRevealedFor = null;
+
+const $ = id => document.getElementById(id);
+const STORAGE_KEY = 'edstellarImprovGameV3';
+
+function showToast(message, kind=''){
+  const t = $('toast'); t.textContent = message;
+  t.className = 'toast show ' + kind;
+  setTimeout(()=> t.classList.remove('show'), 1800);
+}
+
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ teams, currentRound, roundLog, phase, activePowerups }));
+}
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    teams = s.teams || [];
+    currentRound = s.currentRound || 0;
+    roundLog = s.roundLog || [];
+    phase = s.phase || 'setup';
+    activePowerups = s.activePowerups || {};
+  }catch(e){}
+  updateUI();
+}
+
+function setPhase(next){
+  phase = next;
+  ['setup','prompt','perform','score'].forEach(item => {
+    $('flow-'+item).classList.toggle('active', item===phase);
+  });
+  $('phaseStat').textContent = phase.charAt(0).toUpperCase()+phase.slice(1);
+  saveState();
+}
+
+function updateStats(){
+  $('teamCount').textContent = teams.length;
+  $('roundStat').textContent = currentRound;
+  $('promptCount').textContent = PROMPTS.length;
+  $('phaseStat').textContent = phase.charAt(0).toUpperCase()+phase.slice(1);
+  const totalCoins = teams.reduce((s,t)=> s + (t.coins||0), 0);
+  $('totalCoins').textContent = totalCoins;
+  $('coinPool').textContent = teams.length ? Math.round(totalCoins/teams.length) + ' avg' : 'Pool';
+}
+
+function updateTeamList(){
+  const list = $('teamList');
+  if(!teams.length){
+    list.innerHTML = '<div class="empty-state">No teams added yet. Use "Play Demo Now" or load sample teams.</div>';
+    return;
+  }
+  list.innerHTML = teams.map(t => `
+    <div class="team-item">
+      <div class="team-avatar" style="--team-color:${t.color}">${t.avatar}</div>
+      <div class="team-info">
+        <div class="team-name">${escapeHtml(t.name)}</div>
+        <div class="team-meta">${t.members.length ? escapeHtml(t.members.join(', ')) : 'No members listed'} · <strong>${t.score} pts</strong> · ${t.coins||0} 🪙</div>
+      </div>
+      <button class="delete-team" onclick="deleteTeam('${t.id}')" aria-label="Remove team">×</button>
+    </div>
+  `).join('');
+}
+
+function leader(){
+  const sorted = [...teams].sort((a,b)=> b.score - a.score);
+  return sorted[0] || null;
+}
+
+function updateResponses(){
+  const grid = $('responseGrid');
+  if(!teams.length){
+    grid.innerHTML = '<div class="empty-state">No teams yet. Click "Play Demo Now" to start instantly.</div>';
+    return;
+  }
+  const lead = leader();
+  grid.innerHTML = teams.map(t => {
+    const liveTotal = CRITERIA.reduce((s,c)=> s + clampScore(getScore(t.id,c.key)), 0);
+    const isLeader = lead && lead.id === t.id && t.score > 0;
+    const dd = activePowerups[t.id]?.double ? ' · ✕2 active' : '';
+    return `
+    <div class="team-score-card ${isLeader?'leader':''}" data-team="${t.id}">
+      <div class="team-score-head">
+        <div class="team-avatar" style="--team-color:${t.color};width:36px;height:36px;font-size:17px;border-radius:11px">${t.avatar}</div>
+        <div class="team-name">${escapeHtml(t.name)}</div>
+        <div class="team-score-running"><span id="running-${t.id}">${liveTotal}</span> pts${dd}</div>
+      </div>
+      <div class="quick-score-row">
+        <button class="quick-score" onclick="quickScore('${t.id}',30)">Avg 30</button>
+        <button class="quick-score" onclick="quickScore('${t.id}',42)">Strong 42</button>
+        <button class="quick-score" onclick="quickScore('${t.id}',54)">Excellent 54</button>
+      </div>
+      <div class="criteria">
+        ${CRITERIA.map(c => `
+          <div class="criterion">
+            <div class="criterion-label">${c.label}<small>${c.hint}</small></div>
+            <div class="criterion-ctrl">
+              <button class="score-btn" onclick="bumpScore('${t.id}','${c.key}',-1)" aria-label="Decrease ${c.label}">−</button>
+              <span class="score-val" id="score-${t.id}-${c.key}">${getScore(t.id,c.key)}</span>
+              <button class="score-btn" onclick="bumpScore('${t.id}','${c.key}',1)" aria-label="Increase ${c.label}">+</button>
+            </div>
           </div>
-          <button class="delete-team" onclick="deleteTeam('${team.id}')">×</button>
-        </div>
-      `).join('');
-    }
+        `).join('')}
+      </div>
+      <div class="response-input">
+        <textarea id="response-${t.id}" placeholder="Capture the team's response or facilitator notes for this round."></textarea>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-    function updateResponses() {
-      const grid = $('responseGrid');
-      if (!teams.length) {
-        grid.innerHTML = '<div class="empty-state">No teams yet. Click “Play Demo Now” to start instantly.</div>';
-        return;
-      }
-      grid.innerHTML = teams.map(team => `
-        <div class="team-item" style="display:block">
-          <div class="team-name">${escapeHtml(team.name)}</div>
-          <div class="team-meta">Score this round from 0 to 60. Quick buttons are available for fast facilitation.</div>
-          <div class="form-row" style="margin-top:10px">
-            <label>Team Response</label>
-            <textarea id="response-${team.id}" placeholder="Capture the team response or facilitator notes for this round."></textarea>
-          </div>
-          <div class="quick-score-row">
-            <button class="quick-score" onclick="quickScore('${team.id}', 30)">Average 30</button>
-            <button class="quick-score" onclick="quickScore('${team.id}', 45)">Strong 45</button>
-            <button class="quick-score" onclick="quickScore('${team.id}', 55)">Excellent 55</button>
-          </div>
-          <div class="score-grid">
-            <div class="score-field"><label>Builds</label><input id="builds-${team.id}" type="number" min="0" max="10" value="0"></div>
-            <div class="score-field"><label>Clarity</label><input id="clarity-${team.id}" type="number" min="0" max="10" value="0"></div>
-            <div class="score-field"><label>Creativity</label><input id="creativity-${team.id}" type="number" min="0" max="10" value="0"></div>
-            <div class="score-field"><label>Speed</label><input id="speed-${team.id}" type="number" min="0" max="10" value="0"></div>
-            <div class="score-field"><label>Solution</label><input id="solution-${team.id}" type="number" min="0" max="10" value="0"></div>
-            <div class="score-field"><label>Teamwork</label><input id="teamwork-${team.id}" type="number" min="0" max="10" value="0"></div>
-          </div>
-        </div>
-      `).join('');
-    }
+function getScore(teamId, key){
+  const el = $('score-'+teamId+'-'+key);
+  return el ? Number(el.textContent) : 0;
+}
+function setScore(teamId, key, val){
+  const el = $('score-'+teamId+'-'+key);
+  if(el) el.textContent = clampScore(val);
+}
+function bumpScore(teamId, key, delta){
+  setScore(teamId, key, getScore(teamId,key) + delta);
+  // Recalculate running total for this team
+  const total = CRITERIA.reduce((s,c)=> s + getScore(teamId, c.key), 0);
+  const runEl = $('running-'+teamId);
+  if(runEl){
+    runEl.textContent = total;
+    runEl.parentElement.style.transition='background .2s ease';
+    runEl.parentElement.style.background='#FFFBEB';
+    setTimeout(()=>{ runEl.parentElement.style.background=''; }, 250);
+  }
+  updateLeaderboard();
+}
 
-    function updateLeaderboard() {
-      const sorted = getLiveTeamScores().sort((a, b) => b.liveScore - a.liveScore);
-      $('leaderboard').innerHTML = sorted.length ? sorted.map((team, index) => `
-        <div class="leader-item">
-          <div class="rank">${index + 1}</div>
-          <div>
-            <div class="team-name">${escapeHtml(team.name)}</div>
-            <div class="team-meta">${team.rounds || 0} completed rounds${team.currentRoundScore ? ` · Current round: ${team.currentRoundScore}` : ''}</div>
-          </div>
-          <div class="leader-score">${team.liveScore}<small>${team.currentRoundScore ? 'live' : 'saved'}</small></div>
-        </div>
-      `).join('') : '<div class="empty-state">No teams added yet.</div>';
-    }
+function quickScore(id, total){
+  const values = splitScore(total);
+  CRITERIA.forEach((c,i)=> setScore(id, c.key, values[i]));
+  bumpScore(id, CRITERIA[0].key, 0); // trigger update
+  showToast('Quick score ' + total + ' applied');
+}
+function splitScore(total){
+  const base = Math.floor(total/6), rem = total%6;
+  return Array.from({length:6}, (_,i)=> Math.min(10, base + (i<rem ? 1 : 0)));
+}
 
-    function getLiveTeamScores() {
-      const criteria = ['builds', 'clarity', 'creativity', 'speed', 'solution', 'teamwork'];
-      return teams.map(team => {
-        const currentRoundScore = criteria.reduce((sum, key) => sum + clampScore(Number($(key + '-' + team.id)?.value || 0)), 0);
-        return { ...team, currentRoundScore, liveScore: team.score + currentRoundScore };
-      });
-    }
+function updateLeaderboard(){
+  const sorted = getLiveTeamScores().sort((a,b)=> b.liveScore - a.liveScore);
+  if(!sorted.length){
+    $('leaderboard').innerHTML = '<div class="empty-state">No teams added yet.</div>';
+    return;
+  }
+  const maxScore = Math.max(...sorted.map(t=>t.liveScore), 60);
+  $('leaderboard').innerHTML = sorted.map((t,i)=>{
+    const pct = Math.min(100, Math.round((t.liveScore / maxScore) * 100));
+    const bars = Array.from({length:6}, (_,k) => `<span class="${k < Math.round((t.currentRoundScore||0)/10) ? 'f':''}"></span>`).join('');
+    return `
+    <div class="leader-item rank-${i+1}">
+      <div class="rank">${i+1}</div>
+      <div class="team-avatar" style="--team-color:${t.color};width:36px;height:36px;font-size:17px;border-radius:11px">${t.avatar}</div>
+      <div>
+        <div class="team-name">${escapeHtml(t.name)}</div>
+        <div class="team-meta">${t.rounds||0} rounds · ${t.coins||0} 🪙${t.currentRoundScore ? ' · live +' + t.currentRoundScore : ''}</div>
+        <div class="score-bar" title="Current round criterion fill">${bars}</div>
+      </div>
+      <div class="leader-score">${t.liveScore}<small>${t.currentRoundScore ? 'live' : 'saved'}</small></div>
+    </div>`;
+  }).join('');
+}
 
-    function updateRoundLog() {
-      const container = $('roundLog');
-      if (!roundLog.length) {
-        container.innerHTML = '<div class="empty-state">No completed rounds yet.</div>';
-        return;
-      }
-      container.innerHTML = roundLog.slice().reverse().map(log => `
-        <div class="log-item">
-          <div class="team-name">Round ${log.round}: ${escapeHtml(log.prompt)}</div>
-          <div class="team-meta">${escapeHtml(log.category)} · ${new Date(log.time).toLocaleString()}</div>
-          <ul style="margin:10px 0 0; padding-left:18px; line-height:1.7">
-            ${log.scores.map(s => `<li><strong>${escapeHtml(s.team)}</strong>: ${s.points} points${s.response ? ` — ${escapeHtml(s.response)}` : ''}</li>`).join('')}
-          </ul>
-        </div>
-      `).join('');
-    }
+function getLiveTeamScores(){
+  return teams.map(t => {
+    const currentRoundScore = CRITERIA.reduce((s,c)=> s + clampScore(getScore(t.id, c.key)), 0);
+    return { ...t, currentRoundScore, liveScore: t.score + currentRoundScore };
+  });
+}
 
-    function updateUI() {
-      updateStats();
-      updateTeamList();
-      updateResponses();
-      updateLeaderboard();
-      updateRoundLog();
-      setPhase(phase);
-    }
+function updateRoundLog(){
+  const c = $('roundLog');
+  if(!roundLog.length){
+    c.innerHTML = '<div class="empty-state">No completed rounds yet.</div>';
+    return;
+  }
+  c.innerHTML = roundLog.slice().reverse().map(log => `
+    <div class="log-item">
+      <div class="team-name">Round ${log.round}: ${escapeHtml(log.prompt)}</div>
+      <div class="team-meta">${escapeHtml(log.category)} · ${log.difficulty || 'Medium'} · ${new Date(log.time).toLocaleString()}${log.twist ? ' · 🌀 ' + escapeHtml(log.twist) : ''}</div>
+      <ul style="margin:10px 0 0;padding-left:18px;line-height:1.7">
+        ${log.scores.map(s => `<li><strong>${escapeHtml(s.team)}</strong>: ${s.points} points${s.response ? ' - ' + escapeHtml(s.response) : ''}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
 
-    function addTeam() {
-      const name = $('teamName').value.trim();
-      const members = $('teamMembers').value.split(',').map(x => x.trim()).filter(Boolean);
-      if (!name) {
-        showToast('Add a team name first');
-        return;
-      }
-      teams.push({ id: makeId(), name, members, score: 0, rounds: 0 });
-      $('teamName').value = '';
-      $('teamMembers').value = '';
-      saveState();
-      updateUI();
-      showToast('Team added');
-    }
+function updateUI(){
+  updateStats();
+  updateTeamList();
+  updateResponses();
+  updateLeaderboard();
+  updateRoundLog();
+  renderPowerups();
+  setPhase(phase);
+}
 
-    function deleteTeam(id) {
-      teams = teams.filter(team => team.id !== id);
-      saveState();
-      updateUI();
-      showToast('Team removed');
-    }
+// ---------- Teams ----------
+function nextTeamStyle(){
+  const idx = teams.length % TEAM_COLORS.length;
+  return { color: TEAM_COLORS[idx], avatar: TEAM_AVATARS[idx] };
+}
+function addTeam(){
+  const name = $('teamName').value.trim();
+  const members = $('teamMembers').value.split(',').map(x=>x.trim()).filter(Boolean);
+  if(!name) return showToast('Add a team name first', 'warning');
+  const style = nextTeamStyle();
+  teams.push({ id: makeId(), name, members, score:0, rounds:0, coins:50, ...style });
+  $('teamName').value=''; $('teamMembers').value='';
+  saveState(); updateUI();
+  showToast('Team added · +50 🪙', 'success');
+}
+function deleteTeam(id){
+  teams = teams.filter(t=> t.id !== id);
+  delete activePowerups[id];
+  saveState(); updateUI();
+  showToast('Team removed');
+}
+function ensureTeams(){ if(!teams.length) loadSampleTeams(false); }
+function loadSampleTeams(toast=true){
+  teams = [
+    { id:'s1', name:'Team Phoenix',  members:['Asha','Ravi','Meera'],  score:0, rounds:0, coins:50, color:TEAM_COLORS[0], avatar:TEAM_AVATARS[0] },
+    { id:'s2', name:'Team Catalyst', members:['Nikhil','Sara','Dev'],  score:0, rounds:0, coins:50, color:TEAM_COLORS[1], avatar:TEAM_AVATARS[1] },
+    { id:'s3', name:'Team Orbit',    members:['Kiran','Ananya','Joel'],score:0, rounds:0, coins:50, color:TEAM_COLORS[2], avatar:TEAM_AVATARS[2] }
+  ];
+  activePowerups = {};
+  saveState(); updateUI();
+  if(toast) showToast('Sample teams loaded · 50 🪙 each', 'success');
+}
 
-    function ensureTeams() {
-      if (!teams.length) loadSampleTeams(false);
-    }
+// ---------- Prompt ----------
+function choosePrompt(){
+  ensureTeams();
+  const selected = $('gameCategory').value;
+  const diff = $('difficulty').value;
+  let pool = PROMPTS.filter(p =>
+    (selected==='mixed' || p.category===selected || p.category==='mixed') &&
+    (diff==='any' || p.difficulty===diff)
+  );
+  if(!pool.length) pool = PROMPTS;
+  let idx = Math.floor(Math.random() * pool.length);
+  if(pool.length > 1){
+    while(pool[idx] === currentPrompt) idx = Math.floor(Math.random() * pool.length);
+  }
+  currentPrompt = pool[idx];
+  currentRound += 1;
+  exampleRevealedFor = null;
 
-    function loadSampleTeams(withToast = true) {
-      teams = [
-        { id: 'sample-1', name: 'Team Phoenix', members: ['Asha', 'Ravi', 'Meera'], score: 0, rounds: 0 },
-        { id: 'sample-2', name: 'Team Catalyst', members: ['Nikhil', 'Sara', 'Dev'], score: 0, rounds: 0 },
-        { id: 'sample-3', name: 'Team Orbit', members: ['Kiran', 'Ananya', 'Joel'], score: 0, rounds: 0 }
-      ];
-      saveState();
-      updateUI();
-      if (withToast) showToast('Sample teams loaded');
-    }
+  $('promptCategory').textContent = currentPrompt.category.replace('-',' ');
+  $('promptText').textContent = currentPrompt.text;
+  $('promptInstruction').textContent = currentPrompt.instruction;
+  const diffPill = $('promptDifficulty');
+  diffPill.textContent = currentPrompt.difficulty;
+  diffPill.className = 'prompt-tag diff-' + currentPrompt.difficulty;
+  $('promptSkill').textContent = currentPrompt.skill;
 
-    function choosePrompt() {
-      ensureTeams();
-      const selected = $('gameCategory').value;
-      const pool = selected === 'mixed' ? prompts : prompts.filter(p => p.category === selected || p.category === 'mixed');
-      let index = Math.floor(Math.random() * pool.length);
-      if (pool.length > 1) {
-        while (pool[index] === currentPrompt) index = Math.floor(Math.random() * pool.length);
-      }
-      currentPrompt = pool[index];
-      lastPromptIndex = index;
-      currentRound += 1;
-      $('promptCategory').textContent = currentPrompt.category.replace('-', ' ');
-      $('promptText').textContent = currentPrompt.text;
-      $('promptInstruction').textContent = currentPrompt.instruction;
-      $('statusTitle').textContent = `Round ${currentRound} prompt ready`;
-      $('statusSub').textContent = 'Click Start Round when teams are ready.';
-      $('timerDisplay').textContent = '⏱ 00:00';
-      clearInterval(timer);
-      $('pauseTimerBtn').textContent = 'Pause Timer';
-      setPhase('prompt');
-      saveState();
-      updateUI();
-      switchView('play');
-      document.getElementById('gameArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  // examples hidden by default; show toggle button
+  $('exampleToggle').hidden = false;
+  $('exampleToggle').textContent = 'Reveal strong / weak example responses ↓';
+  $('examplesBox').classList.remove('show');
+  $('weakExample').textContent = currentPrompt.weak;
+  $('strongExample').textContent = currentPrompt.strong;
 
-    async function playDemo() {
-      await enterFullscreenMode();
-      if (!teams.length) loadSampleTeams(false);
-      choosePrompt();
-      setTimeout(startRound, 350);
-      showToast('Demo started in fullscreen');
-    }
+  $('statusTitle').textContent = `Round ${currentRound} prompt ready`;
+  $('statusSub').textContent = 'Click Start Round when teams are ready.';
+  $('timerDisplay').textContent = '⏱ 00:00';
+  $('timerDisplay').className = 'timer';
+  clearInterval(timer);
+  $('pauseTimerBtn').textContent = '⏸ Pause';
+  setPhase('prompt');
+  // Reset criteria score boxes
+  teams.forEach(t => CRITERIA.forEach(c => setScore(t.id, c.key, 0)));
+  saveState();
+  updateUI();
+  switchView('play');
+  $('gameArea').scrollIntoView({ behavior:'smooth', block:'start' });
+}
 
-    function setupCustomGame() {
-      document.getElementById('setupPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setPhase('setup');
-      showToast('Set up teams and category');
-    }
+function toggleExamples(){
+  const box = $('examplesBox');
+  const open = box.classList.toggle('show');
+  $('exampleToggle').textContent = open ? 'Hide examples ↑' : 'Reveal strong / weak example responses ↓';
+}
 
-    function startRound() {
-      enterFullscreenMode();
-      ensureTeams();
-      if (!currentPrompt) choosePrompt();
-      clearInterval(timer);
-      remainingSeconds = Number($('roundDuration').value);
-      isPaused = false;
-      $('pauseTimerBtn').textContent = 'Pause Timer';
-      $('statusTitle').textContent = `Round ${currentRound} in progress`;
-      $('statusSub').textContent = 'Teams respond using “Yes, and...” thinking.';
-      setPhase('perform');
+async function playDemo(){
+  await enterFullscreenMode();
+  if(!teams.length) loadSampleTeams(false);
+  choosePrompt();
+  setTimeout(startRound, 350);
+  showToast('Demo started', 'success');
+}
+
+function setupCustomGame(){
+  $('setupPanel').scrollIntoView({ behavior:'smooth', block:'start' });
+  setPhase('setup');
+  showToast('Set up teams and category');
+}
+
+// ---------- Timer ----------
+function startRound(){
+  enterFullscreenMode();
+  ensureTeams();
+  if(!currentPrompt) choosePrompt();
+  clearInterval(timer);
+  remainingSeconds = Number($('roundDuration').value);
+  isPaused = false;
+  $('pauseTimerBtn').textContent = '⏸ Pause';
+  $('statusTitle').textContent = `Round ${currentRound} in progress`;
+  $('statusSub').textContent = 'Teams respond using "Yes, and..." thinking.';
+  setPhase('perform');
+  updateTimerDisplay();
+  timer = setInterval(()=>{
+    if(!isPaused){
+      remainingSeconds -= 1;
       updateTimerDisplay();
-      timer = setInterval(() => {
-        if (!isPaused) {
-          remainingSeconds -= 1;
-          updateTimerDisplay();
-          if (remainingSeconds <= 0) {
-            clearInterval(timer);
-            $('statusTitle').textContent = `Round ${currentRound} complete`;
-            $('statusSub').textContent = 'Score team responses, then finish and save the round.';
-            setPhase('score');
-            playBeep();
-          }
+      if(remainingSeconds === 10) playBeep(700, 80);
+      if(remainingSeconds === 5)  playBeep(800, 100);
+      if(remainingSeconds <= 0){
+        clearInterval(timer);
+        $('statusTitle').textContent = `Round ${currentRound} complete`;
+        $('statusSub').textContent = 'Score team responses, then finish and save the round.';
+        setPhase('score');
+        playBeep(880, 240);
+      }
+    }
+  }, 1000);
+}
+function updateTimerDisplay(){
+  const m = String(Math.floor(Math.max(remainingSeconds,0)/60)).padStart(2,'0');
+  const s = String(Math.max(remainingSeconds,0)%60).padStart(2,'0');
+  const t = $('timerDisplay');
+  t.textContent = `⏱ ${m}:${s}`;
+  t.classList.remove('warn','danger');
+  if(remainingSeconds > 0 && remainingSeconds <= 10) t.classList.add('danger');
+  else if(remainingSeconds > 0 && remainingSeconds <= 30) t.classList.add('warn');
+}
+function pauseTimer(){
+  if(!currentPrompt) return showToast('Start a round first', 'warning');
+  isPaused = !isPaused;
+  $('pauseTimerBtn').textContent = isPaused ? '▶ Resume' : '⏸ Pause';
+  showToast(isPaused ? 'Timer paused' : 'Timer resumed');
+}
+
+// ---------- Round complete ----------
+function getRoundScores(){
+  return teams.map(t => {
+    let pts = CRITERIA.reduce((s,c)=> s + clampScore(getScore(t.id, c.key)), 0);
+    // Apply Double Down if active
+    if(activePowerups[t.id]?.double) pts *= 2;
+    // Apply Steal credit (we'll subtract from leader below)
+    const response = ($('response-'+t.id)?.value || '').trim();
+    return { team: t.name, teamId: t.id, points: pts, response };
+  });
+}
+
+function finishRound(){
+  if(!currentPrompt) return showToast('Start a prompt first', 'warning');
+  clearInterval(timer);
+  const scores = getRoundScores();
+
+  // Apply Steal: any team with steal active takes 3 from current leader
+  const lead = leader();
+  if(lead){
+    scores.forEach(s => {
+      if(activePowerups[s.teamId]?.steal){
+        if(lead.id !== s.teamId){
+          const leadEntry = scores.find(x => x.teamId === lead.id);
+          if(leadEntry){ leadEntry.points = Math.max(0, leadEntry.points - 3); }
+          s.points += 3;
         }
-      }, 1000);
-    }
+      }
+    });
+  }
 
-    function updateTimerDisplay() {
-      const m = String(Math.floor(Math.max(remainingSeconds, 0) / 60)).padStart(2, '0');
-      const s = String(Math.max(remainingSeconds, 0) % 60).padStart(2, '0');
-      $('timerDisplay').textContent = `⏱ ${m}:${s}`;
+  // Award coins and update totals
+  const sortedRound = [...scores].sort((a,b)=> b.points - a.points);
+  const winner = sortedRound[0];
+  scores.forEach(s => {
+    const t = teams.find(x => x.id === s.teamId);
+    if(t){
+      t.score += s.points;
+      t.rounds = (t.rounds||0) + 1;
+      // Base coin: 5 for participating; +5 for response text; +15 for round winner
+      let coinDelta = 5;
+      if(s.response) coinDelta += 5;
+      if(winner && winner.teamId === t.id && scores.length > 1) coinDelta += 15;
+      t.coins = (t.coins||0) + coinDelta;
+      s.coinsEarned = coinDelta;
     }
+  });
 
-    function pauseTimer() {
-      if (!currentPrompt) return showToast('Start a round first');
-      isPaused = !isPaused;
-      $('pauseTimerBtn').textContent = isPaused ? 'Resume Timer' : 'Pause Timer';
-      showToast(isPaused ? 'Timer paused' : 'Timer resumed');
-    }
+  // Clear single-round powerups (double, steal)
+  Object.keys(activePowerups).forEach(tid => {
+    if(activePowerups[tid].double) delete activePowerups[tid].double;
+    if(activePowerups[tid].steal) delete activePowerups[tid].steal;
+  });
 
-    function quickScore(id, total) {
-      const values = splitScore(total);
-      const keys = ['builds', 'clarity', 'creativity', 'speed', 'solution', 'teamwork'];
-      keys.forEach((key, index) => {
-        const input = $(key + '-' + id);
-        if (input) input.value = values[index];
-      });
-      updateLeaderboard();
-      showToast(`Quick score ${total} applied`);
-    }
+  roundLog.push({
+    round: currentRound,
+    category: currentPrompt.category,
+    difficulty: currentPrompt.difficulty,
+    skill: currentPrompt.skill,
+    prompt: currentPrompt.text,
+    twist: $('twistBanner').classList.contains('show') ? $('twistText').textContent : null,
+    scores: scores.map(({team,points,response,coinsEarned}) => ({ team, points, response, coinsEarned })),
+    time: new Date().toISOString()
+  });
 
-    function splitScore(total) {
-      const base = Math.floor(total / 6);
-      const remainder = total % 6;
-      return Array.from({ length: 6 }, (_, i) => Math.min(10, base + (i < remainder ? 1 : 0)));
-    }
+  // Dismiss twist
+  $('twistBanner').classList.remove('show');
 
-    function getRoundScores() {
-      const criteria = ['builds', 'clarity', 'creativity', 'speed', 'solution', 'teamwork'];
-      return teams.map(team => {
-        const points = criteria.reduce((sum, key) => sum + clampScore(Number($(key + '-' + team.id)?.value || 0)), 0);
-        const response = ($('response-' + team.id)?.value || '').trim();
-        return { team: team.name, teamId: team.id, points, response };
-      });
-    }
+  $('statusTitle').textContent = `Round ${currentRound} saved`;
+  $('statusSub').textContent = 'Open Leaderboard or click Next Prompt for another round.';
+  setPhase('score');
+  saveState();
+  updateUI();
 
-    function finishRound() {
-      if (!currentPrompt) return showToast('Start a prompt first');
-      clearInterval(timer);
-      const scores = getRoundScores();
-      scores.forEach(score => {
-        const team = teams.find(t => t.id === score.teamId);
-        if (team) {
-          team.score += score.points;
-          team.rounds = (team.rounds || 0) + 1;
-        }
-      });
-      roundLog.push({
-        round: currentRound,
-        category: currentPrompt.category,
-        prompt: currentPrompt.text,
-        scores: scores.map(({ team, points, response }) => ({ team, points, response })),
-        time: new Date().toISOString()
-      });
-      $('statusTitle').textContent = `Round ${currentRound} saved`;
-      $('statusSub').textContent = 'Open Leaderboard or click Next Prompt for another round.';
-      setPhase('score');
-      saveState();
-      updateUI();
-      showToast('Round saved');
-      switchView('leaderboard');
-    }
+  // Celebrate winner
+  showSummary(sortedRound, winner);
+  fireConfetti();
+  switchView('leaderboard');
+}
 
-    function nextPrompt() {
+function showSummary(sortedRound, winner){
+  if(!winner) return;
+  $('summaryWinnerName').textContent = winner.team + ' wins this round';
+  $('summaryWinnerScore').textContent = '+' + winner.points + ' points · +' + (winner.coinsEarned||0) + ' 🪙';
+  $('summaryGrid').innerHTML = sortedRound.map((s,i) => {
+    const t = teams.find(x => x.id === s.teamId);
+    return `
+    <div class="summary-row">
+      <div class="rank">${i+1}</div>
+      <div class="team-avatar" style="--team-color:${t?.color || '#0B3C5D'};width:36px;height:36px;font-size:17px;border-radius:11px">${t?.avatar || '★'}</div>
+      <div>
+        <div class="team-name">${escapeHtml(s.team)}</div>
+        <div class="team-meta">${s.response ? escapeHtml(s.response.slice(0,80)) + (s.response.length>80?'…':'') : '(no response recorded)'}</div>
+      </div>
+      <div class="delta">+${s.points}</div>
+    </div>`;
+  }).join('');
+  $('summaryOverlay').classList.add('show');
+}
+
+function nextPrompt(){ choosePrompt(); showToast('New prompt'); }
+
+// ---------- Power-ups ----------
+function renderPowerups(){
+  const host = $('powerups');
+  if(!host) return;
+  // Show 5 power-ups; clicking spends from any team (the leader by default,
+  // or prompt user if multiple teams). For demo simplicity, use the highest-coin team.
+  const buyer = teams.slice().sort((a,b)=> (b.coins||0) - (a.coins||0))[0];
+  host.innerHTML = POWERUPS.map(p => {
+    const can = buyer && (buyer.coins||0) >= p.cost;
+    return `
+    <div class="powerup-card ${can ? '' : 'disabled'}" onclick="${can ? `usePowerup('${p.id}','${buyer?.id}')` : ''}">
+      <div class="powerup-icon">${p.icon}</div>
+      <div class="powerup-name">${p.name}</div>
+      <div class="powerup-cost"><span style="font-size:9px">🪙</span>${p.cost}</div>
+      <div class="powerup-tooltip"><strong style="color:#fff">${p.name}</strong><br>${p.tip}<br><em style="color:#94A3B8">Buyer: ${buyer ? buyer.name : '-'}</em></div>
+    </div>`;
+  }).join('');
+
+  // Also populate How-to power-ups (static info)
+  const howto = $('howToPowerups');
+  if(howto){
+    howto.innerHTML = POWERUPS.map(p=>`
+      <div class="powerup-card" style="cursor:default">
+        <div class="powerup-icon">${p.icon}</div>
+        <div class="powerup-name">${p.name}</div>
+        <div class="powerup-cost"><span style="font-size:9px">🪙</span>${p.cost}</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:4px">${p.tip}</div>
+      </div>`).join('');
+  }
+}
+
+function usePowerup(id, teamId){
+  const team = teams.find(t=> t.id === teamId);
+  const p = POWERUPS.find(x => x.id === id);
+  if(!team || !p) return;
+  if((team.coins||0) < p.cost) return showToast('Not enough coins', 'warning');
+  team.coins -= p.cost;
+  activePowerups[teamId] = activePowerups[teamId] || {};
+  switch(id){
+    case 'reroll':
       choosePrompt();
-      showToast('New prompt ready');
-    }
+      showToast(team.name + ' rerolled the prompt (-' + p.cost + ' 🪙)', 'success');
+      break;
+    case 'reveal':
+      $('examplesBox').classList.add('show');
+      $('exampleToggle').textContent = 'Hide examples ↑';
+      exampleRevealedFor = currentPrompt;
+      showToast(team.name + ' revealed examples (-' + p.cost + ' 🪙)', 'success');
+      break;
+    case 'double':
+      activePowerups[teamId].double = true;
+      showToast(team.name + ' will double next-round score (-' + p.cost + ' 🪙)', 'success');
+      break;
+    case 'steal':
+      activePowerups[teamId].steal = true;
+      showToast(team.name + ' will steal 3 pts on next save (-' + p.cost + ' 🪙)', 'success');
+      break;
+    case 'twist':
+      triggerTwist();
+      showToast(team.name + ' unleashed a plot twist (-' + p.cost + ' 🪙)', 'success');
+      break;
+  }
+  saveState();
+  updateUI();
+}
 
-    function exportReport() {
-      const report = {
-        game: 'Edstellar Engage - Improv Challenge',
-        exportedAt: new Date().toISOString(),
-        teams,
-        rounds: roundLog,
-        reflectionNotes: $('reflectionNotes').value.trim(),
-        scoringCriteria: ['Builds on previous idea', 'Clarity', 'Creativity', 'Speed', 'Solution orientation', 'Teamwork']
-      };
-      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'edstellar-improv-challenge-report.json';
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('Report exported');
-    }
+// ---------- Twists ----------
+function triggerTwist(){
+  const t = TWISTS[Math.floor(Math.random()*TWISTS.length)];
+  $('twistText').textContent = t;
+  const b = $('twistBanner');
+  b.classList.add('show');
+  // Animate in
+  b.style.animation='none'; void b.offsetHeight; b.style.animation='';
+}
 
-    function resetGame() {
-      if (!confirm('Reset the game, scores, and round log?')) return;
-      clearInterval(timer);
-      teams = [];
-      currentRound = 0;
-      currentPrompt = null;
-      roundLog = [];
-      phase = 'setup';
-      localStorage.removeItem('edstellarImprovGameV2');
-      $('promptCategory').textContent = 'Prompt';
-      $('promptText').textContent = 'Click “Play Demo Now” to instantly start with sample teams and a workplace scenario.';
-      $('promptInstruction').textContent = 'No setup required for demo mode.';
-      $('timerDisplay').textContent = '⏱ 00:00';
-      $('statusTitle').textContent = 'Ready to play';
-      $('statusSub').textContent = 'Click “Play Demo Now” for instant gameplay, or set up your own teams.';
-      updateUI();
-      showToast('Game reset');
-    }
-
-    function switchView(view) {
-      ['play', 'leaderboard', 'reflection', 'log'].forEach(v => {
-        $(v + 'View').classList.toggle('hidden', v !== view);
-      });
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.view === view));
-    }
-
-    function clampScore(n) {
-      if (Number.isNaN(n)) return 0;
-      return Math.max(0, Math.min(10, n));
-    }
-
-    function makeId() {
-      return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
-    }
-
-    function escapeHtml(value) {
-      return String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
-    }
-
-    function playBeep() {
-      try {
-        const audio = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audio.createOscillator();
-        const gain = audio.createGain();
-        oscillator.connect(gain);
-        gain.connect(audio.destination);
-        oscillator.frequency.value = 880;
-        gain.gain.value = 0.08;
-        oscillator.start();
-        setTimeout(() => { oscillator.stop(); audio.close(); }, 220);
-      } catch (e) {}
-    }
-
-    $('addTeamBtn').addEventListener('click', addTeam);
-    $('loadSampleBtn').addEventListener('click', () => loadSampleTeams(true));
-    $('demoBtn').addEventListener('click', playDemo);
-    $('howToPlayBtn').addEventListener('click', openHowToPlay);
-    $('howToClose').addEventListener('click', closeHowToPlay);
-    $('howToCloseBottom').addEventListener('click', closeHowToPlay);
-    $('howToStartDemo').addEventListener('click', () => { closeHowToPlay(); playDemo(); });
-    $('howToSetup').addEventListener('click', () => { closeHowToPlay(); setupCustomGame(); });
-    $('setupGameBtn').addEventListener('click', setupCustomGame);
-    $('startRoundBtn').addEventListener('click', startRound);
-    $('nextPromptBtn').addEventListener('click', nextPrompt);
-    $('nextPromptHeroBtn').addEventListener('click', nextPrompt);
-    $('pauseTimerBtn').addEventListener('click', pauseTimer);
-    $('finishRoundBtn').addEventListener('click', finishRound);
-    $('exportBtn').addEventListener('click', exportReport);
-    $('printBtn').addEventListener('click', () => window.print());
-    $('resetBtn').addEventListener('click', resetGame);
-    document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => switchView(tab.dataset.view)));
-    $('teamName').addEventListener('keydown', (event) => { if (event.key === 'Enter') addTeam(); });
-    $('responseGrid').addEventListener('input', (event) => {
-      if (event.target.matches('input[type="number"]')) updateLeaderboard();
+// ---------- Reports ----------
+function exportReport(){
+  const report = {
+    game: 'Edstellar Engage - Improv Challenge v2',
+    exportedAt: new Date().toISOString(),
+    teams,
+    rounds: roundLog,
+    reflectionNotes: $('reflectionNotes').value.trim(),
+    scoringCriteria: CRITERIA.map(c => c.label),
+    powerupsLibrary: POWERUPS,
+    twistsLibrary: TWISTS
+  };
+  download('edstellar-improv-report.json', JSON.stringify(report,null,2), 'application/json');
+  showToast('JSON exported', 'success');
+}
+function exportCsv(){
+  if(!roundLog.length) return showToast('No completed rounds to export', 'warning');
+  const rows = [['Round','Category','Difficulty','Skill','Prompt','Twist','Team','Points','CoinsEarned','Response']];
+  roundLog.forEach(log => {
+    log.scores.forEach(s => {
+      rows.push([log.round, log.category, log.difficulty||'', log.skill||'', log.prompt, log.twist||'', s.team, s.points, s.coinsEarned||0, (s.response||'').replace(/\n/g,' ')]);
     });
-    $('howToOverlay').addEventListener('click', (event) => {
-      if (event.target.id === 'howToOverlay') closeHowToPlay();
-    });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') closeHowToPlay();
-    });
+  });
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  download('edstellar-improv-rounds.csv', csv, 'text/csv');
+  showToast('CSV exported', 'success');
+}
+function download(name, content, type){
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=name; a.click();
+  URL.revokeObjectURL(url);
+}
 
-    loadState();
-    // Auto-open the how-to-play modal only on first visit (per-browser).
-    if (!localStorage.getItem('edstellarImprovHowToSeen')) {
-      setTimeout(openHowToPlay, 450);
-      localStorage.setItem('edstellarImprovHowToSeen', '1');
+// ---------- Reset ----------
+function resetGame(){
+  if(!confirm('Reset the game, scores, coins, and round log?')) return;
+  clearInterval(timer);
+  teams = []; currentRound=0; currentPrompt=null; roundLog=[]; phase='setup'; activePowerups={};
+  localStorage.removeItem(STORAGE_KEY);
+  $('promptCategory').textContent='Prompt';
+  $('promptDifficulty').textContent='Medium';
+  $('promptDifficulty').className='prompt-tag diff-Medium';
+  $('promptSkill').textContent='';
+  $('promptText').textContent='Click "Play Demo Now" to instantly start with sample teams and a workplace scenario.';
+  $('promptInstruction').textContent='No setup required for demo mode.';
+  $('exampleToggle').hidden = true;
+  $('examplesBox').classList.remove('show');
+  $('timerDisplay').textContent='⏱ 00:00';
+  $('timerDisplay').className='timer';
+  $('statusTitle').textContent='Ready to play';
+  $('statusSub').textContent='Click "Play Demo Now" for instant gameplay, or set up your own teams.';
+  $('twistBanner').classList.remove('show');
+  updateUI();
+  showToast('Game reset');
+}
+
+function switchView(view){
+  ['play','leaderboard','reflection','log'].forEach(v => {
+    $(v+'View').classList.toggle('hidden', v !== view);
+  });
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.view === view));
+}
+
+// ---------- Utils ----------
+function clampScore(n){ if(Number.isNaN(n)) return 0; return Math.max(0, Math.min(10, n)); }
+function makeId(){ return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()); }
+function escapeHtml(v){ return String(v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c])); }
+
+async function enterFullscreenMode(){
+  try{
+    if(!document.fullscreenElement && document.documentElement.requestFullscreen){
+      await document.documentElement.requestFullscreen();
     }
-  </script>
+  }catch(e){}
+}
+
+function playBeep(freq=880, ms=220){
+  try{
+    const audio = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
+    osc.connect(gain); gain.connect(audio.destination);
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(.08, audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001, audio.currentTime + ms/1000);
+    osc.start();
+    setTimeout(()=>{ osc.stop(); audio.close(); }, ms);
+  }catch(e){}
+}
+
+// ---------- Confetti ----------
+function fireConfetti(){
+  const c = $('confetti'); const ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  const colors = ['#0B3C5D','#2563EB','#10B981','#F59E0B','#7C3AED','#EC4899','#38BDF8'];
+  const N = 140;
+  const parts = Array.from({length:N}, () => ({
+    x: c.width/2 + (Math.random()-.5) * 120,
+    y: c.height/2 + (Math.random()-.5) * 60,
+    vx: (Math.random()-.5) * 14,
+    vy: -Math.random() * 14 - 4,
+    g: .35 + Math.random() * .2,
+    s: 4 + Math.random() * 6,
+    r: Math.random() * Math.PI,
+    vr: (Math.random()-.5) * .3,
+    color: colors[Math.floor(Math.random()*colors.length)],
+    life: 90 + Math.random() * 60
+  }));
+  function tick(){
+    ctx.clearRect(0,0,c.width,c.height);
+    let alive = false;
+    parts.forEach(p => {
+      if(p.life-- <= 0) return;
+      alive = true;
+      p.x += p.vx; p.y += p.vy; p.vy += p.g; p.r += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.r);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.s/2, -p.s/2, p.s, p.s * 1.4);
+      ctx.restore();
+    });
+    if(alive) requestAnimationFrame(tick);
+    else ctx.clearRect(0,0,c.width,c.height);
+  }
+  tick();
+}
+window.addEventListener('resize', ()=>{
+  const c = $('confetti'); c.width = window.innerWidth; c.height = window.innerHeight;
+});
+
+// ---------- Modal helpers ----------
+function openHowToPlay(){ $('howToOverlay').classList.add('show'); }
+function closeHowToPlay(){ $('howToOverlay').classList.remove('show'); }
+function closeSummary(){ $('summaryOverlay').classList.remove('show'); }
+
+// ---------- Wire up ----------
+$('addTeamBtn').addEventListener('click', addTeam);
+$('loadSampleBtn').addEventListener('click', () => loadSampleTeams(true));
+$('demoBtn').addEventListener('click', playDemo);
+$('howToPlayBtn').addEventListener('click', openHowToPlay);
+$('howToClose').addEventListener('click', closeHowToPlay);
+$('howToCloseBottom').addEventListener('click', closeHowToPlay);
+$('howToStartDemo').addEventListener('click', () => { closeHowToPlay(); playDemo(); });
+$('howToSetup').addEventListener('click', () => { closeHowToPlay(); setupCustomGame(); });
+$('setupGameBtn').addEventListener('click', setupCustomGame);
+$('startRoundBtn').addEventListener('click', startRound);
+$('nextPromptBtn').addEventListener('click', nextPrompt);
+$('nextPromptHeroBtn').addEventListener('click', nextPrompt);
+$('pauseTimerBtn').addEventListener('click', pauseTimer);
+$('finishRoundBtn').addEventListener('click', finishRound);
+$('exportBtn').addEventListener('click', exportReport);
+$('exportCsvBtn').addEventListener('click', exportCsv);
+$('printBtn').addEventListener('click', () => window.print());
+$('resetBtn').addEventListener('click', resetGame);
+$('twistBtn').addEventListener('click', triggerTwist);
+$('twistClose').addEventListener('click', () => $('twistBanner').classList.remove('show'));
+$('exampleToggle').addEventListener('click', toggleExamples);
+$('summaryClose').addEventListener('click', closeSummary);
+$('summaryNext').addEventListener('click', () => { closeSummary(); nextPrompt(); });
+document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => switchView(tab.dataset.view)));
+$('teamName').addEventListener('keydown', e => { if(e.key === 'Enter') addTeam(); });
+$('howToOverlay').addEventListener('click', e => { if(e.target.id === 'howToOverlay') closeHowToPlay(); });
+$('summaryOverlay').addEventListener('click', e => { if(e.target.id === 'summaryOverlay') closeSummary(); });
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if(e.target.matches('input,textarea,select')) return;
+  if(e.key === 'Escape'){ closeHowToPlay(); closeSummary(); return; }
+  if(e.key === ' '){ e.preventDefault();
+    if(phase === 'perform') pauseTimer();
+    else startRound();
+    return;
+  }
+  if(e.key.toLowerCase() === 'n'){ nextPrompt(); }
+  if(e.key.toLowerCase() === 't'){ triggerTwist(); }
+  if(e.key.toLowerCase() === 'f'){ enterFullscreenMode(); }
+  if(e.key.toLowerCase() === 'p'){ switchView('play'); }
+  if(e.key.toLowerCase() === 'l'){ switchView('leaderboard'); }
+  if(e.key.toLowerCase() === 'r'){ switchView('reflection'); }
+  if(e.key.toLowerCase() === 's'){ if(phase !== 'perform') startRound(); }
+});
+
+// Boot
+loadState();
+if(!localStorage.getItem('edstellarImprovHowToSeenV3')){
+  setTimeout(openHowToPlay, 450);
+  localStorage.setItem('edstellarImprovHowToSeenV3','1');
+}
+</script>
 </body>
 </html>
