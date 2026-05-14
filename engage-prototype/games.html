@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Game Library — Edstellar Engage</title>
+<meta name="description" content="Browse 200+ corporate games for engagement, learning reinforcement, and culture. Filter by category, audience, format, duration, and difficulty."/>
+<link rel="stylesheet" href="./assets/styles.css"/>
+</head>
+<body data-page="library">
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="./index.html">
+      <span class="brand-logo" aria-hidden="true"></span>
+      <span>Edstellar <span style="color:var(--brand-accent-700)">Engage</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="./games.html" class="active">Games</a>
+      <a href="./how-it-works.html">How it works</a>
+      <a href="./use-cases.html">Use Cases</a>
+      <a href="./pricing.html">Pricing</a>
+      <a href="./compare.html">Compare</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost btn-sm" href="#">Sign in</a>
+      <button class="btn btn-primary btn-sm" data-open-demo>Book a Demo</button>
+    </div>
+  </div>
+</header>
+
+<section class="section-tight" style="padding-top:24px">
+  <div class="container">
+    <!-- Library hero -->
+    <div class="lib-hero">
+      <div class="lib-hero-top">
+        <div class="lib-hero-text">
+          <span class="eyebrow">Game Library</span>
+          <h1>Find the right game in under a minute.</h1>
+          <p class="lead">200+ workplace games across 14 categories. Filter by audience, format, duration, and difficulty — tied to your Edstellar training catalog where it matters.</p>
+          <div class="lib-search" role="search">
+            <span aria-hidden="true">⌕</span>
+            <input id="search-input" type="search" placeholder="Try escape room, onboarding, negotiation, vision board…" aria-label="Search games"/>
+            <kbd title="Press / to focus">/</kbd>
+          </div>
+          <div class="lib-popular">
+            <span class="lp-label">Popular:</span>
+            <a href="./games.html?category=Leadership">Leadership</a>
+            <a href="./games.html?category=Sales">Sales</a>
+            <a href="./games.html?category=Communication">Communication</a>
+            <a href="./games.html?category=HR%20%2F%20Onboarding">HR &amp; Onboarding</a>
+            <a href="./games.html?category=Customer%20Service">Customer Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="lib-stats-row">
+        <div class="lib-stat"><strong>200+</strong><small>Games</small></div>
+        <div class="lib-stat"><strong>14</strong><small>Categories</small></div>
+        <div class="lib-stat"><strong>130+</strong><small>Reinforce training</small></div>
+        <div class="lib-stat"><strong>4</strong><small>Formats</small></div>
+      </div>
+    </div>
+
+    <!-- Spotlight game -->
+    <div id="spotlight-host"></div>
+
+    <button id="filters-toggle" class="btn btn-ghost btn-sm filters-toggle" aria-controls="filters">Filters</button>
+
+    <div class="lib-grid" style="margin-top:14px">
+      <aside id="filters" class="filters" aria-label="Filters"></aside>
+      <div>
+        <div class="filter-summary">
+          <div id="active-pills" class="active-pills" aria-live="polite"></div>
+        </div>
+        <div class="lib-result-bar">
+          <span id="result-count">Loading…</span>
+          <label style="display:flex;gap:8px;align-items:center">Sort by
+            <select id="sort-select">
+              <option value="popular">Most popular</option>
+              <option value="reinforce">Most reinforcing</option>
+              <option value="shortest">Shortest first</option>
+              <option value="az">A–Z</option>
+            </select>
+          </label>
+        </div>
+        <div id="grid-results" class="grid-results" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="./index.html" style="color:#fff">
+          <span class="brand-logo"></span>
+          <span style="color:#fff">Edstellar <span style="color:var(--brand-accent)">Engage</span></span>
+        </a>
+        <p style="margin-top:12px;color:#94A3B8;font-size:14px;max-width:280px">Interactive workplace games for engagement, reinforcement, and culture. Part of the Edstellar talent transformation suite.</p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <ul>
+          <li><a href="./games.html">Game Library</a></li>
+          <li><a href="./how-it-works.html">How it works</a></li>
+          <li><a href="./use-cases.html">Use Cases</a></li>
+          <li><a href="./pricing.html">Pricing</a></li>
+          <li><a href="./compare.html">Compare</a></li>
+          <li><a href="./facilitated.html">Facilitated Sessions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Solutions</h5>
+        <ul>
+          <li><a href="./games.html?category=Sales">Sales Enablement</a></li>
+          <li><a href="./games.html?category=Customer%20Service">Customer Service</a></li>
+          <li><a href="./games.html?category=Leadership">Leadership</a></li>
+          <li><a href="./games.html?category=HR%20%2F%20Onboarding">HR &amp; Onboarding</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="./case-studies.html">Case studies</a></li>
+          <li><a href="./facilitated.html">Facilitator program</a></li>
+          <li><a href="./games.html">Game Library</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="./about.html">About Engage</a></li>
+          <li><a href="https://www.edstellar.com" target="_blank" rel="noopener">Edstellar.com</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal"><span>© 2026 Edstellar. All rights reserved.</span><span>engage.edstellar.com</span></div>
+  </div>
+</footer>
+
+<button class="btn btn-accent sticky-cta" data-open-demo>Book a Demo</button>
+
+<div class="modal-overlay" id="demo-modal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <form class="modal-form" novalidate>
+      <h3>Book a 20-minute demo</h3>
+      <p class="muted">Tell us about your team. We'll preload a workspace with your branding.</p>
+      <label>Work email<input type="email" required placeholder="you@company.com"/></label>
+      <label>Company<input type="text" required placeholder="Company name"/></label>
+      <label>Team size<select required><option value="">Select...</option><option>1–50</option><option>50–200</option><option>200–1,000</option><option>1,000+</option></select></label>
+      <label>What are you trying to solve?<textarea rows="3"></textarea></label>
+      <div class="modal-actions"><button type="button" class="btn btn-ghost" data-close-demo>Cancel</button><button type="submit" class="btn btn-primary">Request demo</button></div>
+    </form>
+  </div>
+</div>
+
+<script src="./assets/games-data.js"></script>
+<script src="./assets/app.js"></script>
+</body>
+</html>
