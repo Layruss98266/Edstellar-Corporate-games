@@ -1050,23 +1050,23 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
         </div>
 
         <div class="form-row">
-          <label>Language</label>
-          <div class="lang-row" id="langRow" style="overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px">
-            <button class="lang-pick active" data-lang="en" title="English (28 prompts)">EN</button>
-            <button class="lang-pick" data-lang="hi" title="हिन्दी (Hindi)">हिं</button>
-            <button class="lang-pick" data-lang="ar" title="العربية (Arabic, RTL)">ع</button>
-            <button class="lang-pick" data-lang="es" title="Español (Spanish)">ES</button>
-            <button class="lang-pick" data-lang="fr" title="Français (French)">FR</button>
-            <button class="lang-pick" data-lang="de" title="Deutsch (German)">DE</button>
-            <button class="lang-pick" data-lang="pt" title="Português (Portuguese)">PT</button>
-            <button class="lang-pick" data-lang="ja" title="日本語 (Japanese)">日</button>
-            <button class="lang-pick" data-lang="ko" title="한국어 (Korean)">한</button>
-            <button class="lang-pick" data-lang="zh" title="中文 (Chinese)">中</button>
-            <button class="lang-pick" data-lang="ru" title="Русский (Russian)">RU</button>
-            <button class="lang-pick" data-lang="it" title="Italiano (Italian)">IT</button>
-            <button class="lang-pick" data-lang="id" title="Bahasa Indonesia">ID</button>
-            <button class="lang-pick" data-lang="tr" title="Türkçe (Turkish)">TR</button>
-          </div>
+          <label for="langSelect">Language</label>
+          <select id="langSelect">
+            <option value="en">English (28 prompts)</option>
+            <option value="hi">हिन्दी · Hindi</option>
+            <option value="ar">العربية · Arabic (RTL)</option>
+            <option value="es">Español · Spanish</option>
+            <option value="fr">Français · French</option>
+            <option value="de">Deutsch · German</option>
+            <option value="pt">Português · Portuguese</option>
+            <option value="ja">日本語 · Japanese</option>
+            <option value="ko">한국어 · Korean</option>
+            <option value="zh">中文 · Chinese</option>
+            <option value="ru">Русский · Russian</option>
+            <option value="it">Italiano · Italian</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="tr">Türkçe · Turkish</option>
+          </select>
         </div>
 
         <div class="setup-grid-2">
@@ -1447,18 +1447,6 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
         </div>
 
         <div class="cheat-section">
-          <h4>Live coaching tags</h4>
-          <div class="cheat-row"><span class="lbl">✓ Strong build</span><kbd>+1 Builds</kbd></div>
-          <div class="cheat-row"><span class="lbl">🛑 Block</span><kbd>-1 Builds</kbd></div>
-          <div class="cheat-row"><span class="lbl">💎 Crystal clear</span><kbd>+1 Clarity</kbd></div>
-          <div class="cheat-row"><span class="lbl">🤔 Unclear</span><kbd>-1 Clarity</kbd></div>
-          <div class="cheat-row"><span class="lbl">💡 Novel angle</span><kbd>+1 Creativity</kbd></div>
-          <div class="cheat-row"><span class="lbl">⚡ Quick recovery</span><kbd>+1 Speed</kbd></div>
-          <div class="cheat-row"><span class="lbl">🎯 Moved to outcome</span><kbd>+1 Solution</kbd></div>
-          <div class="cheat-row"><span class="lbl">👥 Whole team in</span><kbd>+1 Teamwork</kbd></div>
-        </div>
-
-        <div class="cheat-section">
           <h4>Badges (10 total)</h4>
           <div class="cheat-row"><span class="lbl">🥇 First Win</span><kbd>Win 1</kbd></div>
           <div class="cheat-row"><span class="lbl">🎩 Hat-Trick</span><kbd>3 in a row</kbd></div>
@@ -1763,8 +1751,9 @@ function loadState(){
   // sync the select with stored value
   const sel = $('totalRounds');
   if(sel) sel.value = String(maxRounds);
-  // sync language pills
-  document.querySelectorAll('.lang-pick').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLanguage));
+  // sync language select
+  const langSel = document.getElementById('langSelect');
+  if(langSel) langSel.value = currentLanguage;
   // sync PROMPTS to active language + custom
   PROMPTS.length = 0; getActivePrompts().forEach(p => PROMPTS.push(p));
   updateUI();
@@ -1905,10 +1894,6 @@ function updateResponses(){
             </div>
           </div>
         `).join('')}
-      </div>
-      <div class="coaching-bar">
-        <small>Live coaching tags · click as the team responds</small>
-        ${COACHING_TAGS.map(ct => `<button class="coach-tag ${ct.positive?'positive':'negative'}" onclick="tagBehavior('${t.id}','${ct.id}')" title="${escapeHtml(ct.tip)}">${ct.icon} ${escapeHtml(ct.label)}</button>`).join('')}
       </div>
       <div class="response-input">
         <textarea id="response-${t.id}" placeholder="Capture the team's response or facilitator notes for this round."></textarea>
@@ -3382,9 +3367,11 @@ function setLanguage(lang){
   // Swap PROMPTS array contents in place
   PROMPTS.length = 0;
   getActivePrompts().forEach(p => PROMPTS.push(p));
-  // Update lang pills
-  document.querySelectorAll('.lang-pick').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  // Sync the language select
+  const sel = document.getElementById('langSelect');
+  if(sel) sel.value = lang;
   saveState();
+  if(typeof updateEstimator === 'function') updateEstimator();
 }
 
 // ---------- Sharing ----------
@@ -3497,7 +3484,7 @@ $('addCpBtn').addEventListener('click', addCustomPrompt);
 $('exportCpBtn').addEventListener('click', exportCustomPack);
 $('importCpBtn').addEventListener('click', () => $('importCpInput').click());
 $('importCpInput').addEventListener('change', e => { const f = e.target.files[0]; if(f) importCustomPack(f); e.target.value=''; });
-document.querySelectorAll('.lang-pick').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+document.getElementById('langSelect')?.addEventListener('change', e => setLanguage(e.target.value));
 
 $('shareBtn').addEventListener('click', openShare);
 $('shareClose').addEventListener('click', closeShare);
