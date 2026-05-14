@@ -573,7 +573,7 @@ input:focus,textarea:focus,select:focus{
       <h2>Game Snapshot</h2>
       <div class="stat-grid">
         <div class="stat-box"><span class="stat-label">Teams</span><span class="stat-value" id="teamCount">0</span></div>
-        <div class="stat-box"><span class="stat-label">Round</span><span class="stat-value" id="roundStat">0</span></div>
+        <div class="stat-box"><span class="stat-label">Round</span><span class="stat-value" id="roundStat">0 / 3</span></div>
         <div class="stat-box"><span class="stat-label">Prompts</span><span class="stat-value" id="promptCount">0</span></div>
         <div class="stat-box"><span class="stat-label">Phase</span><span class="stat-value" id="phaseStat" style="font-size:20px">Setup</span></div>
       </div>
@@ -640,6 +640,21 @@ input:focus,textarea:focus,select:focus{
           <option value="120">2 minutes</option>
           <option value="180">3 minutes</option>
         </select>
+      </div>
+
+      <div class="form-row">
+        <label for="totalRounds">Total Rounds</label>
+        <select id="totalRounds">
+          <option value="3" selected>3 rounds (default)</option>
+          <option value="4">4 rounds</option>
+          <option value="5">5 rounds</option>
+          <option value="6">6 rounds</option>
+          <option value="7">7 rounds</option>
+          <option value="8">8 rounds</option>
+          <option value="9">9 rounds</option>
+          <option value="10">10 rounds (max)</option>
+        </select>
+        <p class="hint">When the last round finishes, the game crowns an overall winner with a final celebration.</p>
       </div>
 
       <div class="form-row">
@@ -1024,6 +1039,7 @@ let lastPromptIndex = -1;
 let activePowerups = {}; // { teamId: { double:true, ... } }
 let exampleRevealedFor = null;
 let editingTeamId = null;
+let maxRounds = 3;
 
 const $ = id => document.getElementById(id);
 const STORAGE_KEY = 'edstellarImprovGameV3';
@@ -1035,7 +1051,7 @@ function showToast(message, kind=''){
 }
 
 function saveState(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ teams, currentRound, roundLog, phase, activePowerups }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ teams, currentRound, roundLog, phase, activePowerups, maxRounds }));
 }
 function loadState(){
   try{
@@ -1045,7 +1061,11 @@ function loadState(){
     roundLog = s.roundLog || [];
     phase = s.phase || 'setup';
     activePowerups = s.activePowerups || {};
+    maxRounds = Number(s.maxRounds) || 3;
   }catch(e){}
+  // sync the select with stored value
+  const sel = $('totalRounds');
+  if(sel) sel.value = String(maxRounds);
   updateUI();
 }
 
@@ -1060,7 +1080,7 @@ function setPhase(next){
 
 function updateStats(){
   $('teamCount').textContent = teams.length;
-  $('roundStat').textContent = currentRound;
+  $('roundStat').textContent = currentRound + ' / ' + maxRounds;
   $('promptCount').textContent = PROMPTS.length;
   $('phaseStat').textContent = phase.charAt(0).toUpperCase()+phase.slice(1);
   const totalCoins = teams.reduce((s,t)=> s + (t.coins||0), 0);
@@ -1357,6 +1377,10 @@ function loadSampleTeams(toast=true){
 // ---------- Prompt ----------
 function choosePrompt(){
   ensureTeams();
+  if(currentRound >= maxRounds){
+    showFinalWinner();
+    return;
+  }
   const selected = $('gameCategory').value;
   const diff = $('difficulty').value;
   let pool = PROMPTS.filter(p =>
@@ -1535,20 +1559,65 @@ function finishRound(){
   // Dismiss twist
   $('twistBanner').classList.remove('show');
 
-  $('statusTitle').textContent = `Round ${currentRound} saved`;
-  $('statusSub').textContent = 'Open Leaderboard or click Next Prompt for another round.';
+  const isFinal = currentRound >= maxRounds;
+  if(isFinal){
+    $('statusTitle').textContent = 'Game complete';
+    $('statusSub').textContent = 'See the final standings and export the report.';
+  } else {
+    $('statusTitle').textContent = `Round ${currentRound} of ${maxRounds} saved`;
+    $('statusSub').textContent = 'Open Leaderboard or click Next Prompt for another round.';
+  }
   setPhase('score');
   saveState();
   updateUI();
 
-  // Celebrate winner
+  // Celebrate round winner
   showSummary(sortedRound, winner);
   fireConfetti();
   switchView('leaderboard');
+
+  // After the last round, transition to the final-winner overlay
+  if(isFinal){
+    setTimeout(showFinalWinner, 700);
+  }
+}
+
+function showFinalWinner(){
+  if(!teams.length) return;
+  const ranked = [...teams].sort((a,b) => (b.score||0) - (a.score||0));
+  const champ = ranked[0];
+  $('summaryWinnerName').textContent = '🏆 ' + champ.name + ' wins the game';
+  $('summaryWinnerScore').textContent =
+    champ.score + ' points · ' + (champ.coins||0) + ' 🪙 · ' + (champ.rounds||0) + ' rounds played';
+  $('summaryGrid').innerHTML = ranked.map((t, i) => `
+    <div class="summary-row">
+      <div class="rank">${i+1}</div>
+      <div class="team-avatar" style="--team-color:${t.color};width:36px;height:36px;font-size:17px;border-radius:11px">${t.avatar}</div>
+      <div>
+        <div class="team-name">${escapeHtml(t.name)}<span class="member-count">👥 ${t.members.length}</span></div>
+        <div class="team-meta">${t.rounds||0} rounds · ${t.coins||0} 🪙</div>
+        ${t.members.length ? memberPills(t) : ''}
+      </div>
+      <div class="delta">${t.score} pts</div>
+    </div>
+  `).join('');
+  // Repurpose Next Round button -> "Play again"
+  const btn = $('summaryNext');
+  btn.textContent = '↻ Play again';
+  btn.dataset.mode = 'final';
+  btn.onclick = () => { closeSummary(); resetGame(); };
+  $('summaryOverlay').classList.add('show');
+  fireConfetti();
+  setTimeout(fireConfetti, 850);
 }
 
 function showSummary(sortedRound, winner){
   if(!winner) return;
+  // Restore default Next Round behavior in case a previous final-winner overlay rebound it
+  const btn = $('summaryNext');
+  btn.textContent = '🎲 Next Round';
+  btn.dataset.mode = 'round';
+  btn.onclick = () => { closeSummary(); nextPrompt(); };
   $('summaryWinnerName').textContent = winner.team + ' wins this round';
   $('summaryWinnerScore').textContent = '+' + winner.points + ' points · +' + (winner.coinsEarned||0) + ' 🪙';
   $('summaryGrid').innerHTML = sortedRound.map((s,i) => {
@@ -1684,6 +1753,7 @@ function resetGame(){
   if(!confirm('Reset the game, scores, coins, and round log?')) return;
   clearInterval(timer);
   teams = []; currentRound=0; currentPrompt=null; roundLog=[]; phase='setup'; activePowerups={};
+  maxRounds = Number($('totalRounds')?.value) || 3;
   localStorage.removeItem(STORAGE_KEY);
   $('promptCategory').textContent='Prompt';
   $('promptDifficulty').textContent='Medium';
@@ -1808,6 +1878,11 @@ $('summaryClose').addEventListener('click', closeSummary);
 $('summaryNext').addEventListener('click', () => { closeSummary(); nextPrompt(); });
 document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => switchView(tab.dataset.view)));
 $('teamName').addEventListener('keydown', e => { if(e.key === 'Enter') addTeam(); });
+$('totalRounds').addEventListener('change', e => {
+  maxRounds = Number(e.target.value) || 3;
+  saveState(); updateStats();
+  showToast('Game length: ' + maxRounds + ' rounds');
+});
 $('howToOverlay').addEventListener('click', e => { if(e.target.id === 'howToOverlay') closeHowToPlay(); });
 $('summaryOverlay').addEventListener('click', e => { if(e.target.id === 'summaryOverlay') closeSummary(); });
 
