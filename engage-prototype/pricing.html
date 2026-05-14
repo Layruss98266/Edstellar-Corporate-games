@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Pricing - Edstellar Engage</title>
+<meta name="description" content="Per-employee plans + facilitated event tiers. ROI calculator. SOC 2-ready. Existing Edstellar training clients get Engage as a 15-20% add-on."/>
 <link rel="stylesheet" href="./assets/styles.css"/>
 </head>
 <body data-page="marketing">
@@ -20,12 +21,15 @@
     </div>
   </div>
 </header>
-<section class="hero" style="padding:72px 0 32px">
+<section class="hero" style="padding:72px 0 24px">
   <div class="container" style="max-width:920px;text-align:center">
     <span class="eyebrow">Pricing</span>
-    <h1>Engagement built for HR and L&amp;D budgets.</h1>
-    <p class="lead" style="margin:14px auto 24px;max-width:680px">Per-employee plans, plus facilitated event tiers. Existing Edstellar training clients get Engage as a 15-20% add-on - no separate procurement.</p>
-    <div class="hero-cta" style="justify-content:center"><button class="btn btn-primary btn-lg" data-open-demo>Book a Demo</button><a class="btn btn-ghost btn-lg" href="#plans">See plans</a></div>
+    <h1>Engagement that fits HR and L&amp;D budgets.</h1>
+    <p class="lead" style="margin:14px auto 0;max-width:680px">Per-employee plans plus facilitated event tiers. Existing Edstellar training clients get Engage as a 15-20% add-on - no separate procurement.</p>
+    <div class="billing-toggle" id="billingToggle">
+      <button class="active" data-cycle="monthly">Monthly</button>
+      <button data-cycle="annual">Annual <span class="save-badge">−15%</span></button>
+    </div>
   </div>
 </section>
 
@@ -34,11 +38,11 @@
     <div class="price-grid">
       <div class="price-card">
         <h3>Team</h3>
-        <div class="price-amount">$3<small> /employee /mo</small></div>
+        <div class="price-amount"><span data-price="3">$3</span><small> /employee /mo</small></div>
         <p class="muted">50-200 employees</p>
         <ul class="price-feat">
-          <li>Full game library (200+ games)</li>
-          <li>Custom branding</li>
+          <li>Full game library (215+ games)</li>
+          <li>Custom branding + workspace</li>
           <li>Monthly engagement reports</li>
           <li>Email support</li>
           <li>14-day free trial</li>
@@ -48,26 +52,26 @@
       <div class="price-card popular">
         <span class="price-ribbon">MOST POPULAR</span>
         <h3>Business</h3>
-        <div class="price-amount">$2<small> /employee /mo</small></div>
+        <div class="price-amount"><span data-price="2">$2</span><small> /employee /mo</small></div>
         <p class="muted">200-1,000 employees</p>
         <ul class="price-feat">
           <li>Everything in Team</li>
           <li>SSO (Okta, Azure AD, Google)</li>
           <li>Advanced analytics + exports</li>
           <li>API access</li>
-          <li>Priority support</li>
+          <li>Priority support + onboarding</li>
         </ul>
         <button class="btn btn-primary" data-open-demo>Book a Demo</button>
       </div>
       <div class="price-card">
         <h3>Enterprise</h3>
-        <div class="price-amount">From $1.25<small> /employee /mo</small></div>
+        <div class="price-amount"><span data-price="1.25">From $1.25</span><small> /employee /mo</small></div>
         <p class="muted">1,000+ employees · $25K floor</p>
         <ul class="price-feat">
           <li>Everything in Business</li>
           <li>HRIS sync (Workday, BambooHR)</li>
           <li>SCORM/xAPI for LMS</li>
-          <li>Dedicated CSM + SLAs</li>
+          <li>Dedicated CSM + 99.9% SLA</li>
           <li>Regional data residency</li>
         </ul>
         <button class="btn btn-primary" data-open-demo>Talk to Sales</button>
@@ -81,12 +85,46 @@
           <li>Custom game design</li>
           <li>Post-session debrief report</li>
           <li>Hybrid, virtual, or in-person</li>
-          <li>Available in India, MEA, APAC</li>
+          <li>India · MEA · APAC delivery</li>
         </ul>
         <a class="btn btn-primary" href="./facilitated.html">Explore Facilitated →</a>
       </div>
     </div>
-    <p class="muted" style="margin-top:24px;text-align:center;font-size:13.5px">Existing Edstellar training clients: Engage attaches as a <strong style="color:var(--brand-primary)">15-20% add-on</strong> on the training contract - talk to your account manager.</p>
+
+    <div class="price-trust-row">
+      <span>No credit card required</span>
+      <span>Cancel anytime</span>
+      <span>SOC 2-ready data handling</span>
+      <span>15-20% add-on for existing Edstellar clients</span>
+    </div>
+
+    <div class="roi-card" id="roiCard">
+      <div>
+        <h3>Quick ROI snapshot</h3>
+        <p>Drop in your team size and current training spend - we'll estimate Engage's first-year payback.</p>
+        <div class="roi-input-row">
+          <label for="roiSize">Team size</label>
+          <input type="number" id="roiSize" value="250" min="10" max="50000"/>
+        </div>
+        <div class="roi-input-row">
+          <label for="roiPlan">Plan</label>
+          <select id="roiPlan">
+            <option value="3">Team ($3/mo)</option>
+            <option value="2" selected>Business ($2/mo)</option>
+            <option value="1.25">Enterprise ($1.25/mo)</option>
+          </select>
+        </div>
+        <div class="roi-input-row">
+          <label for="roiTraining">Annual training spend ($)</label>
+          <input type="number" id="roiTraining" value="120000" min="0" step="1000"/>
+        </div>
+      </div>
+      <div class="roi-results">
+        <div class="roi-big" id="roiAnnual">$6,000</div>
+        <div class="roi-label">Engage annual cost</div>
+        <div class="roi-detail" id="roiPayback">Recovered when reinforcement lifts training retention by 5%</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -98,16 +136,16 @@
       <table>
         <thead><tr><th>Feature</th><th>Team</th><th class="col-engage">Business</th><th>Enterprise</th></tr></thead>
         <tbody>
-          <tr><td>Game library (200+ games)</td><td class="check">✓</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Game library (215+ games)</td><td class="check">✓</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
           <tr><td>Custom branding</td><td class="check">✓</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
           <tr><td>Engagement reports</td><td>Monthly</td><td class="col-engage">Advanced + exports</td><td>Custom dashboards</td></tr>
-          <tr><td>SSO</td><td class="cross">-</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
-          <tr><td>API access</td><td class="cross">-</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
-          <tr><td>HRIS sync</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
-          <tr><td>LMS interop (SCORM/xAPI)</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
-          <tr><td>Data residency</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
-          <tr><td>Dedicated CSM</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
-          <tr><td>SLA</td><td class="cross">-</td><td class="cross">-</td><td class="check">99.9%</td></tr>
+          <tr><td>SSO</td><td class="cross">—</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
+          <tr><td>API access</td><td class="cross">—</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
+          <tr><td>HRIS sync</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
+          <tr><td>LMS interop (SCORM/xAPI)</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
+          <tr><td>Data residency (IN/EU/US/APAC)</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
+          <tr><td>Dedicated CSM</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
+          <tr><td>SLA</td><td class="cross">—</td><td>99.5%</td><td class="check">99.9%</td></tr>
         </tbody>
       </table>
     </div>
@@ -119,8 +157,8 @@
     <h2>Pricing FAQ</h2>
     <div style="margin-top:18px">
       <div class="faq-item"><button class="faq-q">Is there a free trial?</button><div class="faq-a">Yes - 14 days on the Team plan, no card required. Up to 25 employees, full game library, monthly report.</div></div>
-      <div class="faq-item"><button class="faq-q">Are there annual discounts?</button><div class="faq-a">Annual billing saves ~15% on Team and Business plans. Enterprise contracts are negotiated per-deal with multi-year discount tiers.</div></div>
-      <div class="faq-item"><button class="faq-q">What counts as an employee?</button><div class="faq-a">Anyone who can join a game room or receive a campaign. You pay for active employees in the period - not headcount on paper. Inactive users don't count toward your plan.</div></div>
+      <div class="faq-item"><button class="faq-q">What are the annual discounts?</button><div class="faq-a">Annual billing saves 15% on Team and Business plans. Enterprise contracts are negotiated per-deal with multi-year tiers.</div></div>
+      <div class="faq-item"><button class="faq-q">What counts as an employee?</button><div class="faq-a">Anyone who can join a game room or receive a campaign. You pay for active employees in the period - inactive users don't count.</div></div>
       <div class="faq-item"><button class="faq-q">Can we mix Engage with the Facilitated tier?</button><div class="faq-a">Yes. Most Business and Enterprise clients run the SaaS year-round and book Facilitated sessions for quarterly events. Discounts apply when bundled.</div></div>
       <div class="faq-item"><button class="faq-q">How does the Edstellar training add-on work?</button><div class="faq-a">If you're already an Edstellar training client, Engage is added as a 15-20% uplift on the training contract. You get the same library plus reinforcement games auto-scheduled at 14 and 30 days post-training.</div></div>
       <div class="faq-item"><button class="faq-q">What payment methods do you accept?</button><div class="faq-a">Card, ACH, wire, invoice with NET-30. Enterprise contracts support PO-based invoicing in INR, USD, EUR, AED, SGD, GBP.</div></div>
@@ -144,6 +182,43 @@
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  // Billing toggle
+  const btns = document.querySelectorAll('#billingToggle button');
+  const prices = document.querySelectorAll('[data-price]');
+  function apply(cycle){
+    btns.forEach(b => b.classList.toggle('active', b.dataset.cycle === cycle));
+    prices.forEach(p => {
+      const base = parseFloat(p.dataset.price);
+      const v = cycle === 'annual' ? (base * 0.85).toFixed(2) : base;
+      const prefix = p.textContent.match(/^From /) ? 'From ' : '';
+      p.textContent = prefix + '$' + (cycle === 'annual' ? v.replace(/\.00$/,'') : base);
+    });
+    updateRoi();
+  }
+  btns.forEach(b => b.addEventListener('click', () => apply(b.dataset.cycle)));
+
+  // ROI calc
+  const size = document.getElementById('roiSize');
+  const plan = document.getElementById('roiPlan');
+  const train = document.getElementById('roiTraining');
+  const annual = document.getElementById('roiAnnual');
+  const payback = document.getElementById('roiPayback');
+  function updateRoi(){
+    const cycle = document.querySelector('#billingToggle button.active')?.dataset.cycle || 'monthly';
+    const mult = cycle === 'annual' ? 0.85 : 1;
+    const cost = (parseFloat(plan.value) * mult) * Number(size.value) * 12;
+    annual.textContent = '$' + Math.round(cost).toLocaleString();
+    const trainSpend = Number(train.value);
+    const breakeven = trainSpend > 0 ? Math.max(1, Math.round((cost / trainSpend) * 100)) : 0;
+    payback.textContent = `Recovered when reinforcement lifts training retention by ${breakeven}%`;
+  }
+  [size, plan, train].forEach(el => el?.addEventListener('input', updateRoi));
+  updateRoi();
+})();
+</script>
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -170,7 +245,7 @@
       <p class="muted">Tell us about your team. We'll preload a workspace with your branding for the call.</p>
       <label>Work email<input type="email" required placeholder="you@company.com"/></label>
       <label>Company<input type="text" required placeholder="Company name"/></label>
-      <label>Team size<select required><option value="">Select...</option><option>1-50</option><option>50-200</option><option>200-1,000</option><option>1,000+</option></select></label>
+      <label>Team size<select required><option value="">Select...</option><option>1–50</option><option>50–200</option><option>200–1,000</option><option>1,000+</option></select></label>
       <label>What are you trying to solve?<textarea rows="3" placeholder="e.g., post-training reinforcement for our sales team"></textarea></label>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" data-close-demo>Cancel</button>
