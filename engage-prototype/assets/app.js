@@ -93,7 +93,9 @@ function gameCard(g){
       </div>
       <div class="card-foot">
         <span>👥 <strong>${escapeHtml(g.team)}</strong></span>
-        ${g.economy ? `<span title="Uses in-game currency">🪙 EngageCoins</span>` : `<span>&nbsp;</span>`}
+        ${g.playable ? `<span title="Playable demo" style="color:#10B981;font-weight:800">▶ Play now</span>`
+          : g.economy ? `<span title="Uses in-game currency">🪙 EngageCoins</span>`
+          : `<span>&nbsp;</span>`}
       </div>
     </div>
   </a>`;
@@ -521,7 +523,7 @@ async function initLandingFeatured(){
   // Featured row
   const fhost = document.getElementById('featured-grid');
   if(fhost){
-    const slugs = ['sales-jeopardy','escape-room','stress-free-bingo','leadership-pizza','empathy-mapping','egg-drop'];
+    const slugs = ['improv','sales-jeopardy','escape-room','egg-drop','stress-free-bingo','leadership-pizza'];
     const picks = slugs.map(s => games.find(g=>g.slug===s)).filter(Boolean).slice(0,6);
     fhost.innerHTML = picks.map(gameCard).join('');
   }
@@ -660,6 +662,7 @@ async function initDetail(){
             <div class="detail-stat"><small>Facilitator</small><strong>${escapeHtml(game.facilitator||'None')}</strong></div>
           </div>
           <div class="hero-cta" style="margin-top:18px">
+            ${game.playable ? `<a class="btn btn-accent btn-lg" href="${escapeHtml(game.playUrl)}" style="background:linear-gradient(135deg,#10B981,#059669);color:#fff">▶ Play live demo</a>` : ''}
             <button class="btn btn-primary btn-lg" data-open-demo>Run this game with your team</button>
             <a class="btn btn-ghost btn-lg" href="./games.html">Back to library</a>
           </div>

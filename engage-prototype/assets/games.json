@@ -9456,71 +9456,81 @@
     {
       "id": "g127",
       "slug": "improv",
-      "title": "Improv",
+      "title": "Improv Challenge",
       "category": "Critical Thinking",
       "audience": [
         "All employees"
       ],
       "format": "Live",
-      "duration": "15-30 minutes",
-      "durationBucket": "15-30",
-      "team": "3-6 participants per team",
-      "teamBucket": "2-10",
+      "duration": "30-60 min",
+      "durationBucket": "30-60",
+      "team": "6-30",
+      "teamBucket": "10-50",
       "difficulty": "Medium",
       "facilitator": "Optional",
       "reinforcesTraining": false,
-      "concept": "Build scenarios one sentence at a time",
-      "businessPurpose": "Rapid problem-solving; adaptability",
+      "concept": "Teams respond to workplace scenarios using 'Yes, and...' thinking. Build on each other's ideas instead of blocking them. 25 prompts across Communication, Leadership, Sales, Customer Service, Change Management, and Critical Thinking. Live host, timer, scoring across six criteria, leaderboard, and a JSON debrief report.",
+      "businessPurpose": "Build adaptability, communication, fast decision-making, and collaborative thinking.",
       "skills": [
-        "Problem Solving",
-        "Critical Thinking",
-        "Time Management"
+        "Adaptability",
+        "Communication",
+        "Decision-Making",
+        "Collaboration",
+        "Active Listening"
       ],
       "materials": "Scenario cards, role briefs, timer, observer checklist, debrief sheet.",
       "howToPlay": [
-        "Introduce the activity goal and connect it to problem solving, critical thinking.",
-        "Split participants into the recommended format: 3-6 participants per team.",
-        "Give the group the core challenge: build scenarios one sentence at a time.",
-        "Run the activity within the time limit while the facilitator observes teamwork, decision quality, and participation.",
-        "Debrief using reflection questions and capture workplace applications or commitments."
+        "Form teams of 3-6 (or use the demo teams).",
+        "Pick a prompt category (Mixed, Communication, Leadership, Sales, CX, Change, Critical Thinking).",
+        "Read the prompt aloud and start the 30s-3min round timer.",
+        "Each team improvises a response using 'Yes, and...' to build on the scenario.",
+        "Score live across six criteria (Builds, Clarity, Creativity, Speed, Solution, Teamwork).",
+        "Run another round or open the Reflection tab for debrief and JSON export."
       ],
       "reviewQuestions": [
-        "What did the activity reveal about problem solving in the team?",
-        "Where did the team lose time, clarity, or alignment?",
-        "How can the same behavior be applied to real workplace projects?"
+        "Did the team build on ideas or block them?",
+        "How well did participants listen before responding?",
+        "Which workplace situations feel similar to this game?"
       ],
-      "keyTakeaway": "Improv helps employees practice problem solving, critical thinking, time management through a structured workplace activity. The value comes from the debrief: teams should connect what happened in the game to how they plan, communicate, decide, and improve at work.",
+      "keyTakeaway": "Improv Challenge trains the 'Yes, and...' habit. Teams that build on ideas instead of blocking them move faster in client calls, conflicts, and unexpected change.",
       "sourceContext": "14 Critical Thinking Exercises, Games, And Activities - Critical thinking games and activities",
       "sourceBlog": "https://www.edstellar.com/blog/critical-thinking-activities-games-for-employees",
       "sourceBlogTitle": "Blog 9: 14 Critical Thinking Exercises, Games, And Activities",
       "type": "Game/Activity",
       "walkthrough": [
         {
-          "title": "What is this game?",
-          "body": "Build scenarios one sentence at a time"
+          "title": "What is Improv Challenge?",
+          "body": "Workplace improv. Teams respond to unexpected scenarios using 'Yes, and...' thinking - build on each other's ideas instead of blocking them."
         },
         {
           "title": "How a round plays out",
-          "body": "Step 1: Introduce the activity goal and connect it to problem solving, critical thinking. Step 2: Split participants into the recommended format: 3-6 participants per team. Step 3: Give the group the core challenge: build scenarios one sentence at a time."
+          "body": "Pick a category. Read the prompt. Start the timer (30s-3min). Each team improvises a response. Score across 6 criteria. Repeat."
         },
         {
           "title": "Questions you'll discuss after",
-          "body": "• What did the activity reveal about problem solving in the team? • Where did the team lose time, clarity, or alignment? • How can the same behavior be applied to real workplace projects?"
+          "body": "Did the team build or block ideas? How well did people listen before responding? Where can the team apply this back at work?"
         },
         {
           "title": "Why this game matters",
-          "body": "Improv helps employees practice problem solving, critical thinking, time management through a structured workplace activity. The value comes from the debrief: teams should connect what happened in the game to how they plan, communicate, decide, and improve at work."
+          "body": "Improv Challenge trains the 'Yes, and...' habit. Teams that build on ideas instead of blocking them move faster in client calls, conflicts, and unexpected change."
         }
       ],
       "outcomes": [
         "Rapid problem-solving; adaptability"
       ],
       "needs": {
-        "materials": "Scenario cards, role briefs, timer, observer checklist, debrief sheet.",
-        "platform": "Engage facilitator console, timer, team rooms.",
-        "facilitator": "Optional."
+        "materials": "Browser. Optional: projector for live in-room facilitation.",
+        "platform": "Prompt engine, round timer, live scoring across 6 criteria, leaderboard, JSON export.",
+        "facilitator": "Recommended for groups over 12. Optional for small teams."
       },
-      "variations": []
+      "variations": [
+        "Demo mode: instant play with 3 sample teams.",
+        "Custom setup: add your own teams, pick a category, set round duration (30s-3min).",
+        "Async-friendly: capture responses in the response field and score after.",
+        "Fullscreen mode for in-room facilitation."
+      ],
+      "playable": true,
+      "playUrl": "./play/improv-challenge.html"
     },
     {
       "id": "g128",

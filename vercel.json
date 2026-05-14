@@ -14,6 +14,7 @@
     { "source": "/case-studies.html", "destination": "/engage-prototype/case-studies.html" },
     { "source": "/about.html", "destination": "/engage-prototype/about.html" },
     { "source": "/assets/:path*", "destination": "/engage-prototype/assets/:path*" },
-    { "source": "/img/:path*", "destination": "/engage-prototype/img/:path*" }
+    { "source": "/img/:path*", "destination": "/engage-prototype/img/:path*" },
+    { "source": "/play/:path*", "destination": "/engage-prototype/play/:path*" }
   ]
 }

@@ -188,6 +188,11 @@ def derive_reinforces(category: str, title: str, biz_purpose: str) -> bool:
         return True
     return False
 
+# Playable game overrides - slug -> path. Adds {playable:true, playUrl:'...'}
+PLAYABLE = {
+    "improv": "./play/improv-challenge.html",
+}
+
 # Special hand-tuned economies for marquee games.
 ECONOMY_OVERRIDES = {
     "egg-drop": {
@@ -378,6 +383,11 @@ def parse():
             # Apply economy override if present
             if slug in ECONOMY_OVERRIDES:
                 game["economy"] = ECONOMY_OVERRIDES[slug]
+
+            # Apply playable override if present
+            if slug in PLAYABLE:
+                game["playable"] = True
+                game["playUrl"] = PLAYABLE[slug]
 
             games.append(game)
 

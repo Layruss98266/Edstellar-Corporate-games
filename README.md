@@ -23,7 +23,7 @@ End-to-end concept work for **Edstellar Engage** - a proposed corporate engageme
 
 ### 💻 Interactive prototype (`engage-prototype/`)
 
-Static HTML/CSS/JS prototype of the planned `engage.edstellar.com` product surface. **10 pages:**
+Static HTML/CSS/JS prototype of the planned `engage.edstellar.com` product surface. **10 pages + 1 playable game:**
 
 | Page | URL | What it covers |
 |---|---|---|
@@ -37,6 +37,7 @@ Static HTML/CSS/JS prototype of the planned `engage.edstellar.com` product surfa
 | Compare | `compare.html` | Engage vs Kahoot / Mentimeter / Gametize. |
 | Case Studies | `case-studies.html` | Three long-form case studies with before/after metrics. |
 | About | `about.html` | Mission, numbers, roadmap. |
+| **Improv Challenge (playable)** | `play/improv-challenge.html` | Fully playable in-browser game. 25 workplace prompts, team setup, round timer, 6-criteria scoring, leaderboard, JSON export. State persists in localStorage. |
 
 #### Run it
 

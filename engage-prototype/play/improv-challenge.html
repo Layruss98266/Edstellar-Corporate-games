@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edstellar Engage | Improv Challenge</title>
+  <style>
+    :root {
+      --brand-deep: #0B3C5D;
+      --brand-blue: #2563EB;
+      --brand-blue-dark: #1D4ED8;
+      --brand-sky: #38BDF8;
+      --bg: #F5F7FA;
+      --surface: #FFFFFF;
+      --surface-soft: #EEF2F7;
+      --border: #E5E7EB;
+      --heading: #111827;
+      --body: #4B5563;
+      --muted: #6B7280;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--body);
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.22), transparent 34%),
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.15), transparent 32%),
+        linear-gradient(180deg, #FFFFFF 0%, var(--bg) 45%, #EAF0F8 100%);
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 20px;
+    }
+
+    .hero-card, .panel, .mini-card, .toast {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(229, 231, 235, 0.95);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 30px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -90px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.18);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #EFF6FF;
+      color: var(--brand-blue);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    h1, h2, h3 {
+      color: var(--heading);
+      margin: 0;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    h1 { font-size: clamp(34px, 5vw, 58px); max-width: 760px; }
+    h2 { font-size: 24px; margin-bottom: 10px; }
+    h3 { font-size: 17px; margin-bottom: 8px; }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      max-width: 830px;
+      margin: 14px 0 0;
+      font-size: 16px;
+      line-height: 1.72;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      min-height: 44px;
+      padding: 11px 16px;
+      font-weight: 850;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-dark));
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.24);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 26px rgba(37, 99, 235, 0.30); }
+    .btn.secondary { color: var(--brand-deep); background: #FFFFFF; border: 1px solid #C7D2FE; box-shadow: none; }
+    .btn.ghost { color: var(--body); background: #F8FAFC; border: 1px solid var(--border); box-shadow: none; }
+    .btn.success { background: linear-gradient(135deg, var(--success), #059669); }
+    .btn.warning { background: linear-gradient(135deg, var(--warning), #D97706); }
+    .btn.danger { background: linear-gradient(135deg, var(--danger), #DC2626); }
+    .btn.full { width: 100%; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .score-card {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat-box {
+      padding: 14px;
+      border-radius: 16px;
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+    }
+
+    .stat-label { display: block; font-size: 11px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+    .stat-value { display: block; margin-top: 4px; color: var(--heading); font-size: 28px; font-weight: 900; letter-spacing: -0.04em; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .flow-step {
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .flow-step.active {
+      background: var(--brand-blue);
+      color: #FFFFFF;
+      border-color: var(--brand-blue);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel { padding: 22px; }
+
+    .form-row { display: grid; gap: 7px; margin-bottom: 14px; }
+    label { color: var(--heading); font-size: 13px; font-weight: 800; }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #CBD5E1;
+      border-radius: 13px;
+      background: #FFFFFF;
+      color: var(--heading);
+      padding: 11px 12px;
+      outline: none;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    textarea { min-height: 84px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { border-color: var(--brand-blue); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
+
+    .hint { margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+    .team-list, .leaderboard, .round-log { display: grid; gap: 10px; }
+
+    .team-item, .leader-item, .log-item, .prompt-card, .reflection-card {
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .team-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .team-name { color: var(--heading); font-weight: 900; }
+    .team-meta { color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+    .delete-team {
+      border: none;
+      background: #FEF2F2;
+      color: #B91C1C;
+      border-radius: 10px;
+      padding: 7px 9px;
+      font-weight: 900;
+    }
+
+    .game-board { display: grid; gap: 18px; }
+
+    .status-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #0B3C5D, #1E40AF);
+      color: #FFFFFF;
+      box-shadow: var(--shadow);
+    }
+
+    .status-strip strong { font-size: 15px; }
+    .status-strip span { color: #DBEAFE; font-size: 13px; }
+
+    .timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #FFFFFF;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .prompt-card {
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(239, 246, 255, 0.95), rgba(255, 255, 255, 0.98));
+      border-color: #BFDBFE;
+    }
+
+    .prompt-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #DBEAFE;
+      color: #1D4ED8;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    .prompt-text {
+      color: var(--heading);
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -0.035em;
+      margin: 0 0 14px;
+    }
+
+    .prompt-instruction { line-height: 1.65; margin: 0; }
+
+    .response-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .score-field input { text-align: center; font-weight: 900; }
+
+    .quick-score-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .quick-score {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #F8FAFC;
+      color: var(--body);
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .leader-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .rank {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #EFF6FF;
+      color: var(--brand-blue);
+      font-weight: 900;
+    }
+
+    .leader-score { color: var(--heading); font-size: 22px; font-weight: 900; }
+
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+
+    .tab {
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      color: var(--body);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .tab.active { color: #FFFFFF; background: var(--brand-blue); border-color: var(--brand-blue); }
+    .hidden { display: none !important; }
+
+    .empty-state {
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px dashed #CBD5E1;
+      background: #F8FAFC;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.55;
+    }
+
+    .mini-card { padding: 16px; }
+    .mini-card p { margin: 0; line-height: 1.6; }
+
+    .footer-note {
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) translateY(20px);
+      padding: 12px 16px;
+      color: var(--heading);
+      font-weight: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 999;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .fullscreen-hint {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 998;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.88);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 850;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.22);
+    }
+
+    .fullscreen-hint.show { display: inline-flex; }
+
+    .howto-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(15, 23, 42, 0.58);
+      backdrop-filter: blur(8px);
+    }
+
+    .howto-overlay.show { display: flex; }
+
+    .howto-modal {
+      width: min(920px, 96vw);
+      max-height: 90vh;
+      overflow: auto;
+      background: #FFFFFF;
+      border: 1px solid rgba(229, 231, 235, 0.95);
+      border-radius: 28px;
+      box-shadow: 0 30px 90px rgba(15, 23, 42, 0.36);
+      animation: modalPop 0.34s ease both;
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .howto-header {
+      padding: 24px 26px;
+      background: linear-gradient(135deg, #0B3C5D, #2563EB);
+      color: #FFFFFF;
+      border-radius: 28px 28px 0 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .howto-header h2 { color: #FFFFFF; margin-bottom: 6px; }
+    .howto-header p { margin: 0; color: #DBEAFE; line-height: 1.55; }
+
+    .howto-close {
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.13);
+      color: #FFFFFF;
+      border-radius: 12px;
+      min-width: 40px;
+      height: 40px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .howto-body { padding: 24px 26px 26px; }
+
+    .howto-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .howto-step {
+      min-height: 136px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #F8FAFC;
+      overflow: hidden;
+      animation: floatIn 0.5s ease both;
+    }
+
+    .howto-step:nth-child(2) { animation-delay: 0.08s; }
+    .howto-step:nth-child(3) { animation-delay: 0.16s; }
+    .howto-step:nth-child(4) { animation-delay: 0.24s; }
+
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .howto-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: #EFF6FF;
+      color: var(--brand-blue);
+      font-size: 22px;
+      margin-bottom: 10px;
+      animation: pulseIcon 1.8s ease infinite;
+    }
+
+    @keyframes pulseIcon {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .howto-step strong { display: block; color: var(--heading); margin-bottom: 6px; }
+    .howto-step span { display: block; color: var(--muted); font-size: 13px; line-height: 1.48; }
+
+    .example-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .example-card {
+      border: 1px solid #BFDBFE;
+      background: #EFF6FF;
+      border-radius: 18px;
+      padding: 16px;
+      animation: floatIn 0.55s ease both;
+    }
+
+    .example-card strong { display: block; color: var(--brand-deep); margin-bottom: 8px; }
+    .example-card p { margin: 0; color: var(--body); line-height: 1.6; }
+
+    .howto-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #ECFDF5;
+      color: #047857;
+      font-size: 11px;
+      font-weight: 900;
+      margin-left: 8px;
+    }
+
+    .live-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 5px rgba(16,185,129,0.14);
+    }
+
+    .leader-score small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    @media (max-width: 960px) {
+      .howto-steps, .example-box { grid-template-columns: 1fr; }
+      .howto-header { padding: 20px; }
+      .howto-body { padding: 20px; }
+    }
+
+    @media (max-width: 960px) {
+      .hero, .grid { grid-template-columns: 1fr; }
+      .response-grid, .score-grid, .flow { grid-template-columns: 1fr; }
+      .app-shell { padding: 14px; }
+      .hero-card, .panel { padding: 18px; }
+    }
+
+    @media print {
+      .btn, .hero-actions, .setup-panel, .status-strip, .footer-note, .toast { display: none !important; }
+      body { background: #FFFFFF; }
+      .app-shell { max-width: none; padding: 0; }
+      .panel, .hero-card, .mini-card { box-shadow: none; border-color: #D1D5DB; }
+    }
+  </style>
+</head>
+<body>
+  <a href="../game.html?id=improv" style="position:fixed;top:16px;left:16px;z-index:1001;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.92);border:1px solid #E5E7EB;color:#0B3C5D;text-decoration:none;font-weight:800;font-size:13px;box-shadow:0 6px 16px rgba(15,23,42,.08);backdrop-filter:blur(6px)">
+    ← Back to Engage
+  </a>
+
+  <div class="app-shell">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">Edstellar Engage · Workplace Game</div>
+        <h1>Improv Challenge</h1>
+        <p class="hero-text">
+          A workplace game where teams respond to unexpected scenarios, build on each other's ideas, and practice adaptability, communication, rapid problem-solving, and collaborative thinking.
+        </p>
+        <div class="hero-actions">
+          <button class="btn success" id="demoBtn">Play Demo Now</button>
+          <button class="btn" id="setupGameBtn">Setup Custom Game</button>
+          <button class="btn secondary" id="howToPlayBtn">How to Play</button>
+          <button class="btn secondary" id="nextPromptHeroBtn">New Prompt</button>
+          <button class="btn ghost" id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <aside class="score-card">
+        <h2>Game Snapshot</h2>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="stat-label">Teams</span><span class="stat-value" id="teamCount">0</span></div>
+          <div class="stat-box"><span class="stat-label">Round</span><span class="stat-value" id="roundStat">0</span></div>
+          <div class="stat-box"><span class="stat-label">Prompts</span><span class="stat-value" id="promptCount">25</span></div>
+          <div class="stat-box"><span class="stat-label">Phase</span><span class="stat-value" id="phaseStat" style="font-size:22px">Setup</span></div>
+        </div>
+        <div class="mini-card">
+          <p><strong style="color:var(--heading)">Core rule:</strong> Use “Yes, and...” thinking. Build on the previous idea instead of blocking it.</p>
+        </div>
+      </aside>
+    </section>
+
+    <div class="flow">
+      <div class="flow-step active" id="flow-setup">1. Setup</div>
+      <div class="flow-step" id="flow-prompt">2. Prompt</div>
+      <div class="flow-step" id="flow-perform">3. Perform</div>
+      <div class="flow-step" id="flow-score">4. Score</div>
+    </div>
+
+    <section class="grid">
+      <aside class="panel setup-panel" id="setupPanel">
+        <h2>Custom Setup</h2>
+
+        <div class="form-row">
+          <label for="gameCategory">Prompt Category</label>
+          <select id="gameCategory">
+            <option value="mixed">Mixed Workplace Scenarios</option>
+            <option value="communication">Communication</option>
+            <option value="leadership">Leadership</option>
+            <option value="sales">Sales</option>
+            <option value="customer-service">Customer Service</option>
+            <option value="change-management">Change Management</option>
+            <option value="critical-thinking">Critical Thinking</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="roundDuration">Round Duration</label>
+          <select id="roundDuration">
+            <option value="30">30 seconds</option>
+            <option value="60">60 seconds</option>
+            <option value="90" selected>90 seconds</option>
+            <option value="120">2 minutes</option>
+            <option value="180">3 minutes</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="teamName">Add Team</label>
+          <input id="teamName" placeholder="Example: Team Phoenix" />
+          <textarea id="teamMembers" placeholder="Optional: Add members separated by commas"></textarea>
+          <button class="btn secondary" id="addTeamBtn">Add Team</button>
+          <button class="btn ghost" id="loadSampleBtn">Load Sample Teams</button>
+          <p class="hint">You can also skip setup and click “Play Demo Now.”</p>
+        </div>
+
+        <h3>Teams</h3>
+        <div class="team-list" id="teamList"><div class="empty-state">No teams added yet.</div></div>
+      </aside>
+
+      <main class="game-board" id="gameArea">
+        <div class="status-strip">
+          <div>
+            <strong id="statusTitle">Ready to play</strong><br />
+            <span id="statusSub">Click “Play Demo Now” for instant gameplay, or set up your own teams.</span>
+          </div>
+          <div class="timer" id="timerDisplay">⏱ 00:00</div>
+        </div>
+
+        <section class="panel" id="playPanel">
+          <div class="tabs">
+            <button class="tab active" data-view="play">Play</button>
+            <button class="tab" data-view="leaderboard">Leaderboard</button>
+            <button class="tab" data-view="reflection">Reflection</button>
+            <button class="tab" data-view="log">Round Log</button>
+          </div>
+
+          <div id="playView">
+            <div class="prompt-card" id="promptCard">
+              <div class="prompt-category" id="promptCategory">Prompt</div>
+              <p class="prompt-text" id="promptText">Click “Play Demo Now” to instantly start with sample teams and a workplace scenario.</p>
+              <p class="prompt-instruction" id="promptInstruction">No setup required for demo mode.</p>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 0">
+              <button class="btn success" id="startRoundBtn">Start Round</button>
+              <button class="btn warning" id="nextPromptBtn">Next Prompt</button>
+              <button class="btn ghost" id="pauseTimerBtn">Pause Timer</button>
+              <button class="btn secondary" id="finishRoundBtn">Finish & Save Round</button>
+            </div>
+
+            <div class="response-grid" id="responseGrid" style="margin-top:16px"></div>
+          </div>
+
+          <div id="leaderboardView" class="hidden">
+            <h2>Leaderboard <span class="live-badge">Live</span></h2>
+            <div class="leaderboard" id="leaderboard"></div>
+          </div>
+
+          <div id="reflectionView" class="hidden">
+            <h2>Reflection</h2>
+            <div class="reflection-card">
+              <h3>Debrief Questions</h3>
+              <ol style="line-height:1.8; margin-top:8px">
+                <li>Did the team build on ideas or block ideas?</li>
+                <li>How well did participants listen before responding?</li>
+                <li>Which response showed the strongest adaptability?</li>
+                <li>Which workplace situations feel similar to this game?</li>
+                <li>What behavior should the team apply in real meetings, client calls, or project situations?</li>
+              </ol>
+            </div>
+            <div class="form-row" style="margin-top:14px">
+              <label for="reflectionNotes">Facilitator Notes</label>
+              <textarea id="reflectionNotes" placeholder="Capture lessons learned, team observations, and improvement areas."></textarea>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap">
+              <button class="btn" id="exportBtn">Export JSON Report</button>
+              <button class="btn secondary" id="printBtn">Print / Save PDF</button>
+            </div>
+          </div>
+
+          <div id="logView" class="hidden">
+            <h2>Round Log</h2>
+            <div class="round-log" id="roundLog"><div class="empty-state">No completed rounds yet.</div></div>
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <div class="footer-note">
+      Standalone prototype. Runs fully in the browser. No backend, login, database, or internet connection required after download.
+    </div>
+  </div>
+
+  <div class="howto-overlay" id="howToOverlay" role="dialog" aria-modal="true" aria-labelledby="howToTitle">
+    <div class="howto-modal">
+      <div class="howto-header">
+        <div>
+          <h2 id="howToTitle">How to Play Improv Challenge</h2>
+          <p>Use quick workplace scenarios to practice “Yes, and...” thinking, clear communication, fast decisions, and team collaboration.</p>
+        </div>
+        <button class="howto-close" id="howToClose" aria-label="Close how to play">×</button>
+      </div>
+      <div class="howto-body">
+        <div class="howto-steps">
+          <div class="howto-step">
+            <div class="howto-icon">👥</div>
+            <strong>1. Form teams</strong>
+            <span>Use the demo teams or add your own teams with 3 to 6 participants each.</span>
+          </div>
+          <div class="howto-step">
+            <div class="howto-icon">🎯</div>
+            <strong>2. Read the prompt</strong>
+            <span>Each round gives a workplace scenario such as a client issue, team conflict, or urgent change.</span>
+          </div>
+          <div class="howto-step">
+            <div class="howto-icon">⚡</div>
+            <strong>3. Improvise</strong>
+            <span>Teams respond quickly using “Yes, and...” to build on ideas instead of blocking them.</span>
+          </div>
+          <div class="howto-step">
+            <div class="howto-icon">🏆</div>
+            <strong>4. Score live</strong>
+            <span>Score clarity, creativity, speed, solution thinking, teamwork, and idea-building. Leaderboard updates instantly.</span>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-card">
+            <strong>Example Prompt</strong>
+            <p>“A client changes the requirement after the work is nearly complete. Build the team response.”</p>
+          </div>
+          <div class="example-card">
+            <strong>Good Response Pattern</strong>
+            <p>“Yes, and we should first clarify the business reason, estimate the impact, then give the client two practical options.”</p>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-card" style="border-color:#FECACA;background:#FEF2F2">
+            <strong style="color:#991B1B">Weak Response</strong>
+            <p>“No, that will not work.” This blocks the scenario and stops collaboration.</p>
+          </div>
+          <div class="example-card" style="border-color:#BBF7D0;background:#F0FDF4">
+            <strong style="color:#047857">Strong Response</strong>
+            <p>“Yes, and we can involve the client early so they understand the timeline, trade-offs, and next steps.”</p>
+          </div>
+        </div>
+
+        <div class="howto-actions">
+          <button class="btn success" id="howToStartDemo">Start Demo in Fullscreen</button>
+          <button class="btn secondary" id="howToSetup">Setup Custom Game</button>
+          <button class="btn ghost" id="howToCloseBottom">Close Guide</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fullscreen-hint" id="fullscreenHint">⛶ Fullscreen game mode</div>
+  <div class="toast" id="toast">Ready</div>
+
+  <script>
+    const prompts = [
+      { category: 'communication', text: 'A manager gives unclear instructions for an urgent project. Continue the scenario and move the team toward clarity.', instruction: 'Focus on asking better questions, confirming expectations, and avoiding assumptions.' },
+      { category: 'communication', text: 'Two departments misunderstood each other and duplicated the same work. Build a solution through dialogue.', instruction: 'Use active listening and constructive communication.' },
+      { category: 'communication', text: 'A team meeting is going off-track. One person must bring the conversation back without sounding rude.', instruction: 'Practice concise, respectful intervention.' },
+      { category: 'leadership', text: 'Your team just missed a major deadline. You have two minutes to address them and reset momentum.', instruction: 'Show ownership, calm communication, and forward planning.' },
+      { category: 'leadership', text: 'A high-performing employee is demotivated after receiving tough feedback. Continue the conversation.', instruction: 'Practice empathy, coaching, and accountability.' },
+      { category: 'leadership', text: 'Leadership announces a sudden change that your team dislikes. Respond as the team lead.', instruction: 'Balance honesty, reassurance, and action.' },
+      { category: 'sales', text: 'A prospect says your solution is too expensive and competitor pricing is lower. Continue the sales conversation.', instruction: 'Focus on value, discovery, and objection handling.' },
+      { category: 'sales', text: 'A product demo fails midway during an important client call. Build the recovery response.', instruction: 'Practice composure, transparency, and next-step control.' },
+      { category: 'sales', text: 'A buyer says they are interested but need approval from three stakeholders. Continue the scenario.', instruction: 'Practice stakeholder mapping and next-step planning.' },
+      { category: 'customer-service', text: 'A customer is angry because a promised delivery was missed. Respond and continue the scenario.', instruction: 'Use empathy, ownership, and practical resolution.' },
+      { category: 'customer-service', text: 'A customer misunderstood the service terms and blames the support team. Continue the conversation.', instruction: 'Explain clearly without sounding defensive.' },
+      { category: 'customer-service', text: 'A customer keeps interrupting and refuses to listen. Continue the service interaction.', instruction: 'Practice calm tone, boundaries, and resolution.' },
+      { category: 'change-management', text: 'The company is moving to a new performance review system next month. Employees are skeptical.', instruction: 'Build trust by explaining purpose, benefits, and support.' },
+      { category: 'change-management', text: 'A new tool is being introduced, but the team prefers the old process. Continue the scenario.', instruction: 'Practice adoption messaging and resistance handling.' },
+      { category: 'change-management', text: 'A restructuring has changed team responsibilities overnight. Build the team conversation.', instruction: 'Clarify roles, reduce anxiety, and create next steps.' },
+      { category: 'critical-thinking', text: 'The team receives incomplete project data but must make a recommendation by end of day.', instruction: 'Practice assumptions, risk framing, and decision logic.' },
+      { category: 'critical-thinking', text: 'A project has three urgent problems, but the team can only solve one today. Continue the decision-making process.', instruction: 'Prioritize based on impact, urgency, and dependencies.' },
+      { category: 'critical-thinking', text: 'A client changes the requirement after the work is nearly complete. Build the team response.', instruction: 'Practice trade-off analysis and stakeholder communication.' },
+      { category: 'mixed', text: 'A new employee joins remotely and feels disconnected from the team. Continue the scenario.', instruction: 'Focus on inclusion, communication, and team bonding.' },
+      { category: 'mixed', text: 'A team member makes a mistake but tries to hide it. Continue the workplace conversation.', instruction: 'Practice accountability without blame.' },
+      { category: 'mixed', text: 'A meeting ends with no clear owner for the next steps. Continue the scenario.', instruction: 'Create clarity, ownership, and follow-through.' },
+      { category: 'mixed', text: 'A senior leader asks for an update, but the team does not have all the answers yet.', instruction: 'Practice transparent communication and structured response.' },
+      { category: 'mixed', text: 'Two team members strongly disagree about how to solve a problem. Continue the discussion.', instruction: 'Use facilitation, evidence, and respectful challenge.' },
+      { category: 'mixed', text: 'The team has ten minutes to prepare for an unexpected client presentation.', instruction: 'Practice role clarity, quick planning, and confidence under pressure.' },
+      { category: 'mixed', text: 'A customer, manager, and teammate all need different things at the same time. Continue the prioritization conversation.', instruction: 'Practice calm decision-making and communication.' }
+    ];
+
+    let teams = [];
+    let currentPrompt = null;
+    let currentRound = 0;
+    let timer = null;
+    let remainingSeconds = 0;
+    let isPaused = false;
+    let roundLog = [];
+    let phase = 'setup';
+    let lastPromptIndex = -1;
+
+    const $ = (id) => document.getElementById(id);
+
+    function showToast(message) {
+      const toast = $('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    async function enterFullscreenMode() {
+      try {
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+        }
+        const hint = $('fullscreenHint');
+        hint.classList.add('show');
+        setTimeout(() => hint.classList.remove('show'), 2000);
+      } catch (error) {
+        showToast('Fullscreen blocked by browser. Use F11 if needed.');
+      }
+    }
+
+    function openHowToPlay() {
+      $('howToOverlay').classList.add('show');
+    }
+
+    function closeHowToPlay() {
+      $('howToOverlay').classList.remove('show');
+    }
+
+    function saveState() {
+      localStorage.setItem('edstellarImprovGameV2', JSON.stringify({ teams, currentRound, roundLog, phase }));
+    }
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('edstellarImprovGameV2') || '{}');
+        teams = saved.teams || [];
+        currentRound = saved.currentRound || 0;
+        roundLog = saved.roundLog || [];
+        phase = saved.phase || 'setup';
+      } catch (e) {
+        teams = [];
+        currentRound = 0;
+        roundLog = [];
+        phase = 'setup';
+      }
+      updateUI();
+    }
+
+    function setPhase(nextPhase) {
+      phase = nextPhase;
+      ['setup', 'prompt', 'perform', 'score'].forEach(item => {
+        $('flow-' + item).classList.toggle('active', item === phase);
+      });
+      $('phaseStat').textContent = phase.charAt(0).toUpperCase() + phase.slice(1);
+      saveState();
+    }
+
+    function updateStats() {
+      $('teamCount').textContent = teams.length;
+      $('roundStat').textContent = currentRound;
+      $('promptCount').textContent = prompts.length;
+      $('phaseStat').textContent = phase.charAt(0).toUpperCase() + phase.slice(1);
+    }
+
+    function updateTeamList() {
+      const list = $('teamList');
+      if (!teams.length) {
+        list.innerHTML = '<div class="empty-state">No teams added yet. Use “Play Demo Now” or load sample teams.</div>';
+        return;
+      }
+      list.innerHTML = teams.map(team => `
+        <div class="team-item">
+          <div>
+            <div class="team-name">${escapeHtml(team.name)}</div>
+            <div class="team-meta">${team.members.length ? escapeHtml(team.members.join(', ')) : 'No members listed'} · ${team.score} points</div>
+          </div>
+          <button class="delete-team" onclick="deleteTeam('${team.id}')">×</button>
+        </div>
+      `).join('');
+    }
+
+    function updateResponses() {
+      const grid = $('responseGrid');
+      if (!teams.length) {
+        grid.innerHTML = '<div class="empty-state">No teams yet. Click “Play Demo Now” to start instantly.</div>';
+        return;
+      }
+      grid.innerHTML = teams.map(team => `
+        <div class="team-item" style="display:block">
+          <div class="team-name">${escapeHtml(team.name)}</div>
+          <div class="team-meta">Score this round from 0 to 60. Quick buttons are available for fast facilitation.</div>
+          <div class="form-row" style="margin-top:10px">
+            <label>Team Response</label>
+            <textarea id="response-${team.id}" placeholder="Capture the team response or facilitator notes for this round."></textarea>
+          </div>
+          <div class="quick-score-row">
+            <button class="quick-score" onclick="quickScore('${team.id}', 30)">Average 30</button>
+            <button class="quick-score" onclick="quickScore('${team.id}', 45)">Strong 45</button>
+            <button class="quick-score" onclick="quickScore('${team.id}', 55)">Excellent 55</button>
+          </div>
+          <div class="score-grid">
+            <div class="score-field"><label>Builds</label><input id="builds-${team.id}" type="number" min="0" max="10" value="0"></div>
+            <div class="score-field"><label>Clarity</label><input id="clarity-${team.id}" type="number" min="0" max="10" value="0"></div>
+            <div class="score-field"><label>Creativity</label><input id="creativity-${team.id}" type="number" min="0" max="10" value="0"></div>
+            <div class="score-field"><label>Speed</label><input id="speed-${team.id}" type="number" min="0" max="10" value="0"></div>
+            <div class="score-field"><label>Solution</label><input id="solution-${team.id}" type="number" min="0" max="10" value="0"></div>
+            <div class="score-field"><label>Teamwork</label><input id="teamwork-${team.id}" type="number" min="0" max="10" value="0"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateLeaderboard() {
+      const sorted = getLiveTeamScores().sort((a, b) => b.liveScore - a.liveScore);
+      $('leaderboard').innerHTML = sorted.length ? sorted.map((team, index) => `
+        <div class="leader-item">
+          <div class="rank">${index + 1}</div>
+          <div>
+            <div class="team-name">${escapeHtml(team.name)}</div>
+            <div class="team-meta">${team.rounds || 0} completed rounds${team.currentRoundScore ? ` · Current round: ${team.currentRoundScore}` : ''}</div>
+          </div>
+          <div class="leader-score">${team.liveScore}<small>${team.currentRoundScore ? 'live' : 'saved'}</small></div>
+        </div>
+      `).join('') : '<div class="empty-state">No teams added yet.</div>';
+    }
+
+    function getLiveTeamScores() {
+      const criteria = ['builds', 'clarity', 'creativity', 'speed', 'solution', 'teamwork'];
+      return teams.map(team => {
+        const currentRoundScore = criteria.reduce((sum, key) => sum + clampScore(Number($(key + '-' + team.id)?.value || 0)), 0);
+        return { ...team, currentRoundScore, liveScore: team.score + currentRoundScore };
+      });
+    }
+
+    function updateRoundLog() {
+      const container = $('roundLog');
+      if (!roundLog.length) {
+        container.innerHTML = '<div class="empty-state">No completed rounds yet.</div>';
+        return;
+      }
+      container.innerHTML = roundLog.slice().reverse().map(log => `
+        <div class="log-item">
+          <div class="team-name">Round ${log.round}: ${escapeHtml(log.prompt)}</div>
+          <div class="team-meta">${escapeHtml(log.category)} · ${new Date(log.time).toLocaleString()}</div>
+          <ul style="margin:10px 0 0; padding-left:18px; line-height:1.7">
+            ${log.scores.map(s => `<li><strong>${escapeHtml(s.team)}</strong>: ${s.points} points${s.response ? ` — ${escapeHtml(s.response)}` : ''}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+
+    function updateUI() {
+      updateStats();
+      updateTeamList();
+      updateResponses();
+      updateLeaderboard();
+      updateRoundLog();
+      setPhase(phase);
+    }
+
+    function addTeam() {
+      const name = $('teamName').value.trim();
+      const members = $('teamMembers').value.split(',').map(x => x.trim()).filter(Boolean);
+      if (!name) {
+        showToast('Add a team name first');
+        return;
+      }
+      teams.push({ id: makeId(), name, members, score: 0, rounds: 0 });
+      $('teamName').value = '';
+      $('teamMembers').value = '';
+      saveState();
+      updateUI();
+      showToast('Team added');
+    }
+
+    function deleteTeam(id) {
+      teams = teams.filter(team => team.id !== id);
+      saveState();
+      updateUI();
+      showToast('Team removed');
+    }
+
+    function ensureTeams() {
+      if (!teams.length) loadSampleTeams(false);
+    }
+
+    function loadSampleTeams(withToast = true) {
+      teams = [
+        { id: 'sample-1', name: 'Team Phoenix', members: ['Asha', 'Ravi', 'Meera'], score: 0, rounds: 0 },
+        { id: 'sample-2', name: 'Team Catalyst', members: ['Nikhil', 'Sara', 'Dev'], score: 0, rounds: 0 },
+        { id: 'sample-3', name: 'Team Orbit', members: ['Kiran', 'Ananya', 'Joel'], score: 0, rounds: 0 }
+      ];
+      saveState();
+      updateUI();
+      if (withToast) showToast('Sample teams loaded');
+    }
+
+    function choosePrompt() {
+      ensureTeams();
+      const selected = $('gameCategory').value;
+      const pool = selected === 'mixed' ? prompts : prompts.filter(p => p.category === selected || p.category === 'mixed');
+      let index = Math.floor(Math.random() * pool.length);
+      if (pool.length > 1) {
+        while (pool[index] === currentPrompt) index = Math.floor(Math.random() * pool.length);
+      }
+      currentPrompt = pool[index];
+      lastPromptIndex = index;
+      currentRound += 1;
+      $('promptCategory').textContent = currentPrompt.category.replace('-', ' ');
+      $('promptText').textContent = currentPrompt.text;
+      $('promptInstruction').textContent = currentPrompt.instruction;
+      $('statusTitle').textContent = `Round ${currentRound} prompt ready`;
+      $('statusSub').textContent = 'Click Start Round when teams are ready.';
+      $('timerDisplay').textContent = '⏱ 00:00';
+      clearInterval(timer);
+      $('pauseTimerBtn').textContent = 'Pause Timer';
+      setPhase('prompt');
+      saveState();
+      updateUI();
+      switchView('play');
+      document.getElementById('gameArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    async function playDemo() {
+      await enterFullscreenMode();
+      if (!teams.length) loadSampleTeams(false);
+      choosePrompt();
+      setTimeout(startRound, 350);
+      showToast('Demo started in fullscreen');
+    }
+
+    function setupCustomGame() {
+      document.getElementById('setupPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setPhase('setup');
+      showToast('Set up teams and category');
+    }
+
+    function startRound() {
+      enterFullscreenMode();
+      ensureTeams();
+      if (!currentPrompt) choosePrompt();
+      clearInterval(timer);
+      remainingSeconds = Number($('roundDuration').value);
+      isPaused = false;
+      $('pauseTimerBtn').textContent = 'Pause Timer';
+      $('statusTitle').textContent = `Round ${currentRound} in progress`;
+      $('statusSub').textContent = 'Teams respond using “Yes, and...” thinking.';
+      setPhase('perform');
+      updateTimerDisplay();
+      timer = setInterval(() => {
+        if (!isPaused) {
+          remainingSeconds -= 1;
+          updateTimerDisplay();
+          if (remainingSeconds <= 0) {
+            clearInterval(timer);
+            $('statusTitle').textContent = `Round ${currentRound} complete`;
+            $('statusSub').textContent = 'Score team responses, then finish and save the round.';
+            setPhase('score');
+            playBeep();
+          }
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const m = String(Math.floor(Math.max(remainingSeconds, 0) / 60)).padStart(2, '0');
+      const s = String(Math.max(remainingSeconds, 0) % 60).padStart(2, '0');
+      $('timerDisplay').textContent = `⏱ ${m}:${s}`;
+    }
+
+    function pauseTimer() {
+      if (!currentPrompt) return showToast('Start a round first');
+      isPaused = !isPaused;
+      $('pauseTimerBtn').textContent = isPaused ? 'Resume Timer' : 'Pause Timer';
+      showToast(isPaused ? 'Timer paused' : 'Timer resumed');
+    }
+
+    function quickScore(id, total) {
+      const values = splitScore(total);
+      const keys = ['builds', 'clarity', 'creativity', 'speed', 'solution', 'teamwork'];
+      keys.forEach((key, index) => {
+        const input = $(key + '-' + id);
+        if (input) input.value = values[index];
+      });
+      updateLeaderboard();
+      showToast(`Quick score ${total} applied`);
+    }
+
+    function splitScore(total) {
+      const base = Math.floor(total / 6);
+      const remainder = total % 6;
+      return Array.from({ length: 6 }, (_, i) => Math.min(10, base + (i < remainder ? 1 : 0)));
+    }
+
+    function getRoundScores() {
+      const criteria = ['builds', 'clarity', 'creativity', 'speed', 'solution', 'teamwork'];
+      return teams.map(team => {
+        const points = criteria.reduce((sum, key) => sum + clampScore(Number($(key + '-' + team.id)?.value || 0)), 0);
+        const response = ($('response-' + team.id)?.value || '').trim();
+        return { team: team.name, teamId: team.id, points, response };
+      });
+    }
+
+    function finishRound() {
+      if (!currentPrompt) return showToast('Start a prompt first');
+      clearInterval(timer);
+      const scores = getRoundScores();
+      scores.forEach(score => {
+        const team = teams.find(t => t.id === score.teamId);
+        if (team) {
+          team.score += score.points;
+          team.rounds = (team.rounds || 0) + 1;
+        }
+      });
+      roundLog.push({
+        round: currentRound,
+        category: currentPrompt.category,
+        prompt: currentPrompt.text,
+        scores: scores.map(({ team, points, response }) => ({ team, points, response })),
+        time: new Date().toISOString()
+      });
+      $('statusTitle').textContent = `Round ${currentRound} saved`;
+      $('statusSub').textContent = 'Open Leaderboard or click Next Prompt for another round.';
+      setPhase('score');
+      saveState();
+      updateUI();
+      showToast('Round saved');
+      switchView('leaderboard');
+    }
+
+    function nextPrompt() {
+      choosePrompt();
+      showToast('New prompt ready');
+    }
+
+    function exportReport() {
+      const report = {
+        game: 'Edstellar Engage - Improv Challenge',
+        exportedAt: new Date().toISOString(),
+        teams,
+        rounds: roundLog,
+        reflectionNotes: $('reflectionNotes').value.trim(),
+        scoringCriteria: ['Builds on previous idea', 'Clarity', 'Creativity', 'Speed', 'Solution orientation', 'Teamwork']
+      };
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'edstellar-improv-challenge-report.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Report exported');
+    }
+
+    function resetGame() {
+      if (!confirm('Reset the game, scores, and round log?')) return;
+      clearInterval(timer);
+      teams = [];
+      currentRound = 0;
+      currentPrompt = null;
+      roundLog = [];
+      phase = 'setup';
+      localStorage.removeItem('edstellarImprovGameV2');
+      $('promptCategory').textContent = 'Prompt';
+      $('promptText').textContent = 'Click “Play Demo Now” to instantly start with sample teams and a workplace scenario.';
+      $('promptInstruction').textContent = 'No setup required for demo mode.';
+      $('timerDisplay').textContent = '⏱ 00:00';
+      $('statusTitle').textContent = 'Ready to play';
+      $('statusSub').textContent = 'Click “Play Demo Now” for instant gameplay, or set up your own teams.';
+      updateUI();
+      showToast('Game reset');
+    }
+
+    function switchView(view) {
+      ['play', 'leaderboard', 'reflection', 'log'].forEach(v => {
+        $(v + 'View').classList.toggle('hidden', v !== view);
+      });
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.view === view));
+    }
+
+    function clampScore(n) {
+      if (Number.isNaN(n)) return 0;
+      return Math.max(0, Math.min(10, n));
+    }
+
+    function makeId() {
+      return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
+    }
+
+    function playBeep() {
+      try {
+        const audio = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audio.createOscillator();
+        const gain = audio.createGain();
+        oscillator.connect(gain);
+        gain.connect(audio.destination);
+        oscillator.frequency.value = 880;
+        gain.gain.value = 0.08;
+        oscillator.start();
+        setTimeout(() => { oscillator.stop(); audio.close(); }, 220);
+      } catch (e) {}
+    }
+
+    $('addTeamBtn').addEventListener('click', addTeam);
+    $('loadSampleBtn').addEventListener('click', () => loadSampleTeams(true));
+    $('demoBtn').addEventListener('click', playDemo);
+    $('howToPlayBtn').addEventListener('click', openHowToPlay);
+    $('howToClose').addEventListener('click', closeHowToPlay);
+    $('howToCloseBottom').addEventListener('click', closeHowToPlay);
+    $('howToStartDemo').addEventListener('click', () => { closeHowToPlay(); playDemo(); });
+    $('howToSetup').addEventListener('click', () => { closeHowToPlay(); setupCustomGame(); });
+    $('setupGameBtn').addEventListener('click', setupCustomGame);
+    $('startRoundBtn').addEventListener('click', startRound);
+    $('nextPromptBtn').addEventListener('click', nextPrompt);
+    $('nextPromptHeroBtn').addEventListener('click', nextPrompt);
+    $('pauseTimerBtn').addEventListener('click', pauseTimer);
+    $('finishRoundBtn').addEventListener('click', finishRound);
+    $('exportBtn').addEventListener('click', exportReport);
+    $('printBtn').addEventListener('click', () => window.print());
+    $('resetBtn').addEventListener('click', resetGame);
+    document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => switchView(tab.dataset.view)));
+    $('teamName').addEventListener('keydown', (event) => { if (event.key === 'Enter') addTeam(); });
+    $('responseGrid').addEventListener('input', (event) => {
+      if (event.target.matches('input[type="number"]')) updateLeaderboard();
+    });
+    $('howToOverlay').addEventListener('click', (event) => {
+      if (event.target.id === 'howToOverlay') closeHowToPlay();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeHowToPlay();
+    });
+
+    loadState();
+    // Auto-open the how-to-play modal only on first visit (per-browser).
+    if (!localStorage.getItem('edstellarImprovHowToSeen')) {
+      setTimeout(openHowToPlay, 450);
+      localStorage.setItem('edstellarImprovHowToSeen', '1');
+    }
+  </script>
+</body>
+</html>
