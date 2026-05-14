@@ -5,8 +5,8 @@ Concept work and an interactive prototype for **Edstellar Engage** — a propose
 ## Contents
 
 - **`engage-prototype/`** — static prototype (10 marketing pages + 3 playable games). Vanilla HTML/CSS/JS, no build step. See [`engage-prototype/README.md`](engage-prototype/README.md).
-- **Strategy & research** — `Edstellar_Engage_Concept_Document.docx`, `Edstellar_Engage_Games_Research.docx`, `Edstellar_Blogs_Games_Catalog.docx`, `Edstellar_Engage_Game_Page_Concept.docx`.
-- **Game content** — `Edstellar_Engage_All_Games_Master.html` (215 structured game cards across 14 blog sections) and `Edstellar_Engage_Individual_Game_HTML_Files/` (216 standalone modules).
+- **`Edstellar_Engage_All_Games_Master.html`** — source-of-truth for the 215 structured game cards (parsed by `engage-prototype/_build/parse_master.py` into the catalog).
+- **`MIGRATION_PLAN.md`** — reference plan for the Next.js + Supabase production migration.
 
 ## Run the prototype
 

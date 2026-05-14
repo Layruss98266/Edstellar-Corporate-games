@@ -4,7 +4,8 @@
 */
 
 // ---------- Data ----------
-const DATA_URL = './assets/games.json';
+// Loaded via assets/games-data.js (window.GAMES_DATA). The prototype runs from
+// file:// where fetch() is blocked, so the script-tag path is the only path.
 let CACHE = null;
 async function loadGames(){
   if(CACHE) return CACHE;
@@ -12,15 +13,8 @@ async function loadGames(){
     CACHE = window.GAMES_DATA.games;
     return CACHE;
   }
-  try{
-    const r = await fetch(DATA_URL);
-    const j = await r.json();
-    CACHE = j.games || [];
-    return CACHE;
-  }catch(err){
-    console.error('Could not load games. Include games-data.js before app.js if opening via file://.', err);
-    return [];
-  }
+  console.error('window.GAMES_DATA missing — include assets/games-data.js before app.js.');
+  return [];
 }
 
 function escapeHtml(s){
