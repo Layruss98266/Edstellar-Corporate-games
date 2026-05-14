@@ -177,10 +177,69 @@ input:focus,textarea:focus,select:focus{
 .team-name{color:var(--heading);font-weight:900;font-size:15px}
 .team-meta{color:var(--muted);font-size:12px;line-height:1.45}
 .team-meta strong{color:var(--brand-deep);font-weight:800}
+.team-actions{display:flex;gap:6px;flex-shrink:0}
+.team-btn{
+  border:1px solid var(--border);background:#fff;color:var(--brand-deep);
+  border-radius:10px;padding:7px 10px;font-weight:800;font-size:12px;
+  transition:all .12s ease;
+}
+.team-btn:hover{border-color:var(--brand-blue);color:var(--brand-blue)}
 .delete-team{
   border:none;background:#FEF2F2;color:#B91C1C;
   border-radius:10px;padding:7px 11px;font-weight:900;
 }
+.delete-team:hover{background:#FEE2E2}
+
+/* Member pills (shown on team cards everywhere) */
+.member-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.member-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  background:#F1F5F9;color:var(--brand-deep);
+  padding:2px 9px;border-radius:999px;
+  font-size:11px;font-weight:700;
+}
+.member-pill::before{
+  content:"";width:14px;height:14px;border-radius:50%;
+  background:var(--team-color,#0B3C5D);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:900;
+}
+.member-pill.add{
+  background:transparent;border:1px dashed #CBD5E1;color:var(--muted);
+  cursor:pointer;
+}
+.member-pill.add::before{display:none}
+.member-pill.add:hover{border-color:var(--brand-blue);color:var(--brand-blue)}
+.member-count{
+  display:inline-flex;align-items:center;gap:4px;color:var(--muted);
+  font-size:11px;font-weight:800;margin-left:6px;
+}
+
+/* Inline edit form */
+.team-edit{
+  margin-top:10px;padding:14px;background:#F8FAFC;
+  border-radius:14px;border:1px solid var(--border);
+  display:grid;gap:10px;
+}
+.team-edit h4{margin:0 0 4px;font-size:13px;color:var(--heading);font-weight:900}
+.team-edit input,.team-edit textarea{padding:8px 11px;font-size:13px}
+.team-edit textarea{min-height:54px}
+.swatch-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.swatch{
+  width:26px;height:26px;border-radius:9px;border:2px solid transparent;
+  cursor:pointer;transition:transform .1s ease,border-color .12s ease;
+}
+.swatch:hover{transform:scale(1.08)}
+.swatch.active{border-color:#0F172A;box-shadow:0 0 0 2px #fff inset}
+.avatar-row{display:flex;gap:6px;flex-wrap:wrap}
+.avatar-pick{
+  width:32px;height:32px;border-radius:10px;
+  border:1px solid var(--border);background:#fff;
+  font-size:16px;cursor:pointer;transition:all .12s ease;
+}
+.avatar-pick:hover{border-color:var(--brand-blue)}
+.avatar-pick.active{background:#EFF6FF;border-color:var(--brand-blue);box-shadow:0 0 0 2px rgba(37,99,235,.2)}
+.edit-actions{display:flex;gap:8px;justify-content:flex-end}
 
 /* ---------- Status / timer ---------- */
 .game-board{display:grid;gap:18px}
@@ -964,6 +1023,7 @@ let phase = 'setup';
 let lastPromptIndex = -1;
 let activePowerups = {}; // { teamId: { double:true, ... } }
 let exampleRevealedFor = null;
+let editingTeamId = null;
 
 const $ = id => document.getElementById(id);
 const STORAGE_KEY = 'edstellarImprovGameV3';
@@ -1008,6 +1068,13 @@ function updateStats(){
   $('coinPool').textContent = teams.length ? Math.round(totalCoins/teams.length) + ' avg' : 'Pool';
 }
 
+function memberPills(t, { addable=false } = {}){
+  const initials = name => (name.trim().split(/\s+/).map(p=>p[0]).join('').slice(0,2) || '?').toUpperCase();
+  const pills = (t.members||[]).map(m => `<span class="member-pill" style="--team-color:${t.color}" data-i="${escapeHtml(initials(m))}">${escapeHtml(m)}</span>`).join('');
+  const add = addable ? `<button class="member-pill add" onclick="editTeam('${t.id}')">+ Add member</button>` : '';
+  return `<div class="member-pills">${pills}${add}</div>`;
+}
+
 function updateTeamList(){
   const list = $('teamList');
   if(!teams.length){
@@ -1015,15 +1082,53 @@ function updateTeamList(){
     return;
   }
   list.innerHTML = teams.map(t => `
-    <div class="team-item">
-      <div class="team-avatar" style="--team-color:${t.color}">${t.avatar}</div>
-      <div class="team-info">
-        <div class="team-name">${escapeHtml(t.name)}</div>
-        <div class="team-meta">${t.members.length ? escapeHtml(t.members.join(', ')) : 'No members listed'} · <strong>${t.score} pts</strong> · ${t.coins||0} 🪙</div>
+    <div>
+      <div class="team-item">
+        <div class="team-avatar" style="--team-color:${t.color}">${t.avatar}</div>
+        <div class="team-info">
+          <div class="team-name">${escapeHtml(t.name)}<span class="member-count">👥 ${t.members.length}</span></div>
+          <div class="team-meta"><strong>${t.score} pts</strong> · ${t.coins||0} 🪙 · ${t.rounds||0} rounds</div>
+          ${t.members.length ? memberPills(t, {addable:true}) : `<div class="member-pills"><button class="member-pill add" onclick="editTeam('${t.id}')">+ Add members</button></div>`}
+        </div>
+        <div class="team-actions">
+          <button class="team-btn" onclick="editTeam('${t.id}')" aria-label="Edit team">✎ Edit</button>
+          <button class="delete-team" onclick="deleteTeam('${t.id}')" aria-label="Remove team">×</button>
+        </div>
       </div>
-      <button class="delete-team" onclick="deleteTeam('${t.id}')" aria-label="Remove team">×</button>
+      ${editingTeamId === t.id ? renderEditForm(t) : ''}
     </div>
   `).join('');
+}
+
+function renderEditForm(t){
+  return `
+  <div class="team-edit">
+    <h4>Edit team</h4>
+    <div class="form-row" style="margin:0">
+      <label>Team name</label>
+      <input id="edit-name-${t.id}" value="${escapeHtml(t.name)}" />
+    </div>
+    <div class="form-row" style="margin:0">
+      <label>Members <span style="color:var(--muted);font-weight:600">(comma separated)</span></label>
+      <textarea id="edit-members-${t.id}" placeholder="Asha, Ravi, Meera">${escapeHtml((t.members||[]).join(', '))}</textarea>
+    </div>
+    <div class="form-row" style="margin:0">
+      <label>Team color</label>
+      <div class="swatch-row">
+        ${TEAM_COLORS.map(c => `<button class="swatch ${c===t.color?'active':''}" style="background:${c}" onclick="setTeamColor('${t.id}','${c}')" aria-label="Color ${c}"></button>`).join('')}
+      </div>
+    </div>
+    <div class="form-row" style="margin:0">
+      <label>Avatar</label>
+      <div class="avatar-row">
+        ${TEAM_AVATARS.map(a => `<button class="avatar-pick ${a===t.avatar?'active':''}" onclick="setTeamAvatar('${t.id}','${a}')" aria-label="Avatar ${a}">${a}</button>`).join('')}
+      </div>
+    </div>
+    <div class="edit-actions">
+      <button class="btn ghost btn-sm" onclick="cancelEditTeam()">Cancel</button>
+      <button class="btn btn-sm" onclick="saveEditTeam('${t.id}')">✓ Save changes</button>
+    </div>
+  </div>`;
 }
 
 function leader(){
@@ -1046,7 +1151,10 @@ function updateResponses(){
     <div class="team-score-card ${isLeader?'leader':''}" data-team="${t.id}">
       <div class="team-score-head">
         <div class="team-avatar" style="--team-color:${t.color};width:36px;height:36px;font-size:17px;border-radius:11px">${t.avatar}</div>
-        <div class="team-name">${escapeHtml(t.name)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="team-name">${escapeHtml(t.name)}<span class="member-count">👥 ${t.members.length}</span></div>
+          ${t.members.length ? memberPills(t) : ''}
+        </div>
         <div class="team-score-running"><span id="running-${t.id}">${liveTotal}</span> pts${dd}</div>
       </div>
       <div class="quick-score-row">
@@ -1120,9 +1228,10 @@ function updateLeaderboard(){
     <div class="leader-item rank-${i+1}">
       <div class="rank">${i+1}</div>
       <div class="team-avatar" style="--team-color:${t.color};width:36px;height:36px;font-size:17px;border-radius:11px">${t.avatar}</div>
-      <div>
-        <div class="team-name">${escapeHtml(t.name)}</div>
+      <div style="min-width:0">
+        <div class="team-name">${escapeHtml(t.name)}<span class="member-count">👥 ${t.members.length}</span></div>
         <div class="team-meta">${t.rounds||0} rounds · ${t.coins||0} 🪙${t.currentRoundScore ? ' · live +' + t.currentRoundScore : ''}</div>
+        ${t.members.length ? memberPills(t) : ''}
         <div class="score-bar" title="Current round criterion fill">${bars}</div>
       </div>
       <div class="leader-score">${t.liveScore}<small>${t.currentRoundScore ? 'live' : 'saved'}</small></div>
@@ -1182,8 +1291,56 @@ function addTeam(){
 function deleteTeam(id){
   teams = teams.filter(t=> t.id !== id);
   delete activePowerups[id];
+  if(editingTeamId === id) editingTeamId = null;
   saveState(); updateUI();
   showToast('Team removed');
+}
+
+function editTeam(id){
+  editingTeamId = editingTeamId === id ? null : id;
+  updateTeamList();
+  if(editingTeamId){
+    setTimeout(()=>{
+      const el = document.getElementById('edit-name-'+id);
+      if(el){ el.focus(); el.select(); }
+    }, 30);
+  }
+}
+
+function cancelEditTeam(){
+  editingTeamId = null;
+  updateTeamList();
+}
+
+function saveEditTeam(id){
+  const t = teams.find(x => x.id === id);
+  if(!t) return;
+  const nameEl = document.getElementById('edit-name-'+id);
+  const membersEl = document.getElementById('edit-members-'+id);
+  const newName = (nameEl?.value || '').trim();
+  if(!newName){ showToast('Team name cannot be empty', 'warning'); return; }
+  t.name = newName;
+  t.members = (membersEl?.value || '').split(',').map(x => x.trim()).filter(Boolean);
+  editingTeamId = null;
+  saveState();
+  updateUI();
+  showToast('Team updated', 'success');
+}
+
+function setTeamColor(id, color){
+  const t = teams.find(x => x.id === id);
+  if(!t) return;
+  t.color = color;
+  saveState();
+  updateUI();
+}
+
+function setTeamAvatar(id, avatar){
+  const t = teams.find(x => x.id === id);
+  if(!t) return;
+  t.avatar = avatar;
+  saveState();
+  updateUI();
 }
 function ensureTeams(){ if(!teams.length) loadSampleTeams(false); }
 function loadSampleTeams(toast=true){
