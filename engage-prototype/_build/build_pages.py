@@ -125,7 +125,9 @@ def page(filename, title, body_html, active_nav='', page_attr='marketing'):
 <button class="btn btn-accent sticky-cta" data-open-demo>Book a Demo</button>
 {DEMO_MODAL}
 <script src="./assets/games-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.min.js" defer></script>
 <script src="./assets/app.js"></script>
+<script src="./assets/motion.js" defer></script>
 </body>
 </html>'''
     (OUT / filename).write_text(html, encoding='utf-8')
