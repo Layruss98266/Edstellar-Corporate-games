@@ -859,6 +859,108 @@ body[data-phase="score"] #twistBtn{display:none}
 /* Snapshot phase stat is redundant with the flow stepper - hide */
 #phaseStatBox{display:none}
 
+/* ============= GAME UI/UX POLISH ============= */
+
+/* Tighter hero */
+.hero-card{padding:24px 26px}
+.hero-card .eyebrow{margin-bottom:8px}
+.hero-card h1{font-size:clamp(28px,4.2vw,46px)}
+.hero-card .hero-text{margin-top:8px;font-size:14.5px;line-height:1.6;max-width:680px}
+.hero-card .hero-actions{margin-top:14px}
+.hero-card::after{width:200px;height:200px;right:-60px;top:-70px}
+
+/* Phase-aware status strip */
+.status-strip{padding:14px 18px 18px}
+.status-strip .status-progress{
+  position:absolute;left:0;right:0;bottom:0;height:3px;
+  background:rgba(255,255,255,.1);overflow:hidden;
+}
+.status-strip .status-progress-fill{
+  display:block;height:100%;
+  background:linear-gradient(90deg,var(--brand-sky),var(--success));
+  width:0;transition:width .4s ease;
+}
+body[data-phase="perform"] .status-strip{
+  background:linear-gradient(135deg,#0B3C5D,#16A34A);
+}
+body[data-phase="score"] .status-strip{
+  background:linear-gradient(135deg,#0B3C5D,#7C3AED);
+}
+
+/* Bigger prompt during perform phase */
+body[data-phase="perform"] .prompt-text{font-size:clamp(26px,3.6vw,40px)}
+body[data-phase="perform"] .prompt-card{border-color:var(--success);box-shadow:0 16px 36px rgba(16,185,129,.18)}
+
+/* Score scale dots (replaces +/- buttons) */
+.criterion{padding:8px 12px;background:#fff;border:1px solid var(--border)}
+.criterion-label{flex:0 0 96px}
+.score-dots{display:flex;gap:2px;flex:1;justify-content:flex-end}
+.score-dots button{
+  width:14px;height:14px;border-radius:50%;
+  border:1px solid var(--border);background:#fff;
+  padding:0;cursor:pointer;transition:transform .08s ease, background .12s ease, border-color .12s ease;
+}
+.score-dots button:hover{border-color:var(--brand-blue);transform:scale(1.18)}
+.score-dots button.filled{background:var(--brand-blue);border-color:var(--brand-blue)}
+.score-dots button.filled.lo{background:#EF4444;border-color:#EF4444}
+.score-dots button.filled.md{background:#F59E0B;border-color:#F59E0B}
+.score-dots button.filled.hi{background:var(--success);border-color:var(--success)}
+.score-num{
+  font-weight:900;color:var(--brand-deep);font-variant-numeric:tabular-nums;
+  width:22px;text-align:right;font-size:12px;
+}
+
+/* Floating +X feedback */
+.float-points{
+  position:absolute;pointer-events:none;
+  font-weight:900;font-size:20px;color:var(--success);
+  animation:floatUp 1s ease-out forwards;z-index:50;
+  text-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.float-points.negative{color:var(--danger)}
+@keyframes floatUp{
+  from{opacity:0;transform:translateY(0) scale(.8)}
+  20%{opacity:1;transform:translateY(-10px) scale(1.1)}
+  100%{opacity:0;transform:translateY(-40px) scale(1)}
+}
+
+/* Podium-style top 3 in leaderboard */
+.leader-item.rank-1{
+  background:linear-gradient(135deg,#FFFBEB,#FEF3C7);
+  border-color:var(--gold);
+  box-shadow:0 14px 28px rgba(245,158,11,.22);
+}
+.leader-item.rank-1 .leader-score{font-size:30px;color:#92400E}
+.leader-item.rank-2{
+  background:linear-gradient(135deg,#F8FAFC,#E5E7EB);
+  border-color:#9CA3AF;
+}
+.leader-item.rank-2 .leader-score{font-size:26px;color:#374151}
+.leader-item.rank-3{
+  background:linear-gradient(135deg,#FED7AA,#FFF7ED);
+  border-color:#FB923C;
+}
+.leader-item.rank-3 .leader-score{font-size:24px;color:#9A3412}
+
+/* Empty-state polish */
+.empty-state{
+  padding:24px 20px;
+}
+.empty-state::before{
+  content:"🎯";display:block;font-size:34px;margin-bottom:8px;opacity:.6;
+}
+
+/* Stat boxes - tighter, more visual */
+.stat-box{padding:12px 14px}
+.stat-value{font-size:24px}
+#roundStat{
+  background:linear-gradient(135deg,var(--brand-blue),var(--brand-blue-dark));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* Smooth phase transitions on key UI */
+.prompt-card,.team-score-card,.status-strip{transition:background .35s ease, border-color .35s ease, box-shadow .35s ease}
+
 /* ============= SETUP PANEL REDESIGN ============= */
 .setup-panel{padding:20px 22px 90px;position:relative}
 .setup-section{
@@ -1207,6 +1309,7 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
           <span id="statusSub">Click "Play Demo Now" for instant gameplay, or set up your own teams.</span>
         </div>
         <div class="timer" id="timerDisplay">⏱ 00:00</div>
+        <div class="status-progress" aria-hidden="true"><span class="status-progress-fill" id="statusProgressFill"></span></div>
       </div>
 
       <!-- Twist banner -->
@@ -1884,16 +1987,20 @@ function updateResponses(){
         <button class="quick-score" onclick="quickScore('${t.id}',54)">Excellent 54</button>
       </div>
       <div class="criteria">
-        ${CRITERIA.map(c => `
+        ${CRITERIA.map(c => {
+          const v = getScore(t.id, c.key);
+          const dots = Array.from({length:10}, (_,i) => {
+            const filled = i < v;
+            const tier = v <= 3 ? 'lo' : v <= 6 ? 'md' : 'hi';
+            return `<button class="${filled?'filled '+tier:''}" onclick="setScoreDirect('${t.id}','${c.key}',${i+1})" aria-label="${c.label} ${i+1}/10"></button>`;
+          }).join('');
+          return `
           <div class="criterion">
             <div class="criterion-label">${c.label}<small>${c.hint}</small></div>
-            <div class="criterion-ctrl">
-              <button class="score-btn" onclick="bumpScore('${t.id}','${c.key}',-1)" aria-label="Decrease ${c.label}">−</button>
-              <span class="score-val" id="score-${t.id}-${c.key}">${getScore(t.id,c.key)}</span>
-              <button class="score-btn" onclick="bumpScore('${t.id}','${c.key}',1)" aria-label="Increase ${c.label}">+</button>
-            </div>
-          </div>
-        `).join('')}
+            <div class="score-dots" role="slider" aria-label="${c.label}" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${v}">${dots}</div>
+            <span class="score-num" id="score-${t.id}-${c.key}">${v}</span>
+          </div>`;
+        }).join('')}
       </div>
       <div class="response-input">
         <textarea id="response-${t.id}" placeholder="Capture the team's response or facilitator notes for this round."></textarea>
@@ -1921,7 +2028,51 @@ function bumpScore(teamId, key, delta){
     runEl.parentElement.style.background='#FFFBEB';
     setTimeout(()=>{ runEl.parentElement.style.background=''; }, 250);
   }
+  if(delta !== 0) floatPoints(teamId, delta);
+  // Repaint dots for this criterion only
+  paintDots(teamId, key);
   updateLeaderboard();
+}
+
+function setScoreDirect(teamId, key, val){
+  const current = getScore(teamId, key);
+  const next = (current === val) ? val - 1 : val; // click filled-last-dot to toggle off
+  bumpScore(teamId, key, next - current);
+}
+
+function paintDots(teamId, key){
+  const v = getScore(teamId, key);
+  const tier = v <= 3 ? 'lo' : v <= 6 ? 'md' : 'hi';
+  const wrap = document.getElementById('score-'+teamId+'-'+key)?.parentElement?.querySelector('.score-dots');
+  if(!wrap) return;
+  wrap.setAttribute('aria-valuenow', String(v));
+  wrap.querySelectorAll('button').forEach((b,i) => {
+    b.className = i < v ? ('filled ' + tier) : '';
+  });
+}
+
+function floatPoints(teamId, delta){
+  const card = document.querySelector(`.team-score-card[data-team="${teamId}"]`);
+  if(!card) return;
+  const f = document.createElement('span');
+  f.className = 'float-points' + (delta < 0 ? ' negative' : '');
+  f.textContent = (delta > 0 ? '+' : '') + delta;
+  // Position near the running-total chip
+  const runEl = card.querySelector('.team-score-running');
+  const rect = runEl ? runEl.getBoundingClientRect() : card.getBoundingClientRect();
+  const cardRect = card.getBoundingClientRect();
+  f.style.right = (cardRect.right - rect.right + 8) + 'px';
+  f.style.top = (rect.top - cardRect.top - 4) + 'px';
+  card.style.position = 'relative';
+  card.appendChild(f);
+  setTimeout(() => f.remove(), 1000);
+}
+
+function updateRoundProgress(){
+  const fill = document.getElementById('statusProgressFill');
+  if(!fill) return;
+  const pct = maxRounds > 0 ? Math.min(100, Math.round((currentRound / maxRounds) * 100)) : 0;
+  fill.style.width = pct + '%';
 }
 
 function quickScore(id, total){
@@ -2046,6 +2197,7 @@ function updateUI(){
   if(typeof updateEstimator === 'function') updateEstimator();
   if(typeof updateRosterCount === 'function') updateRosterCount();
   if(typeof updateStartCta === 'function') updateStartCta();
+  if(typeof updateRoundProgress === 'function') updateRoundProgress();
 }
 
 // ---------- Teams ----------
