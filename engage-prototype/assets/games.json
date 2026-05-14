@@ -9318,71 +9318,80 @@
     {
       "id": "g126",
       "slug": "egg-drop",
-      "title": "Egg Drop",
+      "title": "Egg Drop Challenge Pro",
       "category": "Critical Thinking",
       "audience": [
         "All employees"
       ],
       "format": "Live",
-      "duration": "20-45 minutes",
-      "durationBucket": "15-30",
-      "team": "3-6 participants per team",
-      "teamBucket": "2-10",
+      "duration": "30-60 min",
+      "durationBucket": "30-60",
+      "team": "4-20",
+      "teamBucket": "10-50",
       "difficulty": "Medium",
       "facilitator": "Optional",
       "reinforcesTraining": false,
-      "concept": "Protective structure for egg drops",
+      "concept": "Teams design a protective structure for a raw egg, manage a 100-budget across 10 materials, navigate 6 random events, and run 3 escalating drop tests (Desk - Balcony - Building). Drag-and-drop build interface, auto-generated review per drop, 10 achievement badges, podium-style leaderboard. 14 languages, presenter & player modes, sharable session URL.",
       "businessPurpose": "Collaboration; creative engineering",
       "skills": [
-        "Collaboration",
-        "Critical Thinking",
-        "Creativity"
+        "Design Thinking",
+        "Resource Allocation",
+        "Iteration under Pressure",
+        "Trade-off Analysis",
+        "Team Collaboration"
       ],
       "materials": "Eggs, tape, straws, paper, rubber bands, cotton balls, balloons, newspapers, drop area.",
       "howToPlay": [
-        "Introduce the activity goal and connect it to collaboration, critical thinking.",
-        "Split participants into the recommended format: 3-6 participants per team.",
-        "Give the group the core challenge: protective structure for egg drops.",
-        "Run the activity within the time limit while the facilitator observes teamwork, decision quality, and participation.",
-        "Debrief using reflection questions and capture workplace applications or commitments."
+        "Each team starts with 100 budget. Pick a category, difficulty, and round count.",
+        "Drag materials (straws, tape, cotton, balloon, etc.) onto the egg. Placement matters - cushion at bottom, drag on top, structure on sides.",
+        "Build timer counts down (60-180s configurable). A random event fires when time runs out (Strong Wind, Tape Shortage, Higher Drop, etc.).",
+        "Run the drop test - watch the egg fall with animation. Survival depends on protection vs difficulty.",
+        "Auto-generated review explains what worked. Run rounds 2 and 3 from Balcony then Building Level.",
+        "Final winner overlay crowns the champion with double confetti and a badge gallery."
       ],
       "reviewQuestions": [
-        "What did the activity reveal about collaboration in the team?",
-        "Where did the team lose time, clarity, or alignment?",
-        "How can the same behavior be applied to real workplace projects?"
+        "Where did budget pressure force the hardest trade-offs?",
+        "Did teams over-engineer or under-engineer their designs?",
+        "How did the random events change team strategy?"
       ],
-      "keyTakeaway": "Egg Drop helps employees practice collaboration, critical thinking, creativity through a structured workplace activity. The value comes from the debrief: teams should connect what happened in the game to how they plan, communicate, decide, and improve at work.",
+      "keyTakeaway": "Egg Drop Pro trains design thinking under real constraints. The auto-review surfaces the same trade-offs you face in real projects: scope, cost, quality, risk. Use the debrief to map design choices to actual workplace decisions.",
       "sourceContext": "14 Critical Thinking Exercises, Games, And Activities - Critical thinking games and activities",
       "sourceBlog": "https://www.edstellar.com/blog/critical-thinking-activities-games-for-employees",
       "sourceBlogTitle": "Blog 9: 14 Critical Thinking Exercises, Games, And Activities",
       "type": "Game/Activity",
       "walkthrough": [
         {
-          "title": "What is this game?",
-          "body": "Protective structure for egg drops"
+          "title": "What is Egg Drop Pro?",
+          "body": "Teams build a protective structure for a raw egg using 10 materials and a 100-budget, then survive 3 escalating drop tests."
         },
         {
           "title": "How a round plays out",
-          "body": "Step 1: Introduce the activity goal and connect it to collaboration, critical thinking. Step 2: Split participants into the recommended format: 3-6 participants per team. Step 3: Give the group the core challenge: protective structure for egg drops."
+          "body": "Pick materials, place them (cushion bottom, drag top, structure sides). Build timer runs. Random event fires. Drop test scores integrity, budget efficiency, placement."
         },
         {
           "title": "Questions you'll discuss after",
-          "body": "• What did the activity reveal about collaboration in the team? • Where did the team lose time, clarity, or alignment? • How can the same behavior be applied to real workplace projects?"
+          "body": "Where did budget pressure force trade-offs? Did teams over- or under-engineer? How did events change strategy?"
         },
         {
           "title": "Why this game matters",
-          "body": "Egg Drop helps employees practice collaboration, critical thinking, creativity through a structured workplace activity. The value comes from the debrief: teams should connect what happened in the game to how they plan, communicate, decide, and improve at work."
+          "body": "Egg Drop trains design thinking under real constraints. The auto-review maps design choices to workplace decisions on scope, cost, quality, risk."
         }
       ],
       "outcomes": [
         "Collaboration; creative engineering"
       ],
       "needs": {
-        "materials": "Eggs, tape, straws, paper, rubber bands, cotton balls, balloons, newspapers, drop area.",
-        "platform": "Engage facilitator console, timer, team rooms.",
-        "facilitator": "Optional."
+        "materials": "Browser. Optional: projector for in-room display. Audio for timer cues.",
+        "platform": "Drag-and-drop build zone, 10-material library, 6 random events, drop animation, auto-review engine, 10-badge system, podium leaderboard, share modal, .ics reminder.",
+        "facilitator": "Recommended for groups over 12."
       },
-      "variations": [],
+      "variations": [
+        "Demo mode: instant play with 3 sample teams.",
+        "Custom setup: add 2-6 teams, pick mode (3-round progressive OR single drop), set build time.",
+        "Presenter mode (?mode=present): big drop zone for in-room facilitation.",
+        "Player mode (?mode=play): phone-friendly for distributed teams.",
+        "Custom material packs: extend the 10 materials with your own (future)."
+      ],
       "economy": {
         "currency": "EngageCoins",
         "starting": 200,
@@ -9451,7 +9460,9 @@
             "icon": "🎈"
           }
         ]
-      }
+      },
+      "playable": true,
+      "playUrl": "./play/egg-drop.html"
     },
     {
       "id": "g127",

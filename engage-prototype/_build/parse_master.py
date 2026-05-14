@@ -191,6 +191,7 @@ def derive_reinforces(category: str, title: str, biz_purpose: str) -> bool:
 # Playable game overrides - slug -> path. Adds {playable:true, playUrl:'...'}
 PLAYABLE = {
     "improv": "./play/improv-challenge.html",
+    "egg-drop": "./play/egg-drop.html",
 }
 
 # Special hand-tuned economies for marquee games.

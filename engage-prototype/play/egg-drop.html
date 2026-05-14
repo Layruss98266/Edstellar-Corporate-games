@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Egg Drop Challenge Pro - Edstellar Engage</title>
+<style>
+:root{
+  --deep:#0B3C5D;--blue:#2563EB;--blue-dark:#1D4ED8;--sky:#38BDF8;
+  --bg:#F5F7FA;--border:#E5E7EB;
+  --heading:#0F172A;--body:#334155;--muted:#64748B;
+  --success:#10B981;--success-dark:#059669;
+  --warning:#F59E0B;--warning-dark:#D97706;
+  --danger:#EF4444;--gold:#F59E0B;
+  --coin-grad:linear-gradient(135deg,#FCD34D,#F59E0B);
+  --shadow:0 18px 45px rgba(15,23,42,.10);
+  --shadow-sm:0 6px 14px rgba(15,23,42,.06);
+  --radius:22px;--radius-sm:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--body);
+  background:
+    radial-gradient(900px 600px at 0% -10%,rgba(56,189,248,.22),transparent 50%),
+    radial-gradient(900px 600px at 110% 0%,rgba(37,99,235,.20),transparent 55%),
+    linear-gradient(180deg,#fff 0%,var(--bg) 40%,#E6EEF8 100%);
+  overflow-x:hidden;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:1100}
+
+/* Skip + announcer */
+.skip-link{position:absolute;left:-9999px}
+.skip-link:focus{position:fixed;left:16px;top:16px;background:var(--blue);color:#fff;padding:10px 16px;border-radius:10px;z-index:2000;font-weight:900}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+/* Layout */
+.shell{max-width:1360px;margin:0 auto;padding:24px}
+.back-pill{
+  position:fixed;top:16px;left:16px;z-index:1001;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 14px;border-radius:999px;
+  background:rgba(255,255,255,.94);border:1px solid var(--border);
+  color:var(--deep);text-decoration:none;font-weight:800;font-size:13px;
+  box-shadow:var(--shadow-sm);backdrop-filter:blur(8px);
+  transition:transform .12s ease;
+}
+.back-pill:hover{transform:translateX(-2px)}
+
+.mode-banner{
+  display:none;align-items:center;gap:10px;
+  padding:8px 14px;border-radius:999px;
+  background:#0F172A;color:#fff;font-size:12px;font-weight:800;
+  position:fixed;top:14px;right:14px;z-index:1001;
+}
+body.mode-present .mode-banner, body.mode-play .mode-banner{display:inline-flex}
+.mode-banner a{color:#7ee5d6;text-decoration:underline;font-weight:900}
+
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:20px;margin-top:8px}
+.card,.panel,.toast{
+  background:rgba(255,255,255,.95);
+  border:1px solid rgba(229,231,235,.95);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.hero-card{padding:24px 26px;position:relative;overflow:hidden}
+.hero-card:after{
+  content:"";position:absolute;right:-90px;top:-100px;
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(56,189,248,.22),transparent 65%);
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 12px;border-radius:999px;
+  background:#EFF6FF;color:var(--blue);font-size:12px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;
+}
+h1,h2,h3{color:var(--heading);margin:0;line-height:1.1;letter-spacing:-.035em}
+h1{font-size:clamp(28px,4.2vw,46px)}
+h2{font-size:22px;margin-bottom:10px}
+h3{font-size:16px;margin-bottom:8px}
+.hero-text{position:relative;z-index:2;max-width:680px;margin:8px 0 0;font-size:14.5px;line-height:1.6}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:2}
+
+/* Buttons */
+.btn{
+  border:none;border-radius:14px;min-height:44px;padding:11px 18px;
+  font-weight:850;color:#fff;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  box-shadow:0 10px 22px rgba(37,99,235,.24);
+  transition:transform .14s ease,box-shadow .14s ease;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(37,99,235,.32)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn.secondary{color:var(--deep);background:#fff;border:1px solid #C7D2FE;box-shadow:none}
+.btn.ghost{color:var(--body);background:#F8FAFC;border:1px solid var(--border);box-shadow:none}
+.btn.success{background:linear-gradient(135deg,var(--success),var(--success-dark));box-shadow:0 10px 22px rgba(16,185,129,.28)}
+.btn.warning{background:linear-gradient(135deg,var(--warning),var(--warning-dark))}
+.btn.danger{background:linear-gradient(135deg,var(--danger),#DC2626)}
+.btn.tertiary{background:transparent;border:1px solid transparent;color:var(--muted);box-shadow:none;font-weight:700;padding:8px 12px}
+.btn.tertiary:hover{color:var(--deep);border-color:var(--border)}
+.btn-sm{min-height:34px;padding:7px 12px;font-size:12.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* Snapshot card */
+.score-card{padding:22px;display:flex;flex-direction:column;gap:14px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat-box{padding:12px 14px;border-radius:16px;background:#F8FAFC;border:1px solid var(--border)}
+.stat-label{display:block;font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.stat-value{display:block;margin-top:4px;color:var(--heading);font-size:24px;font-weight:900;letter-spacing:-.04em}
+#roundCount{background:linear-gradient(135deg,var(--blue),var(--blue-dark));-webkit-background-clip:text;background-clip:text;color:transparent}
+.coins-strip{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px;border-radius:16px;
+  background:linear-gradient(135deg,#0B3C5D,#1E40AF);color:#fff;box-shadow:var(--shadow-sm);
+}
+.budget-pill{
+  display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.22);padding:6px 12px;border-radius:999px;font-weight:900;font-size:13px;
+}
+.streak-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#FB923C,#EF4444);color:#fff;
+  padding:4px 10px;border-radius:999px;font-weight:900;font-size:11px;
+  box-shadow:0 4px 10px rgba(239,68,68,.25);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.mini{padding:14px 16px;border-radius:18px;background:#fff;border:1px solid var(--border)}
+.mini p{margin:0;line-height:1.55;font-size:13.5px}
+.kbd-help{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:11px;color:var(--muted)}
+.kbd-help span{display:inline-flex;align-items:center;gap:4px;background:#F8FAFC;border:1px solid var(--border);padding:3px 7px;border-radius:6px}
+.kbd-help kbd{background:#fff;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-family:inherit;font-size:10px;font-weight:900;color:var(--heading)}
+.settings-row{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;
+  margin-top:10px;font-size:12px;
+}
+.settings-row label{display:inline-flex;align-items:center;gap:6px;color:var(--muted);cursor:pointer;font-weight:700}
+.autosave{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--muted)}
+.autosave::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px rgba(16,185,129,.18)}
+
+/* Flow */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px}
+.flow-step{padding:10px 12px;border-radius:16px;background:#fff;border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:900;text-align:center}
+.flow-step.active{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 10px 24px rgba(37,99,235,.22)}
+
+/* Main grid */
+.grid{display:grid;grid-template-columns:380px minmax(0,1fr);gap:18px;align-items:start}
+.panel{padding:20px 22px}
+
+/* Setup panel redesigned */
+.setup-panel{padding:20px 22px 90px;position:relative}
+.setup-section{padding:14px 0;border-bottom:1px solid var(--border)}
+.setup-section:last-of-type{border-bottom:none}
+.setup-section-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.setup-section-head .sec-ico{
+  width:28px;height:28px;border-radius:9px;background:#EFF6FF;color:var(--blue);
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;
+}
+.setup-section-head h3{margin:0;font-size:14px;color:var(--heading);font-weight:900}
+.setup-section-head .step{
+  margin-left:auto;background:#F8FAFC;color:var(--muted);
+  padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:900;letter-spacing:.06em;
+}
+.setup-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setup-grid-2 .form-row{margin-bottom:0}
+.setup-grid-2 select,.setup-grid-2 input{padding:9px 11px;font-size:13px}
+
+.form-row{display:grid;gap:7px;margin-bottom:14px}
+label{color:var(--heading);font-size:13px;font-weight:800}
+input,select,textarea{
+  width:100%;border:1px solid #CBD5E1;border-radius:13px;background:#fff;color:var(--heading);
+  padding:11px 12px;outline:none;
+  transition:border-color .14s ease,box-shadow .14s ease;
+}
+textarea{min-height:60px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.hint{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
+
+.quickstart{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.quickstart .btn{justify-content:center;padding:11px 12px;min-height:42px}
+.estimator{
+  display:flex;align-items:center;gap:10px;margin-top:10px;
+  background:linear-gradient(135deg,#EFF6FF,#fff);border:1px solid #BFDBFE;
+  border-radius:12px;padding:10px 12px;font-size:12.5px;color:var(--deep);line-height:1.4;
+}
+.estimator strong{color:var(--blue);font-weight:900}
+.estimator .ico{font-size:18px;line-height:1}
+
+.add-team-form{display:grid;gap:6px}
+.add-team-form .name-row{display:grid;grid-template-columns:1fr auto;gap:6px}
+.team-list-head{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.team-list-head small{color:var(--muted);font-weight:700;font-size:11.5px}
+
+.start-cta{
+  position:sticky;bottom:0;margin:14px -22px -20px;padding:14px 22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.98) 30%);
+  backdrop-filter:blur(8px);border-top:1px solid var(--border);
+  display:flex;gap:8px;align-items:center;
+}
+.start-cta .btn{flex:1;justify-content:center;min-height:46px;font-size:15px}
+.start-cta .help{font-size:11px;color:var(--muted);max-width:120px;line-height:1.35}
+
+/* Teams */
+.team-list{display:grid;gap:10px}
+.team-item{
+  border:1px solid var(--border);background:#fff;border-radius:16px;padding:12px;
+  display:flex;align-items:center;gap:12px;
+}
+.team-avatar{
+  width:42px;height:42px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:20px;
+  background:var(--team-color,#0B3C5D);
+  box-shadow:0 4px 10px rgba(15,23,42,.12);
+}
+.team-info{flex:1;min-width:0}
+.team-name{color:var(--heading);font-weight:900;font-size:14.5px}
+.team-meta{color:var(--muted);font-size:12px;line-height:1.45}
+.team-actions{display:flex;gap:6px;flex-shrink:0}
+.team-btn{
+  border:1px solid var(--border);background:#fff;color:var(--deep);
+  border-radius:10px;padding:7px 10px;font-weight:800;font-size:12px;
+}
+.team-btn:hover{border-color:var(--blue);color:var(--blue)}
+.delete-team{
+  border:none;background:#FEF2F2;color:#B91C1C;
+  border-radius:10px;padding:7px 11px;font-weight:900;
+}
+
+.member-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.member-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  background:#F1F5F9;color:var(--deep);
+  padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;
+}
+.member-pill::before{
+  content:"";width:14px;height:14px;border-radius:50%;
+  background:var(--team-color,#0B3C5D);
+}
+.member-count{display:inline-flex;align-items:center;gap:4px;color:var(--muted);font-size:11px;font-weight:800;margin-left:6px}
+
+.team-edit{margin-top:10px;padding:14px;background:#F8FAFC;border-radius:14px;border:1px solid var(--border);display:grid;gap:10px}
+.team-edit h4{margin:0 0 4px;font-size:13px;color:var(--heading);font-weight:900}
+.swatch-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.swatch{
+  width:26px;height:26px;border-radius:9px;border:2px solid transparent;
+  cursor:pointer;transition:transform .1s ease,border-color .12s ease;padding:0;
+}
+.swatch:hover{transform:scale(1.08)}
+.swatch.active{border-color:#0F172A;box-shadow:0 0 0 2px #fff inset}
+.avatar-row{display:flex;gap:6px;flex-wrap:wrap}
+.avatar-pick{
+  width:32px;height:32px;border-radius:10px;border:1px solid var(--border);
+  background:#fff;font-size:16px;cursor:pointer;
+}
+.avatar-pick.active{background:#EFF6FF;border-color:var(--blue);box-shadow:0 0 0 2px rgba(37,99,235,.2)}
+.edit-actions{display:flex;gap:8px;justify-content:flex-end}
+
+/* Status strip - phase-aware */
+.game-board{display:grid;gap:18px}
+.status{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  padding:14px 18px 18px;border-radius:18px;
+  background:linear-gradient(135deg,#0B3C5D,#1E40AF);color:#fff;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+  transition:background .35s ease;
+}
+.status strong{font-size:16px;position:relative}
+.status span{color:#DBEAFE;font-size:13px;position:relative}
+.status > div:first-child{position:relative}
+.timer{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 16px;border-radius:999px;
+  background:rgba(255,255,255,.14);color:#fff;
+  font-weight:900;font-variant-numeric:tabular-nums;font-size:16px;
+  position:relative;transition:.25s ease;
+}
+.timer.warn{background:rgba(245,158,11,.95);color:#3a2700;animation:pulseWarn 1s ease-in-out infinite}
+.timer.danger{background:rgba(239,68,68,.95);color:#fff;animation:pulseDanger .6s ease-in-out infinite}
+@keyframes pulseWarn{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes pulseDanger{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.status-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.1);overflow:hidden}
+.status-progress-fill{display:block;height:100%;background:linear-gradient(90deg,var(--sky),var(--success));width:0;transition:width .4s ease}
+body[data-phase="build"] .status{background:linear-gradient(135deg,#0B3C5D,#16A34A)}
+body[data-phase="event"] .status{background:linear-gradient(135deg,#0B3C5D,#F59E0B)}
+body[data-phase="drop"] .status{background:linear-gradient(135deg,#0B3C5D,#EF4444)}
+body[data-phase="review"] .status{background:linear-gradient(135deg,#0B3C5D,#7C3AED)}
+
+body[data-phase="setup"] .timer{display:none}
+
+/* Tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tab{
+  border:1px solid var(--border);background:#fff;color:var(--body);
+  padding:9px 14px;border-radius:999px;font-size:13px;font-weight:900;
+}
+.tab.active{color:#fff;background:var(--blue);border-color:var(--blue)}
+.tab .kbd{background:rgba(255,255,255,.2);border-radius:5px;padding:1px 6px;font-size:10px}
+.tab:not(.active) .kbd{background:#F1F5F9;color:var(--muted)}
+.hidden{display:none!important}
+body[data-rounds-played="0"] .tab[data-view="awards"],
+body[data-rounds-played="0"] .tab[data-view="log"]{display:none}
+
+/* Game layout */
+.game-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;margin-top:6px}
+
+/* Drop zone */
+.drop-zone{
+  min-height:580px;border-radius:22px;border:1px solid #BFDBFE;
+  background:linear-gradient(180deg,#EFF6FF 0%,#fff 74%,#F8FAFC 100%);
+  position:relative;overflow:hidden;padding:18px;
+}
+.drop-zone:before{
+  content:"INTERACTIVE BUILD ZONE";
+  position:absolute;left:18px;top:18px;
+  color:#1D4ED8;font-size:11px;font-weight:900;letter-spacing:.08em;
+}
+.drop-zone.drag-over{outline:4px solid rgba(37,99,235,.18)}
+.zone-grid{
+  position:absolute;left:18px;right:18px;top:54px;bottom:96px;
+  display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:8px;
+  z-index:2;pointer-events:none;
+}
+.placement-zone{
+  border:1px dashed rgba(37,99,235,.20);border-radius:16px;
+  background:rgba(255,255,255,.22);display:grid;place-items:center;
+  color:rgba(29,78,216,.42);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;
+}
+.placement-zone.active{background:rgba(37,99,235,.10);border-color:rgba(37,99,235,.52)}
+.drop-line{position:absolute;left:50%;top:70px;bottom:92px;border-left:2px dashed rgba(37,99,235,.26);z-index:1}
+.ground{
+  position:absolute;left:0;right:0;bottom:0;height:92px;
+  background:linear-gradient(180deg,#CBD5E1,#94A3B8);
+  display:grid;place-items:center;color:#fff;font-weight:900;letter-spacing:.08em;font-size:12px;z-index:5;
+}
+.egg-stage{
+  position:absolute;left:50%;top:86px;transform:translateX(-50%);
+  width:230px;height:230px;display:grid;place-items:center;z-index:4;
+}
+.egg-wrapper{
+  width:122px;height:144px;border-radius:58% 58% 50% 50%;
+  background:linear-gradient(135deg,#fff,#FDE68A);border:4px solid #F59E0B;
+  box-shadow:0 18px 30px rgba(245,158,11,.22);
+  display:grid;place-items:center;font-size:50px;transition:transform .35s ease;z-index:4;
+}
+.protector{
+  position:absolute;width:190px;height:190px;border-radius:28px;
+  border:4px dashed rgba(37,99,235,.30);background:rgba(56,189,248,.08);
+  animation:pulse 1.7s ease infinite;z-index:1;
+}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.material-layer{position:absolute;inset:0;pointer-events:none;z-index:3}
+.egg-material{
+  position:absolute;display:grid;place-items:center;border-radius:999px;
+  font-size:18px;filter:drop-shadow(0 5px 8px rgba(15,23,42,.16));
+  animation:materialPop .28s ease both;
+}
+@keyframes materialPop{from{opacity:0;transform:scale(.75)}to{opacity:1}}
+.egg-material .qty-badge{
+  position:absolute;right:-8px;top:-8px;min-width:22px;height:22px;border-radius:999px;
+  background:#0F172A;color:#fff;font-size:11px;font-weight:900;display:grid;place-items:center;border:2px solid #fff;
+}
+.egg-material.straws{width:96px;height:8px;background:#FACC15;border-radius:999px;transform:rotate(-35deg)}
+.egg-material.straws:before{content:"";width:96px;height:8px;background:#FACC15;border-radius:999px;transform:rotate(70deg);position:absolute}
+.egg-material.tape{width:104px;height:13px;background:rgba(37,99,235,.66);border:2px solid rgba(29,78,216,.55);border-radius:999px;transform:rotate(18deg)}
+.egg-material.cotton{width:38px;height:38px;background:#fff;border:2px solid #E5E7EB}
+.egg-material.cotton:before{content:"☁️"}
+.egg-material.paper{width:76px;height:52px;background:#F8FAFC;border:2px solid #CBD5E1;border-radius:8px;transform:rotate(13deg)}
+.egg-material.paper:before{content:"📄"}
+.egg-material.balloon{width:44px;height:58px;background:#F472B6;border-radius:50% 50% 46% 46%}
+.egg-material.balloon:before{content:"🎈";font-size:25px}
+.egg-material.rubber{width:140px;height:82px;border:6px solid #A855F7;background:transparent;border-radius:50%;transform:rotate(-18deg)}
+.egg-material.bag{width:150px;height:128px;border:3px solid rgba(56,189,248,.78);background:rgba(186,230,253,.28);border-radius:34px 34px 22px 22px}
+.egg-material.cup{width:96px;height:92px;background:rgba(251,191,36,.20);border:4px solid #F59E0B;border-radius:22px 22px 38px 38px}
+.egg-material.cup:before{content:"🥛"}
+.egg-material.sponge{width:70px;height:46px;background:#FDE68A;border:3px solid #F59E0B;border-radius:14px}
+.egg-material.sponge:before{content:"🧽"}
+.egg-material.cardboard{width:164px;height:132px;border:4px solid #92400E;background:rgba(180,83,9,.13);border-radius:20px}
+.egg-material.cardboard:before{content:"📦"}
+.zone-top{left:88px;top:4px}
+.zone-bottom{left:86px;bottom:8px}
+.zone-left{left:0;top:82px}
+.zone-right{right:0;top:82px}
+.zone-center{left:64px;top:68px}
+.drop-animate .egg-stage{animation:dropEgg 1.45s cubic-bezier(.15,.88,.25,1.02) forwards}
+.drop-animate .egg-wrapper{animation:shakeEgg .18s ease 1.45s 5}
+@keyframes dropEgg{0%{top:86px}75%{top:356px}100%{top:330px}}
+@keyframes shakeEgg{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}75%{transform:rotate(7deg)}}
+.impact-ring{
+  position:absolute;left:50%;bottom:68px;width:30px;height:8px;
+  border:3px solid rgba(37,99,235,.5);border-radius:50%;transform:translateX(-50%) scale(0);z-index:6;
+}
+.drop-animate .impact-ring{animation:ring 1s ease 1.38s both}
+@keyframes ring{to{transform:translateX(-50%) scale(9);opacity:0}}
+.result-banner{
+  position:absolute;left:18px;right:18px;bottom:112px;padding:14px;
+  border-radius:18px;background:rgba(255,255,255,.96);border:1px solid var(--border);
+  box-shadow:var(--shadow);display:none;z-index:8;
+}
+.result-banner.show{display:block;animation:pop .28s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.result-title{font-size:22px;font-weight:900;color:var(--heading);margin-bottom:4px}
+.result-text{font-size:13px;line-height:1.55;color:var(--body)}
+
+/* Building panel */
+.building{display:flex;flex-direction:column;gap:14px}
+.build-summary{display:grid;gap:8px}
+.summary-row{
+  display:flex;justify-content:space-between;gap:10px;
+  padding:9px 12px;border-radius:12px;background:#F8FAFC;border:1px solid var(--border);font-size:13px;
+}
+.summary-row strong{color:var(--heading)}
+.meter{height:10px;border-radius:999px;background:#E5E7EB;overflow:hidden;margin-top:4px}
+.meter-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--sky),var(--blue));transition:.25s ease}
+.event-card{border:1px solid #FDE68A;background:#FFFBEB;color:#92400E;border-radius:14px;padding:12px;font-size:13px;line-height:1.5}
+.event-card strong{display:block;margin-bottom:3px}
+body[data-phase="setup"] .event-card{display:none}
+
+/* Materials grid */
+.materials-section{margin-top:18px}
+.materials-section h2{margin-bottom:10px}
+.materials{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.material-card{
+  border:1px solid var(--border);background:#fff;border-radius:16px;padding:12px;
+  user-select:none;
+}
+.material-card[draggable=true]{cursor:grab}
+.material-card.disabled{opacity:.45;filter:grayscale(.4)}
+.material-icon{font-size:24px}
+.material-name{color:var(--heading);font-weight:900;font-size:13.5px}
+.material-cost{font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.45}
+.qty{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px}
+.qty button{width:32px;height:32px;border:none;border-radius:10px;background:#EFF6FF;color:var(--blue);font-weight:900}
+.qty span{min-width:28px;text-align:center;color:var(--heading);font-weight:900}
+.position-select{margin-top:8px;padding:7px 9px;font-size:12px;border-radius:10px}
+
+/* Leaderboard (podium) */
+.leaderboard{display:grid;gap:10px}
+.leader-item{
+  border:1px solid var(--border);background:#fff;border-radius:16px;padding:14px;
+  display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;
+}
+.rank{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#EFF6FF;color:var(--blue);font-weight:900}
+.leader-item.rank-1{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-color:var(--gold);box-shadow:0 14px 28px rgba(245,158,11,.22)}
+.leader-item.rank-1 .leader-score{font-size:30px;color:#92400E}
+.leader-item.rank-1 .rank{background:var(--coin-grad);color:#3a2700}
+.leader-item.rank-2{background:linear-gradient(135deg,#F8FAFC,#E5E7EB);border-color:#9CA3AF}
+.leader-item.rank-2 .leader-score{font-size:26px;color:#374151}
+.leader-item.rank-2 .rank{background:#E5E7EB;color:#374151}
+.leader-item.rank-3{background:linear-gradient(135deg,#FED7AA,#FFF7ED);border-color:#FB923C}
+.leader-item.rank-3 .leader-score{font-size:24px;color:#9A3412}
+.leader-item.rank-3 .rank{background:#FED7AA;color:#9A3412}
+.leader-score{color:var(--heading);font-size:22px;font-weight:900;text-align:right;line-height:1}
+.leader-score small{display:block;margin-top:2px;color:var(--muted);font-size:10px;font-weight:800;text-align:right}
+.live-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:900;margin-left:8px}
+.live-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#10B981;box-shadow:0 0 0 5px rgba(16,185,129,.14)}
+
+/* Awards / Badges */
+.awards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.award-card{
+  background:#fff;border:1px solid var(--border);border-radius:14px;
+  padding:14px 12px;text-align:center;position:relative;
+}
+.award-card.earned{
+  border-color:#F59E0B;
+  background:linear-gradient(135deg,#FFFBEB,#FEF3C7);
+  box-shadow:0 8px 18px rgba(245,158,11,.18);
+}
+.award-card.locked{opacity:.45}
+.award-icon{font-size:32px;line-height:1;margin-bottom:6px}
+.award-name{font-weight:900;color:var(--heading);font-size:13px;margin-bottom:3px}
+.award-desc{color:var(--muted);font-size:11px;line-height:1.4}
+.award-by{margin-top:6px;font-size:10px;color:var(--blue);font-weight:800}
+
+/* Log */
+.log{display:grid;gap:10px}
+.log-item{border:1px solid var(--border);background:#fff;border-radius:16px;padding:14px}
+
+/* Empty state */
+.empty{padding:20px;border-radius:16px;border:1px dashed #CBD5E1;background:#F8FAFC;color:var(--muted);text-align:center;line-height:1.55}
+.empty::before{content:"🎯";display:block;font-size:34px;margin-bottom:8px;opacity:.6}
+
+/* Floating +X feedback */
+.float-points{
+  position:absolute;pointer-events:none;
+  font-weight:900;font-size:20px;color:var(--success);
+  animation:floatUp 1s ease-out forwards;z-index:50;
+  text-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.float-points.negative{color:var(--danger)}
+@keyframes floatUp{
+  from{opacity:0;transform:translateY(0) scale(.8)}
+  20%{opacity:1;transform:translateY(-10px) scale(1.1)}
+  100%{opacity:0;transform:translateY(-40px) scale(1)}
+}
+
+/* Modals */
+.overlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.62);backdrop-filter:blur(8px)}
+.overlay.show{display:flex;animation:fade .2s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.overlay-modal{width:min(920px,96vw);max-height:90vh;overflow:auto;background:#fff;border-radius:28px;box-shadow:0 30px 90px rgba(15,23,42,.36);animation:modalPop .34s ease both}
+@keyframes modalPop{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.overlay-head{padding:24px 26px;background:linear-gradient(135deg,#0B3C5D,#2563EB);color:#fff;border-radius:28px 28px 0 0;display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.overlay-head h2{color:#fff;margin-bottom:6px}
+.overlay-head p{margin:0;color:#DBEAFE;line-height:1.55}
+.close{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.13);color:#fff;border-radius:12px;min-width:40px;height:40px;font-size:20px;font-weight:900}
+.overlay-body{padding:24px 26px 26px}
+
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.how-step{min-height:130px;padding:16px;border-radius:20px;border:1px solid var(--border);background:#F8FAFC}
+.how-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:16px;background:#EFF6FF;color:var(--blue);font-size:22px;margin-bottom:10px}
+.examples{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.example{border:1px solid #BFDBFE;background:#EFF6FF;border-radius:18px;padding:14px}
+.example.weak{border-color:#FECACA;background:#FEF2F2}
+.example.strong{border-color:#BBF7D0;background:#F0FDF4}
+.example strong{display:block;color:var(--deep);margin-bottom:8px}
+.example.weak strong{color:#991B1B}
+.example.strong strong{color:#047857}
+
+/* Cheat sheet */
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:14px}
+.cheat-section{background:#F8FAFC;border:1px solid var(--border);border-radius:14px;padding:14px}
+.cheat-section h4{margin:0 0 10px;color:var(--heading);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.cheat-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px}
+.cheat-row:last-child{border-bottom:none}
+.cheat-row .lbl{color:var(--body);flex:1}
+.cheat-row kbd{background:#fff;border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-family:inherit;font-size:11px;font-weight:900;color:var(--heading)}
+
+/* Final winner */
+.summary-winner{text-align:center;padding:28px 24px;background:linear-gradient(135deg,#FCD34D,#F59E0B);border-radius:24px 24px 0 0;color:#3a2700}
+.summary-winner h2{color:#3a2700;font-size:28px;margin:6px 0 4px}
+.summary-winner .crown{font-size:54px;line-height:1}
+.summary-grid{display:grid;gap:10px;padding:20px 24px}
+.summary-row-final{display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;background:#F8FAFC;border-radius:14px;border:1px solid var(--border)}
+.summary-row-final .delta{background:#ECFDF5;color:#047857;padding:4px 10px;border-radius:999px;font-weight:900;font-size:12px}
+
+/* Share */
+.share-box{background:#F8FAFC;border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.share-box input{flex:1;border:none;background:transparent;font-family:ui-monospace,monospace;font-size:12px}
+.share-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.share-row .btn{flex:1;min-width:140px;justify-content:center}
+
+/* Undo banner */
+.undo-banner{
+  position:fixed;left:50%;bottom:80px;
+  transform:translateX(-50%) translateY(20px);
+  background:#0F172A;color:#fff;padding:10px 14px;border-radius:14px;
+  box-shadow:var(--shadow);opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;z-index:998;
+  display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;
+}
+.undo-banner.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.undo-banner button{background:var(--warning);color:#3a2700;border:none;border-radius:10px;padding:6px 12px;font-weight:900;font-size:12px;cursor:pointer}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);padding:12px 18px;color:var(--heading);font-weight:900;opacity:0;pointer-events:none;transition:.2s ease;z-index:999;border-radius:14px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:#ECFDF5;border-color:#A7F3D0;color:#065F46}
+.toast.warning{background:#FFFBEB;border-color:#FDE68A;color:#92400E}
+
+/* Modes */
+body.mode-present .back-pill,
+body.mode-present .hero aside,
+body.mode-present .flow,
+body.mode-present aside.setup-panel,
+body.mode-present .building,
+body.mode-present .materials-section,
+body.mode-present .tabs,
+body.mode-present .footer-note{display:none!important}
+body.mode-present .grid,body.mode-present .hero{grid-template-columns:1fr}
+body.mode-present .game-layout{grid-template-columns:1fr}
+body.mode-present .drop-zone{min-height:80vh}
+body.mode-present .timer{font-size:32px;padding:18px 28px}
+
+body.mode-play .back-pill,
+body.mode-play .hero,
+body.mode-play .flow,
+body.mode-play aside.setup-panel,
+body.mode-play .tabs,
+body.mode-play #leaderboardView,
+body.mode-play #awardsView,
+body.mode-play #logView{display:none!important}
+body.mode-play .grid,body.mode-play .game-layout{grid-template-columns:1fr}
+body.mode-play .shell{padding:14px;max-width:600px}
+
+/* High-contrast */
+body.hc{
+  --deep:#000;--blue:#0033CC;--blue-dark:#001F8B;
+  --heading:#000;--body:#1F2937;--muted:#374151;
+  --border:#000;--bg:#FFFFFF;
+  background:#fff!important;
+}
+body.hc .panel,body.hc .card,body.hc .team-item,body.hc .award-card,body.hc .material-card{border-width:2px;border-color:#000}
+body.hc .btn,body.hc .timer{box-shadow:none}
+
+/* Collapsible */
+.collapsible-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;padding:8px 0}
+.collapsible-head h3{margin:0;font-size:13px}
+.collapsible-head .chev{display:inline-block;transition:transform .2s ease;font-weight:900}
+.collapsible[open] .collapsible-head .chev{transform:rotate(90deg)}
+
+/* Templates */
+.template-pill{
+  display:inline-flex;align-items:center;gap:6px;background:#EFF6FF;color:var(--blue);
+  padding:5px 11px;border-radius:999px;font-size:12px;font-weight:800;
+  border:1px solid #BFDBFE;cursor:pointer;margin:3px;
+}
+.template-pill:hover{background:var(--blue);color:#fff}
+.template-pill .x{background:rgba(255,255,255,.4);border-radius:50%;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;font-size:10px}
+
+/* Active team selector */
+.active-team-pick{
+  display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1px solid var(--border);
+  border-radius:14px;padding:8px 12px;margin-bottom:12px;
+}
+.active-team-pick label{margin:0;font-size:12px;color:var(--muted);font-weight:700}
+.active-team-pick select{flex:1;border:none;background:transparent;padding:4px 8px;font-weight:900}
+
+/* Responsive */
+@media (max-width:1020px){
+  .hero,.grid,.game-layout{grid-template-columns:1fr}
+  .how-steps,.examples,.flow{grid-template-columns:1fr 1fr}
+  .shell{padding:14px}
+  .hero-card,.panel{padding:18px}
+  .drop-zone{min-height:520px}
+  .setup-grid-2{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .flow{grid-template-columns:1fr}
+  .stat-grid,.setup-grid-2,.materials{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+@media print{
+  .btn,.actions,.setup-panel,.status,.toast,.back-pill,.tabs{display:none!important}
+  body{background:#fff}
+  .shell{max-width:none;padding:0}
+}
+</style>
+</head>
+<body data-phase="setup" data-teams="0" data-rounds-played="0">
+<a class="skip-link" href="#gameArea">Skip to game</a>
+<div class="sr-only" id="ariaAnnouncer" role="status" aria-live="polite" aria-atomic="true"></div>
+<a class="back-pill" href="../game.html?id=egg-drop">← Back to Engage</a>
+<div class="mode-banner" id="modeBanner"></div>
+
+<div class="shell">
+
+<section class="hero">
+  <div class="hero-card card">
+    <div class="eyebrow">Edstellar Engage · Workplace Game</div>
+    <h1>Egg Drop Challenge Pro</h1>
+    <p class="hero-text">Drag materials onto the egg, manage your 100-budget, handle random events, run three escalating drop tests, and receive an automatic review of every choice. 14 languages · presenter mode · share link · streak tracker.</p>
+    <div class="actions">
+      <button class="btn success" id="demoBtn">▶ Play Demo Now</button>
+      <button class="btn" id="setupBtn">⚙ Setup Custom Game</button>
+      <button class="btn secondary" id="howBtn">📖 How to Play</button>
+      <button class="btn tertiary" id="resetBtn">↺ Reset</button>
+    </div>
+  </div>
+  <aside class="score-card card">
+    <h2>Game Snapshot</h2>
+    <div class="stat-grid">
+      <div class="stat-box"><span class="stat-label">Teams</span><span class="stat-value" id="teamCount">0</span></div>
+      <div class="stat-box"><span class="stat-label">Round</span><span class="stat-value" id="roundCount">0 / 3</span></div>
+      <div class="stat-box"><span class="stat-label">Budget</span><span class="stat-value">100</span></div>
+      <div class="stat-box"><span class="stat-label">Phase</span><span class="stat-value" id="phaseStat" style="font-size:18px">Setup</span></div>
+    </div>
+    <div class="coins-strip">
+      <div>
+        <small style="color:#cbd5e1;text-transform:uppercase;letter-spacing:.06em;font-size:10px;font-weight:800">Best score so far</small>
+        <div style="font-size:22px;font-weight:900;color:#fff;line-height:1.2"><span id="bestScore">0</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+        <span class="budget-pill"><span id="dropsDone">0</span> drops</span>
+        <div class="streak-pill" id="streakPill" style="display:none">🔥 <span id="streakDays">0</span>-day streak</div>
+      </div>
+    </div>
+    <div class="mini">
+      <p><strong style="color:var(--heading)">Scoring:</strong> Survival + integrity + budget efficiency + placement quality.</p>
+      <div class="kbd-help">
+        <span><kbd>Space</kbd> start</span>
+        <span><kbd>D</kbd> drop</span>
+        <span><kbd>E</kbd> event</span>
+        <span><kbd>?</kbd> shortcuts</span>
+      </div>
+      <div class="settings-row">
+        <label><input type="checkbox" id="hcToggle"/> High-contrast</label>
+        <button class="btn ghost btn-sm" id="cheatBtn">⌨ Shortcuts</button>
+        <span class="autosave" id="autosaveLabel">Saved just now</span>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<div class="flow">
+  <div class="flow-step active" id="flow-setup">1. Setup</div>
+  <div class="flow-step" id="flow-build">2. Build</div>
+  <div class="flow-step" id="flow-event">3. Event</div>
+  <div class="flow-step" id="flow-drop">4. Drop Test</div>
+  <div class="flow-step" id="flow-review">5. Review</div>
+</div>
+
+<section class="grid">
+
+<aside class="setup-panel panel" id="setupPanel">
+  <h2 style="margin-bottom:6px">Custom Setup</h2>
+  <p class="hint" style="margin:0 0 12px">Three quick steps. Or just hit <strong>Play Demo Now</strong>.</p>
+
+  <!-- STEP 1: Quick start -->
+  <div class="setup-section">
+    <div class="setup-section-head">
+      <span class="sec-ico">1</span>
+      <h3>Quick start</h3>
+      <span class="step">Optional</span>
+    </div>
+    <div class="quickstart">
+      <button class="btn ghost" id="sampleBtn">↻ Use 3 demo teams</button>
+      <button class="btn ghost" id="saveTemplateBtn">⭑ Save as template</button>
+    </div>
+    <div id="templateList" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px"></div>
+  </div>
+
+  <!-- STEP 2: Game settings -->
+  <div class="setup-section">
+    <div class="setup-section-head">
+      <span class="sec-ico">2</span>
+      <h3>Game settings</h3>
+      <span class="step">Required</span>
+    </div>
+
+    <div class="form-row">
+      <label for="langSelect">Language</label>
+      <select id="langSelect">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी · Hindi</option>
+        <option value="ar">العربية · Arabic (RTL)</option>
+        <option value="es">Español · Spanish</option>
+        <option value="fr">Français · French</option>
+        <option value="de">Deutsch · German</option>
+        <option value="pt">Português · Portuguese</option>
+        <option value="ja">日本語 · Japanese</option>
+        <option value="ko">한국어 · Korean</option>
+        <option value="zh">中文 · Chinese</option>
+        <option value="ru">Русский · Russian</option>
+        <option value="it">Italiano · Italian</option>
+        <option value="id">Bahasa Indonesia</option>
+        <option value="tr">Türkçe · Turkish</option>
+      </select>
+    </div>
+
+    <div class="setup-grid-2">
+      <div class="form-row">
+        <label for="roundMode">Mode</label>
+        <select id="roundMode">
+          <option value="progressive" selected>3-Round Progressive</option>
+          <option value="single">Single Drop</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="timeSelect">Build time</label>
+        <select id="timeSelect">
+          <option value="60">60 seconds</option>
+          <option value="90" selected>90 seconds</option>
+          <option value="120">2 minutes</option>
+          <option value="180">3 minutes</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="estimator" id="setupEstimator">
+      <span class="ico">⏱</span>
+      <div>Session: <strong id="estTime">~9 min</strong> · <strong>10 materials</strong> · <strong>6 events</strong></div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Teams -->
+  <div class="setup-section">
+    <div class="setup-section-head">
+      <span class="sec-ico">3</span>
+      <h3>Teams</h3>
+      <span class="step">Required</span>
+    </div>
+    <div class="add-team-form">
+      <div class="name-row">
+        <input id="teamName" placeholder="Team name (e.g. Innovators)" aria-label="Team name"/>
+        <button class="btn btn-sm" id="addTeamBtn">+ Add</button>
+      </div>
+      <textarea id="teamMembers" placeholder="Members (optional, comma-separated): Asha, Ravi, Meera" aria-label="Team members"></textarea>
+    </div>
+    <p class="hint" style="margin-top:8px">Each team gets <strong>100 budget</strong> per round to spend on materials.</p>
+    <div class="team-list-head">
+      <h3 style="margin:0;font-size:13px">Roster</h3>
+      <small id="rosterCount">0 teams</small>
+    </div>
+    <div class="team-list" id="teamList"><div class="empty">Add your first team, load demo teams, or click Play Demo Now.</div></div>
+  </div>
+
+  <!-- Sticky CTA -->
+  <div class="start-cta">
+    <button class="btn success" id="startGameBtn">▶ Start Game</button>
+    <span class="help" id="startCtaHelp">Add at least 1 team to start.</span>
+  </div>
+</aside>
+
+<main class="game-board" id="gameArea">
+  <div class="status">
+    <div>
+      <strong id="statusTitle">Ready to play</strong><br/>
+      <span id="statusSub">Click Play Demo Now or set up your own teams.</span>
+    </div>
+    <div class="timer" id="timer">⏱ 00:00</div>
+    <div class="status-progress" aria-hidden="true"><span class="status-progress-fill" id="statusProgressFill"></span></div>
+  </div>
+
+  <section class="panel">
+    <div class="tabs">
+      <button class="tab active" data-view="play">▶ Play <span class="kbd">P</span></button>
+      <button class="tab" data-view="leaderboard">🏆 Leaderboard <span class="kbd">L</span></button>
+      <button class="tab" data-view="review">💬 Review <span class="kbd">R</span></button>
+      <button class="tab" data-view="awards">🎖 Awards <span class="kbd">A</span></button>
+      <button class="tab" data-view="log">📋 Round Log</button>
+    </div>
+
+    <div id="playView">
+      <div class="active-team-pick">
+        <label for="activeTeam">Building for:</label>
+        <select id="activeTeam"></select>
+      </div>
+
+      <div class="game-layout">
+        <div class="drop-zone" id="dropZone">
+          <div class="zone-grid">
+            <div class="placement-zone" data-zone="top">Parachute</div>
+            <div class="placement-zone" data-zone="top">Top</div>
+            <div class="placement-zone" data-zone="right">Side</div>
+            <div class="placement-zone" data-zone="left">Left</div>
+            <div class="placement-zone" data-zone="center">Core</div>
+            <div class="placement-zone" data-zone="right">Right</div>
+            <div class="placement-zone" data-zone="bottom">Impact</div>
+            <div class="placement-zone" data-zone="bottom">Bottom</div>
+            <div class="placement-zone" data-zone="bottom">Base</div>
+          </div>
+          <div class="drop-line"></div>
+          <div class="egg-stage">
+            <div class="protector"></div>
+            <div class="material-layer" id="eggMaterials"></div>
+            <div class="egg-wrapper" id="egg">🥚</div>
+          </div>
+          <div class="impact-ring"></div>
+          <div class="result-banner" id="resultBanner">
+            <div class="result-title" id="resultTitle">Ready</div>
+            <div class="result-text" id="resultText">Build a structure and run the test.</div>
+          </div>
+          <div class="ground">IMPACT ZONE</div>
+        </div>
+
+        <div class="building">
+          <div class="build-summary" id="buildSummary">
+            <div class="summary-row"><span>Current drop</span><strong id="heightLabel">Desk Level</strong></div>
+            <div class="summary-row"><span>Budget used</span><strong id="budgetUsed">0 / 100</strong></div>
+            <div class="summary-row"><span>Protection</span><strong id="protectionScore">0</strong></div>
+            <div class="summary-row"><span>Weight penalty</span><strong id="weightPenalty">0</strong></div>
+            <div class="summary-row"><span>Placement bonus</span><strong id="placementBonus">0</strong></div>
+            <div class="summary-row"><span>Survival chance</span><strong id="survivalChance">0%</strong></div>
+            <div class="meter"><div class="meter-fill" id="chanceMeter"></div></div>
+          </div>
+          <div class="event-card" id="eventCard"><strong>No event yet</strong><span>Random events begin when a round starts.</span></div>
+          <textarea id="strategy" placeholder="Strategy notes: Why these materials? What risk are you reducing?"></textarea>
+          <div class="actions">
+            <button class="btn success" id="startBuildBtn">▶ Start Round</button>
+            <button class="btn warning" id="eventBtn">🎲 Random Event</button>
+            <button class="btn danger" id="dropBtn">⬇ Run Drop Test</button>
+            <button class="btn secondary" id="nextTeamBtn">→ Next Team</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="materials-section">
+        <h2>Materials <small style="font-weight:600;color:var(--muted);font-size:13px">· click + or drag onto the egg</small></h2>
+        <div class="materials" id="materials"></div>
+      </div>
+    </div>
+
+    <div id="leaderboardView" class="hidden">
+      <h2>Leaderboard <span class="live-badge">Live</span></h2>
+      <div class="leaderboard" id="leaderboard"></div>
+    </div>
+
+    <div id="reviewView" class="hidden">
+      <h2>Auto Review</h2>
+      <div id="reviewContent"></div>
+      <div class="actions" style="margin-top:14px">
+        <button class="btn" id="exportBtn">📥 Export JSON</button>
+        <button class="btn secondary" id="exportCsvBtn">📊 Export CSV</button>
+        <button class="btn secondary" id="shareBtn">🔗 Share session</button>
+        <button class="btn secondary" id="reminderBtn">📅 14-day reminder</button>
+        <button class="btn ghost" onclick="window.print()">🖨 Print / PDF</button>
+      </div>
+    </div>
+
+    <div id="awardsView" class="hidden">
+      <h2>Awards &amp; badges</h2>
+      <p class="hint">10 awards unlock through smart material choices, survival under pressure, and overall game wins.</p>
+      <div class="awards-grid" id="awardsList"></div>
+    </div>
+
+    <div id="logView" class="hidden">
+      <h2>Round Log</h2>
+      <div class="log" id="roundLog"></div>
+    </div>
+  </section>
+</main>
+
+</section>
+
+<div class="footer-note" style="margin-top:24px;padding:16px;border-radius:18px;background:#fff;border:1px solid var(--border);color:var(--muted);font-size:12px;text-align:center">
+  Standalone prototype · runs fully in the browser · no backend, login, or internet required after download.
+</div>
+
+</div>
+
+<!-- How to play -->
+<div class="overlay" id="howOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="overlay-head">
+      <div>
+        <h2>How to Play Egg Drop Challenge Pro</h2>
+        <p>Drag materials onto the egg, manage cost and weight, run drop tests across 3 escalating heights.</p>
+      </div>
+      <button class="close" id="closeHow">×</button>
+    </div>
+    <div class="overlay-body">
+      <div class="how-steps">
+        <div class="how-step"><div class="how-icon">👥</div><strong>1. Form teams</strong><span>Add teams or use demo teams. Each gets 100 budget.</span></div>
+        <div class="how-step"><div class="how-icon">🧰</div><strong>2. Build</strong><span>Drag materials onto the egg. Placement matters — cushion at bottom, drag on top.</span></div>
+        <div class="how-step"><div class="how-icon">🌪️</div><strong>3. Handle event</strong><span>Random events change cost, drag, or difficulty mid-round.</span></div>
+        <div class="how-step"><div class="how-icon">🏆</div><strong>4. Drop &amp; review</strong><span>Run drop test. Auto-review explains every choice.</span></div>
+      </div>
+      <div class="examples">
+        <div class="example strong"><strong>Good design</strong><p>Cotton/sponge at bottom (impact), straws/cardboard around the core (structure), balloon/bag on top (drag).</p></div>
+        <div class="example weak"><strong>Weak design</strong><p>All budget on heavy structure with no cushioning usually cracks. Heavy ≠ safer.</p></div>
+      </div>
+      <div class="actions" style="margin-top:16px">
+        <button class="btn success" id="howDemo">▶ Start Demo</button>
+        <button class="btn ghost" id="howClose2">Close Guide</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cheat sheet -->
+<div class="overlay" id="cheatOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="overlay-head">
+      <div>
+        <h2>⌨ Keyboard &amp; Materials Cheat Sheet</h2>
+        <p>All shortcuts, materials, events, and awards in one screen.</p>
+      </div>
+      <button class="close" id="cheatClose">×</button>
+    </div>
+    <div class="overlay-body">
+      <div class="cheat-grid">
+        <div class="cheat-section">
+          <h4>Keyboard shortcuts</h4>
+          <div class="cheat-row"><span class="lbl">Start round</span><kbd>Space</kbd></div>
+          <div class="cheat-row"><span class="lbl">Run drop test</span><kbd>D</kbd></div>
+          <div class="cheat-row"><span class="lbl">Random event</span><kbd>E</kbd></div>
+          <div class="cheat-row"><span class="lbl">Next team</span><kbd>N</kbd></div>
+          <div class="cheat-row"><span class="lbl">Play tab</span><kbd>P</kbd></div>
+          <div class="cheat-row"><span class="lbl">Leaderboard</span><kbd>L</kbd></div>
+          <div class="cheat-row"><span class="lbl">Review</span><kbd>R</kbd></div>
+          <div class="cheat-row"><span class="lbl">Awards</span><kbd>A</kbd></div>
+          <div class="cheat-row"><span class="lbl">Cheat sheet</span><kbd>?</kbd></div>
+          <div class="cheat-row"><span class="lbl">Close modal</span><kbd>Esc</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Round difficulty</h4>
+          <div class="cheat-row"><span class="lbl">Desk Level</span><kbd>55</kbd></div>
+          <div class="cheat-row"><span class="lbl">Balcony Level</span><kbd>78</kbd></div>
+          <div class="cheat-row"><span class="lbl">Building Level</span><kbd>105</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Random events</h4>
+          <div class="cheat-row"><span class="lbl">Strong Wind</span><kbd>drag +35%</kbd></div>
+          <div class="cheat-row"><span class="lbl">Heavier Egg</span><kbd>weight +35%</kbd></div>
+          <div class="cheat-row"><span class="lbl">Tape Shortage</span><kbd>tape ×2 cost</kbd></div>
+          <div class="cheat-row"><span class="lbl">Higher Drop</span><kbd>difficulty +15%</kbd></div>
+          <div class="cheat-row"><span class="lbl">Material Stress</span><kbd>structure −15%</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Awards (10 total)</h4>
+          <div class="cheat-row"><span class="lbl">🏆 Overall Winner</span><kbd>highest score</kbd></div>
+          <div class="cheat-row"><span class="lbl">💰 Budget Master</span><kbd>under 50, survived</kbd></div>
+          <div class="cheat-row"><span class="lbl">🛡 Strongest Build</span><kbd>highest protection</kbd></div>
+          <div class="cheat-row"><span class="lbl">🎯 Best Placement</span><kbd>most accurate slots</kbd></div>
+          <div class="cheat-row"><span class="lbl">🥚 Iron Egg</span><kbd>survived all 3 drops</kbd></div>
+          <div class="cheat-row"><span class="lbl">🍀 Lucky Roll</span><kbd>survived under 30%</kbd></div>
+          <div class="cheat-row"><span class="lbl">📈 Comeback Kid</span><kbd>last → top 3</kbd></div>
+          <div class="cheat-row"><span class="lbl">⚡ Quick Builder</span><kbd>built &amp; survived</kbd></div>
+          <div class="cheat-row"><span class="lbl">🌟 All-Rounder</span><kbd>survived every round</kbd></div>
+          <div class="cheat-row"><span class="lbl">👑 Champion</span><kbd>won the game</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Modes</h4>
+          <div class="cheat-row"><span class="lbl">Standard</span><kbd>./</kbd></div>
+          <div class="cheat-row"><span class="lbl">Presenter</span><kbd>?mode=present</kbd></div>
+          <div class="cheat-row"><span class="lbl">Player</span><kbd>?mode=play</kbd></div>
+        </div>
+        <div class="cheat-section">
+          <h4>Accessibility</h4>
+          <div class="cheat-row"><span class="lbl">High-contrast</span><kbd>toggle in snapshot</kbd></div>
+          <div class="cheat-row"><span class="lbl">Screen-reader</span><kbd>round events</kbd></div>
+          <div class="cheat-row"><span class="lbl">Skip to game</span><kbd>Tab once</kbd></div>
+          <div class="cheat-row"><span class="lbl">Languages</span><kbd>14 in setup</kbd></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" id="cheatCloseBottom">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Round summary / final winner -->
+<div class="overlay" id="summaryOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="summary-winner">
+      <div class="crown">👑</div>
+      <h2 id="summaryWinnerName">Champion</h2>
+      <p style="margin:4px 0 0;color:#3a2700;font-weight:800" id="summaryWinnerScore">0 points</p>
+    </div>
+    <div class="summary-grid" id="summaryGrid"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 24px 24px;justify-content:flex-end">
+      <button class="btn ghost" id="summaryClose">Close</button>
+      <button class="btn warning" id="summaryNext">↻ Play again</button>
+    </div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="overlay" id="shareOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="overlay-head">
+      <div>
+        <h2>Share this session</h2>
+        <p>Shareable URL encodes full session state. No backend needed.</p>
+      </div>
+      <button class="close" id="shareClose">×</button>
+    </div>
+    <div class="overlay-body">
+      <label style="display:block;margin-bottom:6px;font-weight:900">Shareable URL</label>
+      <div class="share-box">
+        <input id="shareUrl" readonly value=""/>
+        <button class="btn btn-sm" id="copyShareUrl">📋 Copy</button>
+      </div>
+      <label style="display:block;margin-bottom:6px;font-weight:900;margin-top:14px">Slack / Teams card</label>
+      <div class="share-box" style="display:block">
+        <p id="slackCard" style="margin:0;line-height:1.55;font-size:13.5px;white-space:pre-line"></p>
+        <button class="btn btn-sm" id="copySlackCard" style="margin-top:8px">📋 Copy card text</button>
+      </div>
+      <label style="display:block;margin-bottom:6px;font-weight:900;margin-top:14px">Embed snippet</label>
+      <div class="share-box">
+        <input id="embedSnippet" readonly value=""/>
+        <button class="btn btn-sm" id="copyEmbed">📋 Copy</button>
+      </div>
+      <div class="share-row" style="margin-top:14px">
+        <button class="btn warning" id="presenterModeBtn">📺 Open Presenter View</button>
+        <button class="btn warning" id="playerModeBtn">📱 Open Player View</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Undo banner -->
+<div class="undo-banner" id="undoBanner" role="status" aria-live="polite">
+  <span id="undoText">Drop saved.</span>
+  <button id="undoBtn">↶ Undo</button>
+</div>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="toast" id="toast">Ready</div>
+
+<script>
+/* ===========================================================
+   EGG DROP CHALLENGE PRO - Edstellar Engage
+=========================================================== */
+
+const MATERIALS = [
+  {id:'straws',    name:'Straws',       icon:'🥤', cost:8,  cushion:4,  structure:12, drag:1,  weight:3, best:'side'},
+  {id:'tape',      name:'Tape',         icon:'🩹', cost:10, cushion:1,  structure:14, drag:0,  weight:2, best:'center'},
+  {id:'cotton',    name:'Cotton Balls', icon:'☁️', cost:12, cushion:18, structure:1,  drag:2,  weight:2, best:'bottom'},
+  {id:'paper',     name:'Paper Sheets', icon:'📄', cost:6,  cushion:5,  structure:5,  drag:4,  weight:2, best:'side'},
+  {id:'balloon',   name:'Balloon',      icon:'🎈', cost:14, cushion:8,  structure:1,  drag:14, weight:1, best:'top'},
+  {id:'rubber',    name:'Rubber Bands', icon:'🧶', cost:9,  cushion:4,  structure:9,  drag:0,  weight:1, best:'center'},
+  {id:'bag',       name:'Plastic Bag',  icon:'🛍️', cost:13, cushion:3,  structure:1,  drag:18, weight:1, best:'top'},
+  {id:'cup',       name:'Paper Cup',    icon:'🥛', cost:11, cushion:6,  structure:11, drag:2,  weight:4, best:'center'},
+  {id:'sponge',    name:'Sponge',       icon:'🧽', cost:16, cushion:20, structure:3,  drag:1,  weight:5, best:'bottom'},
+  {id:'cardboard', name:'Cardboard',    icon:'📦', cost:15, cushion:5,  structure:20, drag:1,  weight:7, best:'side'}
+];
+
+const ROUNDS = [
+  {label:'Desk Level',     difficulty:55},
+  {label:'Balcony Level',  difficulty:78},
+  {label:'Building Level', difficulty:105}
+];
+
+const EVENTS = [
+  {id:'none',      name:'No Event',         desc:'Normal conditions.',                     mod:{}},
+  {id:'wind',      name:'Strong Wind',      desc:'Drag materials become more valuable.',   mod:{drag:1.35}},
+  {id:'heavy',     name:'Heavier Egg',      desc:'Weight penalty increases.',              mod:{weight:1.35}},
+  {id:'tape',      name:'Tape Shortage',    desc:'Tape costs double this round.',          mod:{tapeCost:2}},
+  {id:'higher',    name:'Higher Drop',      desc:'Difficulty increases by 15%.',           mod:{difficulty:1.15}},
+  {id:'stress',    name:'Material Stress',  desc:'Structure score is slightly reduced.',   mod:{structure:.85}}
+];
+
+const TEAM_COLORS = ['#0B3C5D','#2563EB','#10B981','#F59E0B','#7C3AED','#EC4899','#0EA5E9','#F97316'];
+const TEAM_AVATARS = ['🦅','⚡','🔥','🌟','🚀','🛡','🎯','🦄'];
+
+const BADGES = [
+  {id:'winner',    icon:'🏆', name:'Overall Winner',    desc:'Highest total score'},
+  {id:'budget',    icon:'💰', name:'Budget Master',     desc:'Under 50 spent + survived'},
+  {id:'strong',    icon:'🛡', name:'Strongest Build',   desc:'Highest protection score'},
+  {id:'placement', icon:'🎯', name:'Best Placement',    desc:'Most accurate material slots'},
+  {id:'iron',     icon:'🥚', name:'Iron Egg',          desc:'Survived all 3 drops'},
+  {id:'lucky',     icon:'🍀', name:'Lucky Roll',        desc:'Survived under 30% chance'},
+  {id:'comeback',  icon:'📈', name:'Comeback Kid',      desc:'Last in round 1 to top 3 by end'},
+  {id:'quick',     icon:'⚡', name:'Quick Builder',     desc:'Built and survived under 30s left'},
+  {id:'allround',  icon:'🌟', name:'All-Rounder',       desc:'Survived every round attempted'},
+  {id:'champion',  icon:'👑', name:'Champion',          desc:'Won the final game'}
+];
+
+const STORAGE_KEY = 'edstellarEggDropV2';
+
+// State
+let teams = [];
+let activeTeamId = null;
+let round = 0;
+let maxRounds = 3;
+let phase = 'setup';
+let timer = null;
+let remaining = 0;
+let log = [];
+let currentEvent = EVENTS[0];
+let sessionTemplates = [];
+let currentLanguage = 'en';
+let editingTeamId = null;
+let lastSaveAt = 0;
+let undoSnapshot = null;
+
+const $ = id => document.getElementById(id);
+function makeId(){ return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()); }
+function safe(v){ return String(v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c])); }
+
+function defaultBuild(){ return Object.fromEntries(MATERIALS.map(m => [m.id, {qty:0, pos:m.best}])); }
+
+function showToast(msg, kind=''){
+  const t = $('toast'); t.textContent = msg;
+  t.className = 'toast show ' + kind;
+  setTimeout(() => t.classList.remove('show'), 1700);
+}
+
+function announce(msg){
+  const el = $('ariaAnnouncer'); if(!el) return;
+  el.textContent = '';
+  setTimeout(()=> el.textContent = msg, 50);
+}
+
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    teams, activeTeamId, round, phase, log, currentEvent,
+    sessionTemplates, currentLanguage, maxRounds
+  }));
+  lastSaveAt = Date.now();
+  updateAutosaveLabel();
+}
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    teams = s.teams || [];
+    activeTeamId = s.activeTeamId || teams[0]?.id || null;
+    round = s.round || 0;
+    phase = s.phase || 'setup';
+    log = s.log || [];
+    currentEvent = s.currentEvent || EVENTS[0];
+    sessionTemplates = s.sessionTemplates || [];
+    currentLanguage = s.currentLanguage || 'en';
+    maxRounds = s.maxRounds || 3;
+  }catch(e){}
+  const sel = $('langSelect'); if(sel) sel.value = currentLanguage;
+  document.documentElement.lang = currentLanguage;
+  document.body.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+}
+function updateAutosaveLabel(){
+  const el = $('autosaveLabel'); if(!el) return;
+  if(!lastSaveAt){ el.textContent = 'Not saved yet'; return; }
+  const s = Math.floor((Date.now() - lastSaveAt) / 1000);
+  if(s < 2) el.textContent = 'Saved just now';
+  else if(s < 60) el.textContent = `Saved ${s}s ago`;
+  else if(s < 3600) el.textContent = `Saved ${Math.floor(s/60)}m ago`;
+  else el.textContent = `Saved ${Math.floor(s/3600)}h ago`;
+}
+setInterval(updateAutosaveLabel, 5000);
+
+function setPhase(p){
+  phase = p;
+  document.body.dataset.phase = p;
+  ['setup','build','event','drop','review'].forEach(x => {
+    $('flow-'+x)?.classList.toggle('active', x === p);
+  });
+  const phaseStat = $('phaseStat');
+  if(phaseStat) phaseStat.textContent = p[0].toUpperCase() + p.slice(1);
+  saveState();
+}
+
+function activeTeam(){ return teams.find(t => t.id === activeTeamId) || teams[0]; }
+function ensureTeams(){ if(!teams.length) loadSampleTeams(); }
+
+function nextTeamStyle(){
+  const i = teams.length % TEAM_COLORS.length;
+  return { color: TEAM_COLORS[i], avatar: TEAM_AVATARS[i] };
+}
+
+function addTeam(){
+  const name = $('teamName').value.trim();
+  if(!name) return showToast('Add a team name first', 'warning');
+  const members = $('teamMembers').value.split(',').map(x => x.trim()).filter(Boolean);
+  const style = nextTeamStyle();
+  const team = { id: makeId(), name, members, score:0, tests:0, build:defaultBuild(), reviews:[], badges:[], ...style };
+  teams.push(team);
+  activeTeamId = team.id;
+  $('teamName').value=''; $('teamMembers').value='';
+  saveState(); render();
+  showToast('Team added', 'success');
+}
+
+function loadSampleTeams(toast=true){
+  teams = [
+    { id:'t1', name:'Team Phoenix',   members:['Asha','Ravi','Meera'],   score:0, tests:0, build:defaultBuild(), reviews:[], badges:[], color:TEAM_COLORS[0], avatar:TEAM_AVATARS[0] },
+    { id:'t2', name:'Team Catalyst',  members:['Nikhil','Sara','Dev'],   score:0, tests:0, build:defaultBuild(), reviews:[], badges:[], color:TEAM_COLORS[1], avatar:TEAM_AVATARS[1] },
+    { id:'t3', name:'Team Orbit',     members:['Kiran','Ananya','Joel'], score:0, tests:0, build:defaultBuild(), reviews:[], badges:[], color:TEAM_COLORS[2], avatar:TEAM_AVATARS[2] }
+  ];
+  activeTeamId = teams[0].id;
+  saveState(); render();
+  if(toast) showToast('Sample teams loaded', 'success');
+}
+
+function removeTeam(id){
+  teams = teams.filter(t => t.id !== id);
+  if(activeTeamId === id) activeTeamId = teams[0]?.id || null;
+  if(editingTeamId === id) editingTeamId = null;
+  saveState(); render();
+  showToast('Team removed');
+}
+
+function editTeam(id){
+  editingTeamId = editingTeamId === id ? null : id;
+  renderTeams();
+  if(editingTeamId){
+    setTimeout(()=>{ const el = $('edit-name-'+id); if(el){ el.focus(); el.select(); } }, 30);
+  }
+}
+function cancelEditTeam(){ editingTeamId = null; renderTeams(); }
+function saveEditTeam(id){
+  const t = teams.find(x => x.id === id); if(!t) return;
+  const name = $('edit-name-'+id)?.value.trim();
+  if(!name) return showToast('Name cannot be empty', 'warning');
+  t.name = name;
+  t.members = ($('edit-members-'+id)?.value || '').split(',').map(x => x.trim()).filter(Boolean);
+  editingTeamId = null;
+  saveState(); render();
+  showToast('Team updated', 'success');
+}
+function setTeamColor(id, color){ const t = teams.find(x => x.id === id); if(t){ t.color = color; saveState(); renderTeams(); } }
+function setTeamAvatar(id, av){ const t = teams.find(x => x.id === id); if(t){ t.avatar = av; saveState(); renderTeams(); } }
+
+function memberPills(t){
+  if(!t.members.length) return '';
+  return `<div class="member-pills">${t.members.map(m => `<span class="member-pill" style="--team-color:${t.color}">${safe(m)}</span>`).join('')}</div>`;
+}
+
+function renderTeams(){
+  const list = $('teamList');
+  if(!teams.length){
+    list.innerHTML = '<div class="empty">Add your first team, load demo teams, or click Play Demo Now.</div>';
+    return;
+  }
+  list.innerHTML = teams.map(t => `
+    <div>
+      <div class="team-item">
+        <div class="team-avatar" style="--team-color:${t.color}">${t.avatar}</div>
+        <div class="team-info">
+          <div class="team-name">${safe(t.name)}<span class="member-count">👥 ${t.members.length}</span></div>
+          <div class="team-meta">${t.score} pts · ${t.tests||0} tests · ${(t.badges||[]).length} badges</div>
+          ${memberPills(t)}
+        </div>
+        <div class="team-actions">
+          <button class="team-btn" onclick="editTeam('${t.id}')">✎ Edit</button>
+          <button class="delete-team" onclick="removeTeam('${t.id}')" aria-label="Remove">×</button>
+        </div>
+      </div>
+      ${editingTeamId === t.id ? renderEditForm(t) : ''}
+    </div>`).join('');
+}
+
+function renderEditForm(t){
+  return `
+  <div class="team-edit">
+    <h4>Edit team</h4>
+    <div class="form-row" style="margin:0">
+      <label>Name</label>
+      <input id="edit-name-${t.id}" value="${safe(t.name)}"/>
+    </div>
+    <div class="form-row" style="margin:0">
+      <label>Members (comma-separated)</label>
+      <textarea id="edit-members-${t.id}" placeholder="Asha, Ravi, Meera">${safe((t.members||[]).join(', '))}</textarea>
+    </div>
+    <div class="form-row" style="margin:0">
+      <label>Color</label>
+      <div class="swatch-row">${TEAM_COLORS.map(c => `<button class="swatch ${c===t.color?'active':''}" style="background:${c}" onclick="setTeamColor('${t.id}','${c}')"></button>`).join('')}</div>
+    </div>
+    <div class="form-row" style="margin:0">
+      <label>Avatar</label>
+      <div class="avatar-row">${TEAM_AVATARS.map(a => `<button class="avatar-pick ${a===t.avatar?'active':''}" onclick="setTeamAvatar('${t.id}','${a}')">${a}</button>`).join('')}</div>
+    </div>
+    <div class="edit-actions">
+      <button class="btn ghost btn-sm" onclick="cancelEditTeam()">Cancel</button>
+      <button class="btn btn-sm" onclick="saveEditTeam('${t.id}')">✓ Save</button>
+    </div>
+  </div>`;
+}
+
+function materialCost(m){
+  if(m.id === 'tape' && currentEvent.mod?.tapeCost) return Math.round(m.cost * currentEvent.mod.tapeCost);
+  return m.cost;
+}
+
+function calculate(team){
+  if(!team) return {cost:0,cushion:0,structure:0,drag:0,weight:0,items:0,placement:0,protection:0,weightPenalty:0,chance:0,projected:0,difficulty:55,height:'Desk Level',budgetBonus:0};
+  let cost=0, cushion=0, structure=0, drag=0, weight=0, items=0, placement=0;
+  MATERIALS.forEach(m => {
+    const item = team.build?.[m.id] || {qty:0, pos:m.best};
+    const q = item.qty || 0;
+    items += q;
+    cost += q * materialCost(m);
+    cushion += q * m.cushion;
+    structure += q * m.structure * (currentEvent.mod?.structure ?? 1);
+    drag += q * m.drag * (currentEvent.mod?.drag ?? 1);
+    weight += q * m.weight;
+    placement += q * (item.pos === m.best ? 4 : -1);
+  });
+  const h = ROUNDS[Math.max(0, Math.min(2, round - 1))] || ROUNDS[0];
+  const difficulty = h.difficulty * (currentEvent.mod?.difficulty ?? 1);
+  const protection = cushion * .9 + structure * .75 + drag * .65 + placement;
+  const weightPenalty = Math.max(0, weight * 1.4 * (currentEvent.mod?.weight ?? 1) + Math.max(0, items - 10) * 3);
+  const raw = protection - weightPenalty;
+  const chance = Math.max(2, Math.min(98, Math.round((raw / difficulty) * 82)));
+  const budgetBonus = Math.round((100 - cost) * .18);
+  const projected = Math.max(0, Math.round(chance + budgetBonus + placement * .4));
+  return { cost, cushion, structure:Math.round(structure), drag:Math.round(drag), weight, items,
+           placement, protection:Math.round(protection), weightPenalty:Math.round(weightPenalty),
+           chance, projected, difficulty:Math.round(difficulty), height:h.label, budgetBonus };
+}
+
+function setPos(id, pos){ const t = activeTeam(); if(!t) return; t.build[id].pos = pos; saveState(); renderSummary(); renderEggMaterials(); renderLeaderboard(); }
+
+function changeQty(id, delta){
+  ensureTeams();
+  const t = activeTeam();
+  const item = t.build[id];
+  const old = item.qty;
+  item.qty = Math.max(0, item.qty + delta);
+  if(calculate(t).cost > 100){ item.qty = old; showToast('Budget limit reached', 'warning'); return; }
+  if(delta !== 0) floatPoints(t.id, delta);
+  saveState();
+  renderMaterials(); renderSummary(); renderEggMaterials(); renderLeaderboard();
+}
+
+function renderMaterials(){
+  const t = activeTeam();
+  $('materials').innerHTML = MATERIALS.map(m => {
+    const item = t?.build?.[m.id] || {qty:0, pos:m.best};
+    const c = materialCost(m);
+    return `<div class="material-card" draggable="true" data-mid="${m.id}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px">
+        <span class="material-icon">${m.icon}</span>
+        <span style="font-size:11px;font-weight:900;color:${item.pos===m.best?'#047857':'#9CA3AF'}">${item.pos===m.best?'✓ pos':'⚠ pos'}</span>
+      </div>
+      <div class="material-name">${m.name}</div>
+      <div class="material-cost">$${c} · cushion ${m.cushion} · structure ${m.structure} · best: ${m.best}</div>
+      <select class="position-select" onchange="setPos('${m.id}',this.value)">
+        <option value="top" ${item.pos==='top'?'selected':''}>Top / parachute</option>
+        <option value="bottom" ${item.pos==='bottom'?'selected':''}>Bottom / impact</option>
+        <option value="side" ${item.pos==='side'?'selected':''}>Side / frame</option>
+        <option value="center" ${item.pos==='center'?'selected':''}>Center / core</option>
+      </select>
+      <div class="qty">
+        <button onclick="changeQty('${m.id}',-1)" aria-label="Remove">−</button>
+        <span>${item.qty}</span>
+        <button onclick="changeQty('${m.id}',1)" aria-label="Add">+</button>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.material-card').forEach(card => {
+    card.ondragstart = e => e.dataTransfer.setData('text/plain', card.dataset.mid);
+  });
+}
+
+function renderSummary(){
+  const c = calculate(activeTeam());
+  $('heightLabel').textContent = c.height;
+  $('budgetUsed').textContent = `${c.cost} / 100`;
+  $('protectionScore').textContent = c.protection;
+  $('weightPenalty').textContent = c.weightPenalty;
+  $('placementBonus').textContent = c.placement;
+  $('survivalChance').textContent = `${c.chance}%`;
+  $('chanceMeter').style.width = c.chance + '%';
+  $('eventCard').innerHTML = `<strong>${safe(currentEvent.name)}</strong><span>${safe(currentEvent.desc)}</span>`;
+}
+
+function posClass(pos){
+  return pos === 'top' ? 'zone-top' : pos === 'bottom' ? 'zone-bottom' : pos === 'side' ? 'zone-left' : 'zone-center';
+}
+function renderEggMaterials(){
+  const t = activeTeam();
+  const layer = $('eggMaterials');
+  if(!layer || !t){ return; }
+  const active = MATERIALS.filter(m => (t.build?.[m.id]?.qty || 0) > 0);
+  layer.innerHTML = active.map(m => {
+    const item = t.build[m.id];
+    return `<div class="egg-material ${m.id} ${posClass(item.pos)}" title="${safe(m.name)} x${item.qty}"><span class="qty-badge">${item.qty}</span></div>`;
+  }).join('');
+}
+
+function renderActiveTeam(){
+  const sel = $('activeTeam');
+  sel.innerHTML = teams.length ? teams.map(t => `<option value="${t.id}" ${t.id===activeTeamId?'selected':''}>${t.avatar} ${safe(t.name)}</option>`).join('') : '<option>No teams</option>';
+}
+
+function liveScore(team){ return (team.score || 0) + calculate(team).projected; }
+
+function renderLeaderboard(){
+  const sorted = [...teams].sort((a,b) => liveScore(b) - liveScore(a));
+  $('leaderboard').innerHTML = sorted.length ? sorted.map((t,i) => `
+    <div class="leader-item rank-${i+1}">
+      <div class="rank">${i+1}</div>
+      <div class="team-avatar" style="--team-color:${t.color};width:36px;height:36px;font-size:17px;border-radius:11px">${t.avatar}</div>
+      <div>
+        <div class="team-name">${safe(t.name)}<span class="member-count">👥 ${t.members.length}</span></div>
+        <div class="team-meta">${t.tests||0} tests · projected ${calculate(t).chance}% survival</div>
+        ${memberPills(t)}
+      </div>
+      <div class="leader-score">${liveScore(t)}<small>${t.tests?'saved':'live'}</small></div>
+    </div>`).join('') : '<div class="empty">No teams yet.</div>';
+}
+
+function startRound(){
+  fullscreenMode();
+  ensureTeams();
+  round += 1;
+  if($('roundMode').value === 'single') round = 1;
+  if(round > maxRounds){ showFinalWinner(); return; }
+  remaining = Number($('timeSelect').value);
+  currentEvent = EVENTS[0];
+  setPhase('build');
+  $('statusTitle').textContent = `Round ${round}: ${ROUNDS[round-1].label}`;
+  $('statusSub').textContent = 'Build or improve your protection design.';
+  clearInterval(timer);
+  tick();
+  announce(`Round ${round} of ${maxRounds}. ${ROUNDS[round-1].label}. ${remaining} seconds.`);
+  timer = setInterval(() => {
+    remaining--;
+    tick();
+    if(remaining === 30){ announce('30 seconds remaining.'); beep(600); }
+    if(remaining === 10){ announce('10 seconds remaining.'); beep(700); }
+    if(remaining <= 0){
+      clearInterval(timer);
+      randomEvent();
+    }
+  }, 1000);
+  saveState(); render();
+}
+function tick(){
+  const m = String(Math.floor(Math.max(0, remaining) / 60)).padStart(2, '0');
+  const s = String(Math.max(0, remaining) % 60).padStart(2, '0');
+  const t = $('timer');
+  t.textContent = `⏱ ${m}:${s}`;
+  t.classList.remove('warn','danger');
+  if(remaining > 0 && remaining <= 10) t.classList.add('danger');
+  else if(remaining > 0 && remaining <= 30) t.classList.add('warn');
+}
+
+function randomEvent(){
+  currentEvent = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+  setPhase('event');
+  $('statusTitle').textContent = `Event: ${currentEvent.name}`;
+  $('statusSub').textContent = currentEvent.desc;
+  announce('Event: ' + currentEvent.name + '. ' + currentEvent.desc);
+  saveState(); render(); beep();
+}
+
+function runDrop(){
+  fullscreenMode();
+  ensureTeams();
+  // Snapshot for undo
+  undoSnapshot = JSON.stringify({ teams:JSON.parse(JSON.stringify(teams)), log:JSON.parse(JSON.stringify(log)) });
+  clearInterval(timer);
+  setPhase('drop');
+  const t = activeTeam();
+  const c = calculate(t);
+  $('dropZone').classList.remove('drop-animate');
+  $('resultBanner').classList.remove('show');
+  void $('dropZone').offsetWidth;
+  $('dropZone').classList.add('drop-animate');
+  $('statusTitle').textContent = `Testing ${t.name}`;
+  $('statusSub').textContent = `Dropping from ${c.height}.`;
+  setTimeout(() => {
+    const roll = Math.floor(Math.random() * 21) - 10;
+    const integrity = Math.max(0, Math.min(100, c.chance + roll));
+    const survived = integrity >= 55;
+    const finalScore = Math.max(0, integrity + c.budgetBonus + c.placement + (survived ? 25 : 0));
+    const review = generateReview(t, c, survived, integrity, finalScore);
+    t.score += finalScore;
+    t.tests = (t.tests || 0) + 1;
+    t.reviews = t.reviews || [];
+    t.reviews.push(review);
+    log.push({
+      round, team:t.name, teamId:t.id, height:c.height, event:currentEvent.name,
+      integrity, survived, score:finalScore, cost:c.cost, review,
+      build:JSON.parse(JSON.stringify(t.build)),
+      strategy:$('strategy').value,
+      time:new Date().toISOString()
+    });
+    // Award per-drop badges
+    awardBadgesAfterDrop(t, c, survived, integrity);
+    $('resultTitle').textContent = survived ? 'Egg Survived! 🥚✅' : 'Egg Cracked! 🥚💥';
+    $('resultText').textContent = `Integrity ${integrity}%. Score +${finalScore}. Budget ${c.cost}/100. ${review.summary}`;
+    $('resultBanner').classList.add('show');
+    $('egg').textContent = survived ? '🥚' : '🍳';
+    if(survived){ fireConfetti(); floatPoints(t.id, finalScore); }
+    showUndoBanner(`${t.name}: ${survived?'survived':'cracked'} · +${finalScore}`);
+    setTimeout(() => $('egg').textContent = '🥚', 1800);
+    setPhase('review');
+    $('statusTitle').textContent = `${t.name} review ready`;
+    $('statusSub').textContent = 'Material and budget feedback below.';
+    announce(`${t.name} ${survived?'survived':'cracked'}. Score ${finalScore}.`);
+    saveState(); render(); beep();
+    switchView('review');
+
+    // If progressive and all teams have tested this round, advance to final or next
+    if($('roundMode').value === 'progressive' && everyTeamTested(round) && round >= maxRounds){
+      setTimeout(showFinalWinner, 1200);
+    }
+  }, 1650);
+}
+
+function everyTeamTested(r){
+  return teams.every(t => log.filter(x => x.teamId === t.id && x.round === r).length > 0);
+}
+
+function generateReview(team, c, survived, integrity, score){
+  const points = [];
+  if(c.cost > 92) points.push('Budget was almost fully used. Fine only if survival gain justifies it.');
+  else if(c.cost < 45) points.push('Budget use very low. Design may be underbuilt for higher drops.');
+  else points.push('Budget use was balanced, leaving efficiency points.');
+  if(c.cushion < 25) points.push('Cushioning is weak. Add cotton or sponge near the bottom.');
+  else points.push('Cushioning is strong enough to absorb impact.');
+  if(c.structure < 25) points.push('Structure is weak. Add straws, cardboard, tape, or cups to stabilize.');
+  else points.push('Structure support is solid.');
+  if(c.drag < 15 && round >= 2) points.push('Air resistance is low. Add balloon or plastic bag on top for higher drops.');
+  if(c.weightPenalty > 30) points.push('Design is too heavy. Heavy protection increases impact force.');
+  if(c.placement < 0) points.push('Placement is poor. Cushion at bottom, drag on top, structure on sides/core.');
+  else if(c.placement > 12) points.push('Material placement is strong and lifts the design score.');
+  const summary = survived
+    ? 'Protection and placement overcame the drop difficulty.'
+    : 'Impact risk was higher than the protection value.';
+  return { summary, points, integrity, score, cost:c.cost, protection:c.protection, weightPenalty:c.weightPenalty, placement:c.placement, chance:c.chance };
+}
+
+function renderReview(){
+  const t = activeTeam();
+  const reviews = t?.reviews || [];
+  if(!reviews.length){
+    $('reviewContent').innerHTML = '<div class="empty">No review yet. Run a drop test first.</div>';
+    return;
+  }
+  const r = reviews[reviews.length - 1];
+  $('reviewContent').innerHTML = `
+    <div class="panel" style="padding:18px;background:#F8FAFC">
+      <h3>${safe(t.name)} latest review</h3>
+      <p><strong>Summary:</strong> ${safe(r.summary)}</p>
+      <div class="stat-grid" style="margin-top:12px">
+        <div class="stat-box"><span class="stat-label">Integrity</span><span class="stat-value">${r.integrity}%</span></div>
+        <div class="stat-box"><span class="stat-label">Score</span><span class="stat-value">+${r.score}</span></div>
+        <div class="stat-box"><span class="stat-label">Budget</span><span class="stat-value">${r.cost}/100</span></div>
+        <div class="stat-box"><span class="stat-label">Placement</span><span class="stat-value">${r.placement}</span></div>
+      </div>
+      <ul style="margin-top:12px;padding-left:18px;line-height:1.7">${r.points.map(p => `<li>${safe(p)}</li>`).join('')}</ul>
+    </div>`;
+}
+
+/* ---------- Badges ---------- */
+function addBadge(team, id){
+  team.badges = team.badges || [];
+  if(team.badges.find(b => b.id === id)) return;
+  team.badges.push({ id, at: Date.now() });
+  const b = BADGES.find(x => x.id === id);
+  if(b) showToast(`🏅 ${team.name}: ${b.name}`, 'success');
+}
+function awardBadgesAfterDrop(team, c, survived, integrity){
+  if(survived && c.cost < 50) addBadge(team, 'budget');
+  if(survived && c.chance < 30) addBadge(team, 'lucky');
+  if(survived && remaining > 30) addBadge(team, 'quick');
+  // Iron Egg = survived all 3 rounds (check across log)
+  const myDrops = log.filter(x => x.teamId === team.id);
+  if(myDrops.length >= 3 && myDrops.slice(-3).every(x => x.survived)) addBadge(team, 'iron');
+  if(myDrops.length && myDrops.every(x => x.survived)) addBadge(team, 'allround');
+  // Strongest build right now
+  const top = [...teams].sort((a,b) => calculate(b).protection - calculate(a).protection)[0];
+  if(top && top.id === team.id && c.protection > 30) addBadge(team, 'strong');
+  // Best placement
+  const place = [...teams].sort((a,b) => calculate(b).placement - calculate(a).placement)[0];
+  if(place && place.id === team.id && c.placement > 8) addBadge(team, 'placement');
+}
+function renderAwards(){
+  if(!teams.length){ $('awardsList').innerHTML = '<div class="empty">No awards yet. Play a round.</div>'; return; }
+  // Compute current winners by category
+  const overall = [...teams].sort((a,b) => b.score - a.score)[0];
+  if(overall && overall.score > 0) addBadge(overall, 'winner');
+  // Comeback Kid
+  if(log.length >= 2 && teams.length >= 2){
+    const r1 = log.filter(x => x.round === 1);
+    if(r1.length){
+      const r1Sorted = [...r1].sort((a,b) => a.score - b.score);
+      const lastInR1 = r1Sorted[0]?.teamId;
+      const top3 = [...teams].sort((a,b) => b.score - a.score).slice(0,3).map(t => t.id);
+      if(lastInR1 && top3.includes(lastInR1)){
+        const t = teams.find(x => x.id === lastInR1);
+        if(t) addBadge(t, 'comeback');
+      }
+    }
+  }
+  // Build badge grid keyed by badge -> teams who earned it
+  const byBadge = {};
+  BADGES.forEach(b => byBadge[b.id] = []);
+  teams.forEach(t => (t.badges || []).forEach(b => byBadge[b.id].push(t)));
+  $('awardsList').innerHTML = BADGES.map(b => {
+    const earners = byBadge[b.id] || [];
+    const earned = earners.length > 0;
+    return `<div class="award-card ${earned ? 'earned' : 'locked'}">
+      <div class="award-icon">${b.icon}</div>
+      <div class="award-name">${safe(b.name)}</div>
+      <div class="award-desc">${safe(b.desc)}</div>
+      ${earned ? `<div class="award-by">${earners.map(t=>safe(t.name)).join(', ')}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function renderLog(){
+  $('roundLog').innerHTML = log.length ? log.slice().reverse().map(x => `
+    <div class="log-item">
+      <div class="team-name">Round ${x.round} · ${safe(x.team)}: ${x.survived?'Survived ✅':'Cracked 💥'} · +${x.score}</div>
+      <div class="team-meta">${safe(x.height)} · ${safe(x.event)} · Integrity ${x.integrity}% · Budget ${x.cost}/100</div>
+      <p style="margin:6px 0 0;font-size:13px;color:var(--body)">${safe(x.review.summary)}</p>
+    </div>`).join('') : '<div class="empty">No drop tests yet.</div>';
+}
+
+function showFinalWinner(){
+  if(!teams.length) return;
+  const ranked = [...teams].sort((a,b) => (b.score||0) - (a.score||0));
+  const champ = ranked[0];
+  if(champ){ addBadge(champ, 'champion'); saveState(); }
+  $('summaryWinnerName').textContent = '👑 ' + champ.name + ' wins the game';
+  $('summaryWinnerScore').textContent = `${champ.score} points · ${champ.tests||0} drops · ${(champ.badges||[]).length} badges`;
+  $('summaryGrid').innerHTML = ranked.map((t,i) => `
+    <div class="summary-row-final">
+      <div class="rank">${i+1}</div>
+      <div class="team-avatar" style="--team-color:${t.color};width:36px;height:36px;font-size:17px;border-radius:11px">${t.avatar}</div>
+      <div>
+        <div class="team-name">${safe(t.name)}<span class="member-count">👥 ${t.members.length}</span></div>
+        <div class="team-meta">${t.tests||0} drops · ${(t.badges||[]).length} badges</div>
+      </div>
+      <div class="delta">${t.score} pts</div>
+    </div>`).join('');
+  $('summaryNext').textContent = '↻ Play again';
+  $('summaryNext').onclick = () => { closeSummary(); reset(); };
+  $('summaryOverlay').classList.add('show');
+  fireConfetti(); setTimeout(fireConfetti, 850);
+  announce(`Game complete. ${champ.name} wins with ${champ.score} points.`);
+}
+
+function nextTeam(){
+  if(!teams.length) return;
+  const idx = teams.findIndex(t => t.id === activeTeamId);
+  activeTeamId = teams[(idx+1) % teams.length].id;
+  $('strategy').value = '';
+  saveState(); render();
+  showToast(`Now building: ${activeTeam().name}`);
+}
+
+function exportReport(){
+  const report = {
+    game:'Edstellar Engage - Egg Drop Challenge Pro',
+    exportedAt:new Date().toISOString(),
+    teams, log, language:currentLanguage
+  };
+  download('edstellar-egg-drop-report.json', JSON.stringify(report, null, 2), 'application/json');
+  showToast('JSON exported', 'success');
+}
+function exportCsv(){
+  if(!log.length) return showToast('No drops to export', 'warning');
+  const rows = [['Round','Team','Height','Event','Integrity','Survived','Score','Cost']];
+  log.forEach(x => rows.push([x.round, x.team, x.height, x.event, x.integrity, x.survived?'yes':'no', x.score, x.cost]));
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  download('edstellar-egg-drop-rounds.csv', csv, 'text/csv');
+  showToast('CSV exported', 'success');
+}
+function download(name, content, type){
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = name; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function reset(){
+  if(!confirm('Reset game data?')) return;
+  clearInterval(timer);
+  teams = []; activeTeamId = null; round = 0; phase = 'setup';
+  log = []; currentEvent = EVENTS[0]; undoSnapshot = null;
+  localStorage.removeItem(STORAGE_KEY);
+  $('timer').textContent = '⏱ 00:00';
+  $('statusTitle').textContent = 'Ready to play';
+  $('statusSub').textContent = 'Click Play Demo Now or set up your own teams.';
+  $('resultBanner').classList.remove('show');
+  render();
+  showToast('Game reset');
+}
+
+function switchView(v){
+  ['play','leaderboard','review','awards','log'].forEach(x => $(x+'View').classList.toggle('hidden', x !== v));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === v));
+  if(v === 'awards') renderAwards();
+}
+
+/* ---------- Modals ---------- */
+function openHow(){ $('howOverlay').classList.add('show'); }
+function closeHow(){ $('howOverlay').classList.remove('show'); }
+function openCheat(){ $('cheatOverlay').classList.add('show'); }
+function closeCheat(){ $('cheatOverlay').classList.remove('show'); }
+function closeSummary(){ $('summaryOverlay').classList.remove('show'); }
+
+/* ---------- Share ---------- */
+function buildShareLink(){
+  const state = { teams, log, language:currentLanguage, round, maxRounds };
+  const enc = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+  return location.origin + location.pathname + '#s=' + enc;
+}
+function buildSlackCard(){
+  const ranked = [...teams].sort((a,b) => (b.score||0) - (a.score||0));
+  const champ = ranked[0];
+  const head = ':trophy: *Egg Drop Challenge Pro - Edstellar Engage*';
+  const teamLine = champ ? `Leader: *${champ.name}* with *${champ.score} pts*` : 'Game in progress';
+  const drops = `Drops: ${log.length} · Best survival: ${log.filter(x=>x.survived).length}`;
+  return `${head}\n${teamLine}\n${drops}\nReplay: ${buildShareLink()}`;
+}
+function buildEmbed(){
+  return `<iframe src="${location.origin}${location.pathname}?mode=present" width="600" height="800" frameborder="0" allow="fullscreen"></iframe>`;
+}
+function openShare(){
+  $('shareUrl').value = buildShareLink();
+  $('slackCard').textContent = buildSlackCard();
+  $('embedSnippet').value = buildEmbed();
+  $('shareOverlay').classList.add('show');
+}
+function closeShare(){ $('shareOverlay').classList.remove('show'); }
+function copyToClipboard(text){
+  navigator.clipboard?.writeText(text).then(
+    () => showToast('Copied!', 'success'),
+    () => showToast('Copy failed', 'warning')
+  );
+}
+function loadFromHash(){
+  if(!location.hash.startsWith('#s=')) return false;
+  try{
+    const enc = location.hash.slice(3);
+    const json = decodeURIComponent(escape(atob(enc)));
+    const s = JSON.parse(json);
+    teams = s.teams || teams;
+    log = s.log || [];
+    currentLanguage = s.language || 'en';
+    round = s.round || 0;
+    maxRounds = s.maxRounds || 3;
+    showToast('Loaded shared session', 'success');
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ---------- Reminder ---------- */
+function downloadIcs(days=14){
+  const start = new Date(Date.now() + days*24*60*60*1000); start.setHours(10,0,0,0);
+  const end = new Date(start.getTime() + 30*60*1000);
+  const fmt = d => d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/, '');
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Edstellar Engage//Egg Drop//EN',
+    'BEGIN:VEVENT',
+    'UID:' + makeId() + '@edstellar.com',
+    'DTSTAMP:' + fmt(new Date()),
+    'DTSTART:' + fmt(start),
+    'DTEND:' + fmt(end),
+    'SUMMARY:Egg Drop Challenge - Reinforcement Session',
+    'DESCRIPTION:Replay the Egg Drop Challenge with the same teams. Beat the forgetting curve.',
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  download('egg-drop-reminder.ics', ics, 'text/calendar');
+  showToast('Reminder downloaded', 'success');
+}
+
+/* ---------- Modes ---------- */
+function detectMode(){
+  const params = new URLSearchParams(location.search);
+  const mode = params.get('mode');
+  if(mode === 'present'){ document.body.classList.add('mode-present'); $('modeBanner').innerHTML = '📺 Presenter mode · <a href="?">exit</a>'; }
+  else if(mode === 'play'){ document.body.classList.add('mode-play'); $('modeBanner').innerHTML = '📱 Player mode · <a href="?">exit</a>'; }
+}
+
+/* ---------- Streak ---------- */
+function updateStreak(){
+  const last = Number(localStorage.getItem('edstellarEggDropLastSession') || 0);
+  let streak = Number(localStorage.getItem('edstellarEggDropStreak') || 0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if(last){
+    const lastDay = new Date(last); lastDay.setHours(0,0,0,0);
+    const days = Math.floor((today - lastDay) / (1000*60*60*24));
+    if(days === 0){} else if(days === 1) streak += 1; else streak = 1;
+  } else { streak = 1; }
+  localStorage.setItem('edstellarEggDropStreak', String(streak));
+  localStorage.setItem('edstellarEggDropLastSession', String(Date.now()));
+  if(streak >= 2){ $('streakPill').style.display = 'inline-flex'; $('streakDays').textContent = streak; }
+}
+
+/* ---------- Setup helpers ---------- */
+function updateEstimator(){
+  const dur = Number($('timeSelect')?.value || 90);
+  const rounds = $('roundMode')?.value === 'single' ? 1 : 3;
+  const total = (dur + 60) * rounds; // buffer per round
+  $('estTime').textContent = '~' + Math.round(total/60) + ' min';
+}
+function updateRosterCount(){
+  const el = $('rosterCount'); if(el) el.textContent = teams.length + (teams.length === 1 ? ' team' : ' teams');
+}
+function updateStartCta(){
+  const btn = $('startGameBtn'); const help = $('startCtaHelp');
+  if(!btn) return;
+  const ready = teams.length >= 1;
+  btn.disabled = !ready;
+  if(!ready){ help.textContent = 'Add at least 1 team to start.'; }
+  else if(round >= maxRounds && log.length){ btn.textContent = '↻ New game'; help.textContent = 'Last game complete.'; }
+  else if(round > 0){ btn.textContent = '▶ Continue: Round ' + (round+1); help.textContent = 'Resume from where you left off.'; }
+  else { btn.textContent = '▶ Start Game · ' + teams.length + (teams.length===1?' team':' teams'); help.textContent = $('estTime')?.textContent + ' total'; }
+}
+function updateBestScore(){
+  const best = log.length ? Math.max(...log.map(x => x.score)) : 0;
+  $('bestScore').textContent = best;
+  $('dropsDone').textContent = log.length;
+}
+function updateRoundProgress(){
+  const fill = $('statusProgressFill'); if(!fill) return;
+  const pct = maxRounds > 0 ? Math.min(100, Math.round((round / maxRounds) * 100)) : 0;
+  fill.style.width = pct + '%';
+}
+function renderStats(){
+  $('teamCount').textContent = teams.length;
+  $('roundCount').textContent = round + ' / ' + maxRounds;
+  document.body.dataset.teams = String(teams.length);
+  document.body.dataset.roundsPlayed = String(log.length);
+}
+
+/* ---------- Templates ---------- */
+function saveSessionTemplate(){
+  const name = prompt('Template name?', 'Quick Build');
+  if(!name) return;
+  sessionTemplates.push({ id:makeId(), name, mode:$('roundMode').value, time:$('timeSelect').value, language:currentLanguage });
+  saveState(); renderTemplates(); showToast('Template saved', 'success');
+}
+function loadSessionTemplate(id){
+  const t = sessionTemplates.find(x => x.id === id); if(!t) return;
+  $('roundMode').value = t.mode; $('timeSelect').value = t.time;
+  if(t.language) setLanguage(t.language);
+  saveState(); updateEstimator();
+  showToast('Loaded: ' + t.name);
+}
+function deleteSessionTemplate(id){
+  sessionTemplates = sessionTemplates.filter(t => t.id !== id);
+  saveState(); renderTemplates();
+}
+function renderTemplates(){
+  const host = $('templateList'); if(!host) return;
+  if(!sessionTemplates.length){ host.innerHTML = '<span class="hint" style="margin:0">No saved templates yet.</span>'; return; }
+  host.innerHTML = sessionTemplates.map(t => `<span class="template-pill" onclick="loadSessionTemplate('${t.id}')">${safe(t.name)}<span class="x" onclick="event.stopPropagation();deleteSessionTemplate('${t.id}')">×</span></span>`).join('');
+}
+
+/* ---------- Language ---------- */
+function setLanguage(lang){
+  currentLanguage = lang;
+  document.documentElement.lang = lang;
+  document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  const sel = $('langSelect'); if(sel) sel.value = lang;
+  saveState();
+}
+
+/* ---------- Undo ---------- */
+function showUndoBanner(msg){
+  $('undoText').textContent = msg;
+  $('undoBanner').classList.add('show');
+  clearTimeout(showUndoBanner._t);
+  showUndoBanner._t = setTimeout(() => $('undoBanner').classList.remove('show'), 12000);
+}
+function undoLastDrop(){
+  if(!undoSnapshot) return showToast('Nothing to undo', 'warning');
+  try{
+    const s = JSON.parse(undoSnapshot);
+    teams = s.teams; log = s.log;
+    undoSnapshot = null;
+    saveState(); render();
+    $('undoBanner').classList.remove('show');
+    showToast('Last drop undone', 'success');
+    announce('Last drop undone.');
+  }catch(e){ showToast('Undo failed', 'warning'); }
+}
+
+/* ---------- Effects ---------- */
+function floatPoints(teamId, delta){
+  const idx = teams.findIndex(t => t.id === teamId);
+  const card = document.querySelector('.leader-item .team-name');
+  const host = $('leaderboard');
+  if(!host) return;
+  const f = document.createElement('span');
+  f.className = 'float-points' + (delta < 0 ? ' negative' : '');
+  f.textContent = (delta > 0 ? '+' : '') + delta;
+  f.style.right = '20px';
+  f.style.top = (40 + idx * 80) + 'px';
+  host.style.position = 'relative';
+  host.appendChild(f);
+  setTimeout(() => f.remove(), 1000);
+}
+
+function fireConfetti(){
+  const c = $('confetti'); if(!c) return;
+  const ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  const colors = ['#0B3C5D','#2563EB','#10B981','#F59E0B','#7C3AED','#EC4899','#38BDF8'];
+  const N = 120;
+  const parts = Array.from({length:N}, () => ({
+    x:c.width/2 + (Math.random()-.5)*120, y:c.height/2 + (Math.random()-.5)*60,
+    vx:(Math.random()-.5)*14, vy:-Math.random()*14 - 4,
+    g:.35+Math.random()*.2, s:4+Math.random()*6,
+    r:Math.random()*Math.PI, vr:(Math.random()-.5)*.3,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    life:80+Math.random()*60
+  }));
+  function tick(){
+    ctx.clearRect(0,0,c.width,c.height);
+    let alive = false;
+    parts.forEach(p => {
+      if(p.life-- <= 0) return;
+      alive = true;
+      p.x += p.vx; p.y += p.vy; p.vy += p.g; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.4);
+      ctx.restore();
+    });
+    if(alive) requestAnimationFrame(tick); else ctx.clearRect(0,0,c.width,c.height);
+  }
+  tick();
+}
+window.addEventListener('resize', () => { const c = $('confetti'); if(c){ c.width=window.innerWidth; c.height=window.innerHeight; }});
+
+function beep(freq=760, ms=220){
+  try{
+    const a = new (window.AudioContext||window.webkitAudioContext)();
+    const o = a.createOscillator(); const g = a.createGain();
+    o.connect(g); g.connect(a.destination);
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(.08, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, a.currentTime + ms/1000);
+    o.start(); setTimeout(() => { o.stop(); a.close(); }, ms);
+  }catch(e){}
+}
+
+async function fullscreenMode(){
+  try{
+    if(!document.fullscreenElement && document.documentElement.requestFullscreen)
+      await document.documentElement.requestFullscreen();
+  }catch(e){}
+}
+
+/* ---------- Render orchestrator ---------- */
+function render(){
+  renderStats();
+  renderTeams();
+  renderActiveTeam();
+  renderMaterials();
+  renderSummary();
+  renderEggMaterials();
+  renderLeaderboard();
+  renderLog();
+  renderReview();
+  renderAwards();
+  setPhase(phase);
+  updateEstimator();
+  updateRosterCount();
+  updateStartCta();
+  updateBestScore();
+  updateRoundProgress();
+  renderTemplates();
+}
+
+/* ---------- High contrast ---------- */
+function applyHc(on){
+  document.body.classList.toggle('hc', !!on);
+  const t = $('hcToggle'); if(t) t.checked = !!on;
+  localStorage.setItem('edstellarEggDropHC', on ? '1' : '0');
+}
+
+/* ===========================================================
+   WIRE UP
+=========================================================== */
+
+$('demoBtn').onclick = () => { fullscreenMode(); if(!teams.length) loadSampleTeams(false); startRound(); showToast('Demo started','success'); };
+$('setupBtn').onclick = () => { $('setupPanel').scrollIntoView({behavior:'smooth'}); setPhase('setup'); };
+$('howBtn').onclick = openHow;
+$('closeHow').onclick = closeHow;
+$('howClose2').onclick = closeHow;
+$('howDemo').onclick = () => { closeHow(); fullscreenMode(); if(!teams.length) loadSampleTeams(false); startRound(); };
+$('howOverlay').onclick = e => { if(e.target.id === 'howOverlay') closeHow(); };
+
+$('sampleBtn').onclick = () => loadSampleTeams(true);
+$('addTeamBtn').onclick = addTeam;
+$('teamName').addEventListener('keydown', e => { if(e.key === 'Enter') addTeam(); });
+$('resetBtn').onclick = reset;
+$('saveTemplateBtn').onclick = saveSessionTemplate;
+
+$('langSelect').addEventListener('change', e => setLanguage(e.target.value));
+['roundMode','timeSelect'].forEach(id => $(id).addEventListener('change', updateEstimator));
+
+$('startBuildBtn').onclick = startRound;
+$('eventBtn').onclick = randomEvent;
+$('dropBtn').onclick = runDrop;
+$('nextTeamBtn').onclick = nextTeam;
+$('startGameBtn').onclick = () => {
+  if(!teams.length){ showToast('Add a team first', 'warning'); return; }
+  if(round >= maxRounds && log.length){ reset(); return; }
+  startRound();
+};
+$('activeTeam').onchange = e => { activeTeamId = e.target.value; $('strategy').value = ''; saveState(); render(); };
+
+$('exportBtn').onclick = exportReport;
+$('exportCsvBtn').onclick = exportCsv;
+$('shareBtn').onclick = openShare;
+$('reminderBtn').onclick = () => downloadIcs(14);
+
+$('cheatBtn').onclick = openCheat;
+$('cheatClose').onclick = closeCheat;
+$('cheatCloseBottom').onclick = closeCheat;
+$('cheatOverlay').onclick = e => { if(e.target.id === 'cheatOverlay') closeCheat(); };
+
+$('shareClose').onclick = closeShare;
+$('shareOverlay').onclick = e => { if(e.target.id === 'shareOverlay') closeShare(); };
+$('copyShareUrl').onclick = () => copyToClipboard($('shareUrl').value);
+$('copySlackCard').onclick = () => copyToClipboard($('slackCard').textContent);
+$('copyEmbed').onclick = () => copyToClipboard($('embedSnippet').value);
+$('presenterModeBtn').onclick = () => window.open(location.pathname + '?mode=present', '_blank');
+$('playerModeBtn').onclick = () => window.open(location.pathname + '?mode=play', '_blank');
+
+$('summaryClose').onclick = closeSummary;
+$('undoBtn').onclick = undoLastDrop;
+
+$('hcToggle').addEventListener('change', e => applyHc(e.target.checked));
+
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => switchView(t.dataset.view));
+
+/* Drag-drop materials onto egg */
+$('dropZone').ondragover = e => { e.preventDefault(); $('dropZone').classList.add('drag-over'); };
+$('dropZone').ondragleave = () => $('dropZone').classList.remove('drag-over');
+$('dropZone').ondrop = e => {
+  e.preventDefault();
+  $('dropZone').classList.remove('drag-over');
+  const id = e.dataTransfer.getData('text/plain');
+  const rect = $('dropZone').getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width;
+  const y = (e.clientY - rect.top) / rect.height;
+  let pos = 'center';
+  if(y < .35) pos = 'top';
+  else if(y > .68) pos = 'bottom';
+  else if(x < .38 || x > .62) pos = 'side';
+  ensureTeams();
+  const t = activeTeam();
+  t.build[id].pos = pos;
+  changeQty(id, 1);
+  showToast(`${MATERIALS.find(m => m.id === id).name} placed at ${pos}`);
+};
+
+/* Keyboard */
+document.addEventListener('keydown', e => {
+  if(e.target.matches('input,textarea,select')) return;
+  if(e.key === 'Escape'){ closeHow(); closeCheat(); closeShare(); closeSummary(); return; }
+  if(e.key === '?' || (e.shiftKey && e.key === '/')){ e.preventDefault(); openCheat(); }
+  if(e.key === ' '){ e.preventDefault(); startRound(); }
+  if(e.key.toLowerCase() === 'd') runDrop();
+  if(e.key.toLowerCase() === 'e') randomEvent();
+  if(e.key.toLowerCase() === 'n') nextTeam();
+  if(e.key.toLowerCase() === 'p') switchView('play');
+  if(e.key.toLowerCase() === 'l') switchView('leaderboard');
+  if(e.key.toLowerCase() === 'r') switchView('review');
+  if(e.key.toLowerCase() === 'a') switchView('awards');
+});
+
+/* Boot */
+detectMode();
+loadFromHash();
+loadState();
+updateStreak();
+render();
+applyHc(localStorage.getItem('edstellarEggDropHC') === '1');
+if(!localStorage.getItem('edstellarEggDropHowSeen') && !document.body.classList.contains('mode-present') && !document.body.classList.contains('mode-play')){
+  setTimeout(openHow, 450);
+  localStorage.setItem('edstellarEggDropHowSeen', '1');
+}
+</script>
+</body>
+</html>

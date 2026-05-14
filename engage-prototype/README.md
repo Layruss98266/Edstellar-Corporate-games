@@ -17,7 +17,8 @@ engage-prototype/
 ├── case-studies.html       # Three stories with before/after
 ├── about.html              # Company, mission, roadmap
 ├── play/
-│   └── improv-challenge.html  # Fully playable game (14 languages)
+│   ├── improv-challenge.html  # Fully playable game (14 languages)
+│   └── egg-drop.html          # Fully playable build-and-drop game (14 languages)
 ├── assets/                 # styles.css, app.js, motion.js, games-data.js, games.json
 └── _build/                 # parse_master.py + build_pages.py (re-generators)
 ```
@@ -38,16 +39,17 @@ python _build/parse_master.py
 python _build/build_pages.py
 ```
 
-## Playable game
+## Playable games
 
-`play/improv-challenge.html` is a fully playable workplace-improv game.
+Two fully playable workplace games. Both ship the same infrastructure layer (14 languages, presenter/player modes, share modal, .ics reminder, cheat-sheet, high-contrast, ARIA announcements, undo, autosave, badges, podium leaderboard, confetti).
 
-- **14 languages** (EN + 13 packs)
-- Configurable rounds (3–10), team customisation, EngageCoins economy with 5 power-ups, 10 plot twists, live coaching toolbar, auto coaching tips with linked Edstellar courses, 10 achievement badges, per-team canvas analytics (radar + trend), round summary with confetti, final-game champion overlay.
-- Undo last save, edit historical round scores, auto-save indicator, cheat-sheet (`?`), high-contrast mode, ARIA-live announcements.
-- Presenter mode (`?mode=present`), Player mode (`?mode=play`), share URL, Slack/Teams card, iframe embed, 14-day .ics reminder.
-- Custom prompt creator with JSON pack import/export, saved session templates.
-- All client-side, state persists in `localStorage`.
+**`play/improv-challenge.html`** - Improv Challenge v4
+28 EN prompts + 13 language packs. Configurable rounds (3-10). EngageCoins + 5 power-ups + 10 plot twists. Auto coaching tips linked to Edstellar courses. 10 badges. Per-team radar + trend analytics. Custom prompt creator.
+
+**`play/egg-drop.html`** - Egg Drop Challenge Pro
+10 build materials × 6 random events × 3 escalating drop heights (Desk - Balcony - Building). Drag-and-drop build zone with placement scoring. Auto-generated review per drop. 10 badges (Iron Egg, Lucky Roll, Comeback Kid, Champion, etc.).
+
+Both: client-side only, state persists in `localStorage`, opens from `file://`.
 
 ## Theming
 
