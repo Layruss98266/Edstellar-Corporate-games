@@ -253,7 +253,7 @@ p{margin:0 0 12px;color:var(--brand-ink)}
 .faq-q{width:100%;text-align:left;background:#fff;border:none;cursor:pointer;padding:16px 18px;font-family:inherit;font-weight:600;color:var(--brand-primary);display:flex;justify-content:space-between;align-items:center;font-size:15px}
 .faq-a{padding:0 18px 16px;color:var(--brand-muted);display:none}
 .faq-item[open] .faq-a{display:block}
-.faq-item[open] .faq-q::after{content:"–";font-size:22px}
+.faq-item[open] .faq-q::after{content:"-";font-size:22px}
 .faq-q::after{content:"+";font-size:22px;color:var(--brand-muted)}
 
 /* ---------- Footer ---------- */
@@ -680,7 +680,7 @@ p{margin:0 0 12px;color:var(--brand-ink)}
 .quote-author small{color:var(--brand-muted);font-size:12px}
 
 /* ---------- Library: full-width content with 100px side gutters
-   (nav and footer keep the default 1200px container — don't touch them) ---------- */
+   (nav and footer keep the default 1200px container - don't touch them) ---------- */
 body[data-page="library"] .section-tight > .container{
   max-width:none;
   width:100%;

@@ -1,6 +1,6 @@
 # Edstellar Corporate Games
 
-End-to-end concept work for **Edstellar Engage** — a proposed corporate engagement and learning-reinforcement platform that turns Edstellar's training catalog into game-based experiences.
+End-to-end concept work for **Edstellar Engage** - a proposed corporate engagement and learning-reinforcement platform that turns Edstellar's training catalog into game-based experiences.
 
 ## What's in this repo
 
@@ -19,7 +19,7 @@ End-to-end concept work for **Edstellar Engage** — a proposed corporate engage
 |---|---|
 | `Edstellar_Engage_All_Games_Master.html` | One master HTML containing all 215 structured game cards across 14 blog sections. Source of truth for the prototype's data. |
 | `Edstellar_Engage_All_Games_Master_Document.docx` | DOCX export of the same master. |
-| `Edstellar_Engage_Individual_Game_HTML_Files/` | 216 standalone HTML modules — one self-contained page per game. |
+| `Edstellar_Engage_Individual_Game_HTML_Files/` | 216 standalone HTML modules - one self-contained page per game. |
 
 ### 💻 Interactive prototype (`engage-prototype/`)
 
@@ -33,7 +33,7 @@ Static HTML/CSS/JS prototype of the planned `engage.edstellar.com` product surfa
 | Pricing | `pricing.html` | 4 plans · plan-comparison table · pricing FAQ. |
 | Use Cases | `use-cases.html` | HR / L&D / Managers / Enterprise persona deep-dives. |
 | How it works | `how-it-works.html` | Anatomy timeline + admin/employee flows + mechanics + integrations table. |
-| Facilitated | `facilitated.html` | Session tiers ($1.5K – $15K) + regional coverage + FAQ. |
+| Facilitated | `facilitated.html` | Session tiers ($1.5K - $15K) + regional coverage + FAQ. |
 | Compare | `compare.html` | Engage vs Kahoot / Mentimeter / Gametize. |
 | Case Studies | `case-studies.html` | Three long-form case studies with before/after metrics. |
 | About | `about.html` | Mission, numbers, roadmap. |
@@ -54,12 +54,12 @@ python engage-prototype/_build/build_pages.py
 
 ## Key product decisions captured here
 
-- **Positioning**: Engagement, reinforcement, and culture — not "another quiz tool".
+- **Positioning**: Engagement, reinforcement, and culture - not "another quiz tool".
 - **Wedge**: Bundled with Edstellar's existing training catalog. Reinforcement games trigger 14 and 30 days post-training.
 - **Library**: 215 named games across 14 categories, parsed from existing Edstellar blog content (~200 games already documented in public posts).
-- **Currency model**: **EngageCoins** — virtual in-game budget. Public pages show the **concept** (read-only). The interactive shop is gated behind login inside a live game session.
-- **Pricing**: $3 → $2 → $1.25 per-employee per-month tiers + facilitated event packages from $1,500. Existing Edstellar training clients get Engage as a 15–20% contract add-on.
-- **Differentiation**: 200+ game library, post-training reinforcement bundle, Edstellar facilitator network, strong India / MEA / APAC delivery, in-game currency mechanic — none of which Kahoot, Mentimeter, or Gametize offer together.
+- **Currency model**: **EngageCoins** - virtual in-game budget. Public pages show the **concept** (read-only). The interactive shop is gated behind login inside a live game session.
+- **Pricing**: $3 → $2 → $1.25 per-employee per-month tiers + facilitated event packages from $1,500. Existing Edstellar training clients get Engage as a 15-20% contract add-on.
+- **Differentiation**: 200+ game library, post-training reinforcement bundle, Edstellar facilitator network, strong India / MEA / APAC delivery, in-game currency mechanic - none of which Kahoot, Mentimeter, or Gametize offer together.
 
 ## Status
 

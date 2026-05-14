@@ -99,7 +99,7 @@ DEMO_MODAL = '''<div class="modal-overlay" id="demo-modal" role="dialog" aria-mo
       <p class="muted">Tell us about your team. We'll preload a workspace with your branding for the call.</p>
       <label>Work email<input type="email" required placeholder="you@company.com"/></label>
       <label>Company<input type="text" required placeholder="Company name"/></label>
-      <label>Team size<select required><option value="">Select...</option><option>1–50</option><option>50–200</option><option>200–1,000</option><option>1,000+</option></select></label>
+      <label>Team size<select required><option value="">Select...</option><option>1-50</option><option>50-200</option><option>200-1,000</option><option>1,000+</option></select></label>
       <label>What are you trying to solve?<textarea rows="3" placeholder="e.g., post-training reinforcement for our sales team"></textarea></label>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" data-close-demo>Cancel</button>
@@ -136,7 +136,7 @@ PRICING_BODY = '''<section class="hero" style="padding:72px 0 32px">
   <div class="container" style="max-width:920px;text-align:center">
     <span class="eyebrow">Pricing</span>
     <h1>Engagement built for HR and L&amp;D budgets.</h1>
-    <p class="lead" style="margin:14px auto 24px;max-width:680px">Per-employee plans, plus facilitated event tiers. Existing Edstellar training clients get Engage as a 15–20% add-on — no separate procurement.</p>
+    <p class="lead" style="margin:14px auto 24px;max-width:680px">Per-employee plans, plus facilitated event tiers. Existing Edstellar training clients get Engage as a 15-20% add-on - no separate procurement.</p>
     <div class="hero-cta" style="justify-content:center"><button class="btn btn-primary btn-lg" data-open-demo>Book a Demo</button><a class="btn btn-ghost btn-lg" href="#plans">See plans</a></div>
   </div>
 </section>
@@ -147,7 +147,7 @@ PRICING_BODY = '''<section class="hero" style="padding:72px 0 32px">
       <div class="price-card">
         <h3>Team</h3>
         <div class="price-amount">$3<small> /employee /mo</small></div>
-        <p class="muted">50–200 employees</p>
+        <p class="muted">50-200 employees</p>
         <ul class="price-feat">
           <li>Full game library (200+ games)</li>
           <li>Custom branding</li>
@@ -161,7 +161,7 @@ PRICING_BODY = '''<section class="hero" style="padding:72px 0 32px">
         <span class="price-ribbon">MOST POPULAR</span>
         <h3>Business</h3>
         <div class="price-amount">$2<small> /employee /mo</small></div>
-        <p class="muted">200–1,000 employees</p>
+        <p class="muted">200-1,000 employees</p>
         <ul class="price-feat">
           <li>Everything in Team</li>
           <li>SSO (Okta, Azure AD, Google)</li>
@@ -198,7 +198,7 @@ PRICING_BODY = '''<section class="hero" style="padding:72px 0 32px">
         <a class="btn btn-primary" href="./facilitated.html">Explore Facilitated →</a>
       </div>
     </div>
-    <p class="muted" style="margin-top:24px;text-align:center;font-size:13.5px">Existing Edstellar training clients: Engage attaches as a <strong style="color:var(--brand-primary)">15–20% add-on</strong> on the training contract — talk to your account manager.</p>
+    <p class="muted" style="margin-top:24px;text-align:center;font-size:13.5px">Existing Edstellar training clients: Engage attaches as a <strong style="color:var(--brand-primary)">15-20% add-on</strong> on the training contract - talk to your account manager.</p>
   </div>
 </section>
 
@@ -213,13 +213,13 @@ PRICING_BODY = '''<section class="hero" style="padding:72px 0 32px">
           <tr><td>Game library (200+ games)</td><td class="check">✓</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
           <tr><td>Custom branding</td><td class="check">✓</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
           <tr><td>Engagement reports</td><td>Monthly</td><td class="col-engage">Advanced + exports</td><td>Custom dashboards</td></tr>
-          <tr><td>SSO</td><td class="cross">—</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
-          <tr><td>API access</td><td class="cross">—</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
-          <tr><td>HRIS sync</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
-          <tr><td>LMS interop (SCORM/xAPI)</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
-          <tr><td>Data residency</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
-          <tr><td>Dedicated CSM</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
-          <tr><td>SLA</td><td class="cross">—</td><td class="cross">—</td><td class="check">99.9%</td></tr>
+          <tr><td>SSO</td><td class="cross">-</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
+          <tr><td>API access</td><td class="cross">-</td><td class="col-engage check">✓</td><td class="check">✓</td></tr>
+          <tr><td>HRIS sync</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
+          <tr><td>LMS interop (SCORM/xAPI)</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
+          <tr><td>Data residency</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
+          <tr><td>Dedicated CSM</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
+          <tr><td>SLA</td><td class="cross">-</td><td class="cross">-</td><td class="check">99.9%</td></tr>
         </tbody>
       </table>
     </div>
@@ -230,11 +230,11 @@ PRICING_BODY = '''<section class="hero" style="padding:72px 0 32px">
   <div class="container" style="max-width:820px">
     <h2>Pricing FAQ</h2>
     <div style="margin-top:18px">
-      <div class="faq-item"><button class="faq-q">Is there a free trial?</button><div class="faq-a">Yes — 14 days on the Team plan, no card required. Up to 25 employees, full game library, monthly report.</div></div>
+      <div class="faq-item"><button class="faq-q">Is there a free trial?</button><div class="faq-a">Yes - 14 days on the Team plan, no card required. Up to 25 employees, full game library, monthly report.</div></div>
       <div class="faq-item"><button class="faq-q">Are there annual discounts?</button><div class="faq-a">Annual billing saves ~15% on Team and Business plans. Enterprise contracts are negotiated per-deal with multi-year discount tiers.</div></div>
-      <div class="faq-item"><button class="faq-q">What counts as an employee?</button><div class="faq-a">Anyone who can join a game room or receive a campaign. You pay for active employees in the period — not headcount on paper. Inactive users don't count toward your plan.</div></div>
+      <div class="faq-item"><button class="faq-q">What counts as an employee?</button><div class="faq-a">Anyone who can join a game room or receive a campaign. You pay for active employees in the period - not headcount on paper. Inactive users don't count toward your plan.</div></div>
       <div class="faq-item"><button class="faq-q">Can we mix Engage with the Facilitated tier?</button><div class="faq-a">Yes. Most Business and Enterprise clients run the SaaS year-round and book Facilitated sessions for quarterly events. Discounts apply when bundled.</div></div>
-      <div class="faq-item"><button class="faq-q">How does the Edstellar training add-on work?</button><div class="faq-a">If you're already an Edstellar training client, Engage is added as a 15–20% uplift on the training contract. You get the same library plus reinforcement games auto-scheduled at 14 and 30 days post-training.</div></div>
+      <div class="faq-item"><button class="faq-q">How does the Edstellar training add-on work?</button><div class="faq-a">If you're already an Edstellar training client, Engage is added as a 15-20% uplift on the training contract. You get the same library plus reinforcement games auto-scheduled at 14 and 30 days post-training.</div></div>
       <div class="faq-item"><button class="faq-q">What payment methods do you accept?</button><div class="faq-a">Card, ACH, wire, invoice with NET-30. Enterprise contracts support PO-based invoicing in INR, USD, EUR, AED, SGD, GBP.</div></div>
     </div>
   </div>
@@ -245,7 +245,7 @@ PRICING_BODY = '''<section class="hero" style="padding:72px 0 32px">
     <div class="facil">
       <div>
         <h2>Need a custom quote?</h2>
-        <p class="lead">For 2,000+ employees, multi-region rollouts, or training-bundle pricing — our team will put together a tailored plan in 24 hours.</p>
+        <p class="lead">For 2,000+ employees, multi-region rollouts, or training-bundle pricing - our team will put together a tailored plan in 24 hours.</p>
         <button class="btn btn-accent btn-lg" data-open-demo>Talk to Sales</button>
       </div>
       <div class="facil-table">
@@ -256,7 +256,7 @@ PRICING_BODY = '''<section class="hero" style="padding:72px 0 32px">
     </div>
   </div>
 </section>'''
-page('pricing.html', 'Pricing — Edstellar Engage', PRICING_BODY, active_nav='./pricing.html')
+page('pricing.html', 'Pricing - Edstellar Engage', PRICING_BODY, active_nav='./pricing.html')
 
 # ---------------- USE CASES ----------------
 USE_CASES_BODY = '''<section class="hero" style="padding:72px 0 32px">
@@ -276,21 +276,21 @@ USE_CASES_BODY = '''<section class="hero" style="padding:72px 0 32px">
         <p>Onboarding quests, monthly culture games, recognition rituals, wellness campaigns. Engagement stops being a quarterly survey and starts being a weekly habit.</p>
         <h4 style="margin:14px 0 6px;font-size:13px;color:var(--brand-primary);text-transform:uppercase;letter-spacing:.04em">Top games for HR</h4>
         <ul>
-          <li><a href="./game.html?id=onboarding-quest">Onboarding Quest</a> — 7-day new-hire game</li>
-          <li><a href="./game.html?id=values-mapping">Values Mapping</a> — culture alignment</li>
-          <li><a href="./game.html?id=stress-free-bingo">Stress-Free Bingo</a> — wellness habit builder</li>
+          <li><a href="./game.html?id=onboarding-quest">Onboarding Quest</a> - 7-day new-hire game</li>
+          <li><a href="./game.html?id=values-mapping">Values Mapping</a> - culture alignment</li>
+          <li><a href="./game.html?id=stress-free-bingo">Stress-Free Bingo</a> - wellness habit builder</li>
         </ul>
         <a class="btn btn-primary btn-sm" href="./games.html?category=HR%20%2F%20Onboarding" style="margin-top:14px">Browse HR games →</a>
       </div>
       <div class="uc-card" id="ld">
         <span class="eyebrow" style="background:rgba(37,99,235,.1);color:var(--brand-accent-700)">L&amp;D Teams</span>
         <h3 style="margin:10px 0 8px">Make every training program 2× as effective.</h3>
-        <p>Tie every Edstellar course to a reinforcement game at 14 and 30 days post-training. Beat the forgetting curve — without redesigning your LMS.</p>
+        <p>Tie every Edstellar course to a reinforcement game at 14 and 30 days post-training. Beat the forgetting curve - without redesigning your LMS.</p>
         <h4 style="margin:14px 0 6px;font-size:13px;color:var(--brand-primary);text-transform:uppercase;letter-spacing:.04em">Top games for L&amp;D</h4>
         <ul>
-          <li><a href="./game.html?id=sales-jeopardy">Sales Jeopardy</a> — post-sales-training reinforcement</li>
-          <li><a href="./game.html?id=empathy-mapping">Empathy Mapping</a> — post-CX-training</li>
-          <li><a href="./game.html?id=prioritization-pyramid">Prioritization Pyramid</a> — manager training follow-up</li>
+          <li><a href="./game.html?id=sales-jeopardy">Sales Jeopardy</a> - post-sales-training reinforcement</li>
+          <li><a href="./game.html?id=empathy-mapping">Empathy Mapping</a> - post-CX-training</li>
+          <li><a href="./game.html?id=prioritization-pyramid">Prioritization Pyramid</a> - manager training follow-up</li>
         </ul>
         <a class="btn btn-primary btn-sm" href="./games.html?reinforces=1" style="margin-top:14px">Browse reinforcement games →</a>
       </div>
@@ -300,9 +300,9 @@ USE_CASES_BODY = '''<section class="hero" style="padding:72px 0 32px">
         <p>Trust Battery for quarterly check-ins, GROW coaching for monthly 1:1s, Hot Seat for project retros. Built for managers who want structure without slides.</p>
         <h4 style="margin:14px 0 6px;font-size:13px;color:var(--brand-primary);text-transform:uppercase;letter-spacing:.04em">Top games for Managers</h4>
         <ul>
-          <li><a href="./game.html?id=trust-battery">Trust Battery</a> — quarterly trust check-in</li>
-          <li><a href="./game.html?id=hot-seat">The Hot Seat</a> — project retro format</li>
-          <li><a href="./game.html?id=leadership-pizza">Leadership Pizza</a> — team value alignment</li>
+          <li><a href="./game.html?id=trust-battery">Trust Battery</a> - quarterly trust check-in</li>
+          <li><a href="./game.html?id=hot-seat">The Hot Seat</a> - project retro format</li>
+          <li><a href="./game.html?id=leadership-pizza">Leadership Pizza</a> - team value alignment</li>
         </ul>
         <a class="btn btn-primary btn-sm" href="./games.html?category=Leadership" style="margin-top:14px">Browse leadership games →</a>
       </div>
@@ -350,13 +350,13 @@ USE_CASES_BODY = '''<section class="hero" style="padding:72px 0 32px">
       </div>
       <div class="facil-table">
         <div class="facil-row"><span>HR-led pilots</span><b>14-day free trial</b></div>
-        <div class="facil-row"><span>L&amp;D bundles</span><b>15–20% training add-on</b></div>
+        <div class="facil-row"><span>L&amp;D bundles</span><b>15-20% training add-on</b></div>
         <div class="facil-row"><span>Enterprise</span><b>Custom quote</b></div>
       </div>
     </div>
   </div>
 </section>'''
-page('use-cases.html', 'Use Cases — Edstellar Engage', USE_CASES_BODY, active_nav='./use-cases.html')
+page('use-cases.html', 'Use Cases - Edstellar Engage', USE_CASES_BODY, active_nav='./use-cases.html')
 
 # ---------------- HOW IT WORKS ----------------
 HOW_BODY = '''<section class="hero" style="padding:72px 0 32px">
@@ -445,14 +445,14 @@ HOW_BODY = '''<section class="hero" style="padding:72px 0 32px">
     </div>
   </div>
 </section>'''
-page('how-it-works.html', 'How it works — Edstellar Engage', HOW_BODY, active_nav='./how-it-works.html')
+page('how-it-works.html', 'How it works - Edstellar Engage', HOW_BODY, active_nav='./how-it-works.html')
 
 # ---------------- FACILITATED ----------------
 FACIL_BODY = '''<section class="hero" style="padding:72px 0 32px">
   <div class="container" style="max-width:920px;text-align:center">
     <span class="eyebrow">Facilitated Sessions</span>
     <h1>Trained Edstellar facilitators. Your big moments.</h1>
-    <p class="lead" style="margin:14px auto 24px;max-width:680px">For town halls, off-sites, leadership retreats, sales kickoffs, and onboarding waves — we bring a facilitator, a tailored game, and a debrief report.</p>
+    <p class="lead" style="margin:14px auto 24px;max-width:680px">For town halls, off-sites, leadership retreats, sales kickoffs, and onboarding waves - we bring a facilitator, a tailored game, and a debrief report.</p>
     <div class="hero-cta" style="justify-content:center"><button class="btn btn-accent btn-lg" data-open-demo>Book a Facilitator</button><a class="btn btn-ghost btn-lg" href="#packages">See packages</a></div>
   </div>
 </section>
@@ -469,7 +469,7 @@ FACIL_BODY = '''<section class="hero" style="padding:72px 0 32px">
         <ul class="price-feat">
           <li>1 Edstellar facilitator</li>
           <li>Templated game format</li>
-          <li>60–90 minutes</li>
+          <li>60-90 minutes</li>
           <li>Virtual or hybrid</li>
           <li>Post-session report</li>
         </ul>
@@ -483,7 +483,7 @@ FACIL_BODY = '''<section class="hero" style="padding:72px 0 32px">
         <ul class="price-feat">
           <li>1 Edstellar facilitator</li>
           <li>Choice of 6 templated games</li>
-          <li>60–90 minutes</li>
+          <li>60-90 minutes</li>
           <li>Virtual, hybrid, or in-person</li>
           <li>Detailed engagement report</li>
         </ul>
@@ -496,7 +496,7 @@ FACIL_BODY = '''<section class="hero" style="padding:72px 0 32px">
         <ul class="price-feat">
           <li>2 facilitators</li>
           <li>Custom game design</li>
-          <li>90–120 minutes</li>
+          <li>90-120 minutes</li>
           <li>Pre-session discovery call</li>
           <li>Full debrief + recommendations</li>
         </ul>
@@ -504,7 +504,7 @@ FACIL_BODY = '''<section class="hero" style="padding:72px 0 32px">
       </div>
       <div class="price-card">
         <h3>Enterprise event</h3>
-        <div class="price-amount">$8K–$15K<small> / event</small></div>
+        <div class="price-amount">$8K-$15K<small> / event</small></div>
         <p class="muted">200+ participants</p>
         <ul class="price-feat">
           <li>3+ facilitators, multi-room</li>
@@ -535,21 +535,21 @@ FACIL_BODY = '''<section class="hero" style="padding:72px 0 32px">
   <div class="container" style="max-width:820px">
     <h2>Common questions</h2>
     <div style="margin-top:18px">
-      <div class="faq-item"><button class="faq-q">How fast can we book a session?</button><div class="faq-a">Standard sessions: 1–2 weeks lead time. Premium custom: 3–4 weeks. Enterprise events: 6–8 weeks. Rush is possible with a surcharge.</div></div>
+      <div class="faq-item"><button class="faq-q">How fast can we book a session?</button><div class="faq-a">Standard sessions: 1-2 weeks lead time. Premium custom: 3-4 weeks. Enterprise events: 6-8 weeks. Rush is possible with a surcharge.</div></div>
       <div class="faq-item"><button class="faq-q">Can we use our own facilitators?</button><div class="faq-a">Yes. Edstellar can certify your internal facilitators through a 2-3 day Engage Facilitator program. Then you run on the platform with your own team.</div></div>
-      <div class="faq-item"><button class="faq-q">What does the debrief report include?</button><div class="faq-a">Engagement metrics, qualitative themes, facilitator observations, top-rated activities, and 2–3 recommended follow-up actions for your team.</div></div>
+      <div class="faq-item"><button class="faq-q">What does the debrief report include?</button><div class="faq-a">Engagement metrics, qualitative themes, facilitator observations, top-rated activities, and 2-3 recommended follow-up actions for your team.</div></div>
       <div class="faq-item"><button class="faq-q">Can a session be recorded?</button><div class="faq-a">Yes with participant consent. We can also share anonymized highlights for internal sharing.</div></div>
     </div>
   </div>
 </section>'''
-page('facilitated.html', 'Facilitated Sessions — Edstellar Engage', FACIL_BODY)
+page('facilitated.html', 'Facilitated Sessions - Edstellar Engage', FACIL_BODY)
 
 # ---------------- COMPARE ----------------
 COMPARE_BODY = '''<section class="hero" style="padding:72px 0 32px">
   <div class="container" style="max-width:920px;text-align:center">
     <span class="eyebrow">Compare</span>
     <h1>How Engage stacks up.</h1>
-    <p class="lead" style="margin:14px auto 24px;max-width:680px">Most HR teams already have a quiz tool. The question is what to add on top — a polling app, an event service, or a full engagement platform tied to your training catalog.</p>
+    <p class="lead" style="margin:14px auto 24px;max-width:680px">Most HR teams already have a quiz tool. The question is what to add on top - a polling app, an event service, or a full engagement platform tied to your training catalog.</p>
   </div>
 </section>
 
@@ -568,15 +568,15 @@ COMPARE_BODY = '''<section class="hero" style="padding:72px 0 32px">
         </thead>
         <tbody>
           <tr><td>200+ game library</td><td class="col-engage check">✓</td><td class="cross">limited</td><td class="cross">polls only</td><td class="partial">~</td></tr>
-          <tr><td>Post-training reinforcement bundle</td><td class="col-engage check">✓ native</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
-          <tr><td>Edstellar facilitator network</td><td class="col-engage check">✓ included</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
-          <tr><td>Tied to an L&amp;D training catalog</td><td class="col-engage check">✓</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
-          <tr><td>In-game currency &amp; power-ups</td><td class="col-engage check">✓ EngageCoins</td><td class="cross">—</td><td class="cross">—</td><td class="partial">~</td></tr>
+          <tr><td>Post-training reinforcement bundle</td><td class="col-engage check">✓ native</td><td class="cross">-</td><td class="cross">-</td><td class="cross">-</td></tr>
+          <tr><td>Edstellar facilitator network</td><td class="col-engage check">✓ included</td><td class="cross">-</td><td class="cross">-</td><td class="cross">-</td></tr>
+          <tr><td>Tied to an L&amp;D training catalog</td><td class="col-engage check">✓</td><td class="cross">-</td><td class="cross">-</td><td class="cross">-</td></tr>
+          <tr><td>In-game currency &amp; power-ups</td><td class="col-engage check">✓ EngageCoins</td><td class="cross">-</td><td class="cross">-</td><td class="partial">~</td></tr>
           <tr><td>India / MEA / APAC delivery</td><td class="col-engage check">✓ strong</td><td class="partial">~</td><td class="partial">~</td><td class="cross">thin</td></tr>
           <tr><td>Live quiz format</td><td class="col-engage check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="partial">~</td></tr>
-          <tr><td>Async &amp; multi-week campaigns</td><td class="col-engage check">✓</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
-          <tr><td>HRIS sync (Workday, BambooHR)</td><td class="col-engage check">✓ Enterprise</td><td class="cross">—</td><td class="cross">—</td><td class="partial">~</td></tr>
-          <tr><td>Facilitated event services</td><td class="col-engage check">✓</td><td class="cross">—</td><td class="cross">—</td><td class="cross">—</td></tr>
+          <tr><td>Async &amp; multi-week campaigns</td><td class="col-engage check">✓</td><td class="cross">-</td><td class="cross">-</td><td class="check">✓</td></tr>
+          <tr><td>HRIS sync (Workday, BambooHR)</td><td class="col-engage check">✓ Enterprise</td><td class="cross">-</td><td class="cross">-</td><td class="partial">~</td></tr>
+          <tr><td>Facilitated event services</td><td class="col-engage check">✓</td><td class="cross">-</td><td class="cross">-</td><td class="cross">-</td></tr>
         </tbody>
       </table>
     </div>
@@ -589,9 +589,9 @@ COMPARE_BODY = '''<section class="hero" style="padding:72px 0 32px">
     <h2>The differences that actually matter.</h2>
     <p class="lead">Six reasons buyers tell us they picked Engage in evaluations.</p>
     <div class="value-grid" style="margin-top:24px">
-      <div class="value-card"><h3>1. Tied to training</h3><p class="muted">Every game maps to an Edstellar course. Reinforcement happens automatically — you don't rebuild it in your LMS.</p></div>
+      <div class="value-card"><h3>1. Tied to training</h3><p class="muted">Every game maps to an Edstellar course. Reinforcement happens automatically - you don't rebuild it in your LMS.</p></div>
       <div class="value-card"><h3>2. A real game library</h3><p class="muted">200+ games across 14 categories. Most competitors are quiz tools dressed up with a few extras.</p></div>
-      <div class="value-card"><h3>3. Facilitators included</h3><p class="muted">Kahoot doesn't run your town hall. Engage facilitators do — at a fraction of agency rates.</p></div>
+      <div class="value-card"><h3>3. Facilitators included</h3><p class="muted">Kahoot doesn't run your town hall. Engage facilitators do - at a fraction of agency rates.</p></div>
       <div class="value-card"><h3>4. Async + live</h3><p class="muted">Most competitors are live-only. Engage runs multi-week campaigns, async cohorts, and live sessions in one platform.</p></div>
       <div class="value-card"><h3>5. India, MEA, APAC strong</h3><p class="muted">Local facilitators, local-language delivery, local data residency. Built where Edstellar is strongest.</p></div>
       <div class="value-card"><h3>6. Buyer-aware</h3><p class="muted">Different value props for HR, L&amp;D, managers, and enterprise. Not "one feature page fits all".</p></div>
@@ -608,21 +608,21 @@ COMPARE_BODY = '''<section class="hero" style="padding:72px 0 32px">
         <button class="btn btn-accent btn-lg" data-open-demo>Talk to a Migration Specialist</button>
       </div>
       <div class="facil-table">
-        <div class="facil-row"><span>Avg. migration</span><b>2–3 weeks</b></div>
+        <div class="facil-row"><span>Avg. migration</span><b>2-3 weeks</b></div>
         <div class="facil-row"><span>Avg. cost change</span><b>−12% bundled</b></div>
         <div class="facil-row"><span>Avg. engagement lift</span><b>+38% YoY</b></div>
       </div>
     </div>
   </div>
 </section>'''
-page('compare.html', 'Compare Engage — Edstellar Engage vs Kahoot, Mentimeter, Gametize', COMPARE_BODY, active_nav='./compare.html')
+page('compare.html', 'Compare Engage - Edstellar Engage vs Kahoot, Mentimeter, Gametize', COMPARE_BODY, active_nav='./compare.html')
 
 # ---------------- CASE STUDIES ----------------
 CASES_BODY = '''<section class="hero" style="padding:72px 0 32px">
   <div class="container" style="max-width:920px;text-align:center">
     <span class="eyebrow">Case Studies</span>
     <h1>How HR &amp; L&amp;D leaders use Engage.</h1>
-    <p class="lead" style="margin:14px auto 24px;max-width:680px">Three stories from the field — what they tried before Engage, what they ran, and what changed.</p>
+    <p class="lead" style="margin:14px auto 24px;max-width:680px">Three stories from the field - what they tried before Engage, what they ran, and what changed.</p>
   </div>
 </section>
 
@@ -710,14 +710,14 @@ CASES_BODY = '''<section class="hero" style="padding:72px 0 32px">
     </div>
   </div>
 </section>'''
-page('case-studies.html', 'Case Studies — Edstellar Engage', CASES_BODY)
+page('case-studies.html', 'Case Studies - Edstellar Engage', CASES_BODY)
 
 # ---------------- ABOUT ----------------
 ABOUT_BODY = '''<section class="hero" style="padding:72px 0 32px">
   <div class="container" style="max-width:920px;text-align:center">
     <span class="eyebrow">About</span>
     <h1>Built for the gap between training and behavior.</h1>
-    <p class="lead" style="margin:14px auto 24px;max-width:680px">Edstellar Engage is the engagement and reinforcement product inside the Edstellar talent-transformation suite. We make training stick — by turning it into a game your team actually plays.</p>
+    <p class="lead" style="margin:14px auto 24px;max-width:680px">Edstellar Engage is the engagement and reinforcement product inside the Edstellar talent-transformation suite. We make training stick - by turning it into a game your team actually plays.</p>
   </div>
 </section>
 
@@ -725,7 +725,7 @@ ABOUT_BODY = '''<section class="hero" style="padding:72px 0 32px">
   <div class="container">
     <div class="value-grid">
       <div class="value-card"><h3>What we are</h3><p class="muted">A SaaS-plus-services product. Platform for engagement programs. Facilitator network for live events. Tied to the world's largest curated training catalog.</p></div>
-      <div class="value-card"><h3>What we're not</h3><p class="muted">Not a quiz tool. Not a polling app. Not an entertainment site. We don't replace Kahoot for live quizzes — we wrap engagement around what your training delivers.</p></div>
+      <div class="value-card"><h3>What we're not</h3><p class="muted">Not a quiz tool. Not a polling app. Not an entertainment site. We don't replace Kahoot for live quizzes - we wrap engagement around what your training delivers.</p></div>
       <div class="value-card"><h3>Where we come from</h3><p class="muted">Edstellar has delivered training to 500K+ professionals across 200+ enterprises in India, MEA, APAC, and Europe. Engage is what those clients asked us to build.</p></div>
     </div>
   </div>
@@ -749,7 +749,7 @@ ABOUT_BODY = '''<section class="hero" style="padding:72px 0 32px">
     <h2>Why engagement, why now.</h2>
     <p class="lead">Three numbers we cite a lot, and what they mean.</p>
     <div class="stats-strip" style="margin-top:24px">
-      <div class="stat-card"><div class="stat-num">21%</div><div class="stat-label">of employees globally are engaged (Gallup 2024). Engagement isn't an HR nice-to-have — it's the default failure mode of modern work.</div></div>
+      <div class="stat-card"><div class="stat-num">21%</div><div class="stat-label">of employees globally are engaged (Gallup 2024). Engagement isn't an HR nice-to-have - it's the default failure mode of modern work.</div></div>
       <div class="stat-card"><div class="stat-num">50%</div><div class="stat-label">of training content is forgotten within 1 hour (Ebbinghaus). Without reinforcement, your training spend evaporates fast.</div></div>
       <div class="stat-card"><div class="stat-num">$438B</div><div class="stat-label">in annual economic loss from disengagement (Gallup). Engage exists to convert a fraction of that into measurable wins.</div></div>
     </div>
@@ -784,6 +784,6 @@ ABOUT_BODY = '''<section class="hero" style="padding:72px 0 32px">
     </div>
   </div>
 </section>'''
-page('about.html', 'About — Edstellar Engage', ABOUT_BODY)
+page('about.html', 'About - Edstellar Engage', ABOUT_BODY)
 
 print('\nAll pages generated.')

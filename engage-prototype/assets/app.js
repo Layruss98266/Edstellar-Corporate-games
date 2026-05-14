@@ -1,4 +1,4 @@
-/* Edstellar Engage prototype — vanilla JS.
+/* Edstellar Engage prototype - vanilla JS.
    Pages: landing | library | detail. Driven by data in games-data.js (window.GAMES_DATA).
    No framework, no build step, works from file:// because data is a script tag.
 */
@@ -288,7 +288,7 @@ async function renderResults(){
         ? `Browsing all ${totalLabel} games`
         : `Showing all ${total} matching games`;
     } else {
-      count.textContent = `Showing ${start+1}–${end} of ${total} games`;
+      count.textContent = `Showing ${start+1}-${end} of ${total} games`;
     }
   }
   if(!grid) return;
@@ -422,9 +422,9 @@ function initLibraryHelp(){
   injectHelpButton('Open library help');
   injectHelpModal('library-help', `
     <h3>How the Game Library works</h3>
-    <p class="muted">215 games across 14 categories — built for HR, L&amp;D, managers, and team leads.</p>
+    <p class="muted">215 games across 14 categories - built for HR, L&amp;D, managers, and team leads.</p>
     <ul class="help-list">
-      <li><span class="help-num">1</span><div><strong>Search</strong><p>Type a game name, skill, or keyword — "escape", "onboarding", "negotiation". Results update as you type.</p></div></li>
+      <li><span class="help-num">1</span><div><strong>Search</strong><p>Type a game name, skill, or keyword - "escape", "onboarding", "negotiation". Results update as you type.</p></div></li>
       <li><span class="help-num">2</span><div><strong>Filter with live counts</strong><p>Each filter chip shows how many games would match if you toggled it on. Disabled chips mean no games match in your current selection.</p></div></li>
       <li><span class="help-num">3</span><div><strong>Sort smart</strong><p>"Most reinforcing" surfaces games tied to your training catalog first. "Shortest first" is great for quick energizers.</p></div></li>
       <li><span class="help-num">4</span><div><strong>Reinforcement toggle</strong><p>Turn on "Reinforces Edstellar training" to show only games designed as post-program reinforcement.</p></div></li>
@@ -486,7 +486,7 @@ function initModal(){
   overlay.querySelector('form')?.addEventListener('submit', e=>{
     e.preventDefault();
     const f = e.target;
-    f.innerHTML = `<h3>Thanks — we'll be in touch.</h3>
+    f.innerHTML = `<h3>Thanks - we'll be in touch.</h3>
       <p class="muted">An Edstellar account manager will reach out within one business day to schedule your demo.</p>
       <div class="modal-actions"><button type="button" class="btn btn-primary" data-close-demo>Close</button></div>`;
   });
@@ -569,7 +569,7 @@ async function initLandingFeatured(){
 async function initLibraryExtras(){
   const games = await loadGames();
 
-  // Spotlight game — rotates daily based on date seed
+  // Spotlight game - rotates daily based on date seed
   const spot = document.getElementById('spotlight-host');
   if(spot){
     const featured = games.filter(g => g.economy || (g.reinforcesTraining && (g.skills||[]).length > 0));
@@ -605,7 +605,7 @@ async function initDetail(){
   const slug = new URLSearchParams(location.search).get('id');
   const game = games.find(g=>g.slug===slug) || games[0];
   if(!game){ host.innerHTML = '<p>Game not found.</p>'; return; }
-  document.title = `${game.title} — Edstellar Engage`;
+  document.title = `${game.title} - Edstellar Engage`;
 
   const related = games.filter(g=>g.category===game.category && g.slug!==game.slug).slice(0,4);
   const howToFull = (game.howToPlay||[]).map((s,i)=>`<li ${i>=4?'class="collapsed-item"':''}>${escapeHtml(s)}</li>`).join('');
@@ -613,7 +613,7 @@ async function initDetail(){
   const variations = game.variations && game.variations.length ? game.variations : [];
   const variationsHtml = variations.length
     ? `<ul>${variations.map((v,i)=>`<li ${i>=3?'class="collapsed-item"':''}>${escapeHtml(v)}</li>`).join('')}</ul>${variations.length>3?'<button class="collapse-toggle" data-collapse-toggle>Show all variations</button>':''}`
-    : `<p class="muted" style="margin:0">No variations published yet — check the source blog for ideas.</p>`;
+    : `<p class="muted" style="margin:0">No variations published yet - check the source blog for ideas.</p>`;
 
   const skillsHtml = (game.skills||[]).length
     ? `<div class="skill-row">${game.skills.map(s=>`<span class="skill-pill">${escapeHtml(s)}</span>`).join('')}</div>` : '';
@@ -706,7 +706,7 @@ async function initDetail(){
 
           <section class="panel section-anchor" id="takeaway">
             <h2>Key takeaway</h2>
-            <p>${escapeHtml(game.keyTakeaway || 'The value comes from the debrief — connect what happened in the game to what changes at work.')}</p>
+            <p>${escapeHtml(game.keyTakeaway || 'The value comes from the debrief - connect what happened in the game to what changes at work.')}</p>
           </section>
 
           ${game.economy ? `<section class="panel section-anchor" id="currency" style="padding:0;background:transparent;border:none">${ecoHtml}</section>` : ''}
@@ -753,7 +753,7 @@ async function initDetail(){
   }
   highlight(); window.addEventListener('scroll', highlight, {passive:true});
 
-  // Walkthrough — auto-open on first visit
+  // Walkthrough - auto-open on first visit
   initWalkthrough(game);
 }
 

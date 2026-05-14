@@ -9386,7 +9386,7 @@
       "economy": {
         "currency": "EngageCoins",
         "starting": 200,
-        "explainer": "Each team gets a virtual budget. Buy materials carefully — overspending leaves no margin for backup ideas, but cheap-only builds rarely survive the drop.",
+        "explainer": "Each team gets a virtual budget. Buy materials carefully - overspending leaves no margin for backup ideas, but cheap-only builds rarely survive the drop.",
         "earnRules": [
           "Help another team: +20 coins",
           "Share a design tip in chat: +10 coins",
