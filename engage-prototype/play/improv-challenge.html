@@ -859,6 +859,67 @@ body[data-phase="score"] #twistBtn{display:none}
 /* Snapshot phase stat is redundant with the flow stepper - hide */
 #phaseStatBox{display:none}
 
+/* ============= SETUP PANEL REDESIGN ============= */
+.setup-panel{padding:20px 22px 90px;position:relative}
+.setup-section{
+  padding:14px 0;border-bottom:1px solid var(--border);
+}
+.setup-section:last-of-type{border-bottom:none}
+.setup-section-head{
+  display:flex;align-items:center;gap:8px;margin-bottom:12px;
+}
+.setup-section-head .sec-ico{
+  width:28px;height:28px;border-radius:9px;
+  background:#EFF6FF;color:var(--brand-blue);
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;
+}
+.setup-section-head h3{margin:0;font-size:14px;color:var(--heading);font-weight:900}
+.setup-section-head .step{
+  margin-left:auto;background:#F8FAFC;color:var(--muted);
+  padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:900;letter-spacing:.06em;
+}
+
+.setup-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setup-grid-2 .form-row{margin-bottom:0}
+.setup-grid-2 select,.setup-grid-2 input{padding:9px 11px;font-size:13px}
+
+/* Quick start row */
+.quickstart{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;
+}
+.quickstart .btn{justify-content:center;padding:11px 12px;min-height:42px}
+.quickstart .btn.ghost{background:#F8FAFC}
+
+/* Estimator pill */
+.estimator{
+  display:flex;align-items:center;gap:10px;margin-top:10px;
+  background:linear-gradient(135deg,#EFF6FF,#FFFFFF);
+  border:1px solid #BFDBFE;border-radius:12px;padding:10px 12px;
+  font-size:12.5px;color:var(--brand-deep);line-height:1.4;
+}
+.estimator strong{color:var(--brand-blue);font-weight:900}
+.estimator .ico{font-size:18px;line-height:1}
+
+/* Add-team form, tighter */
+.add-team-form{display:grid;gap:6px}
+.add-team-form .name-row{display:grid;grid-template-columns:1fr auto;gap:6px}
+.add-team-form input,.add-team-form textarea{padding:9px 11px;font-size:13px}
+.add-team-form textarea{min-height:60px}
+.team-list-head{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.team-list-head small{color:var(--muted);font-weight:700;font-size:11.5px}
+
+/* Sticky "Start Game" CTA */
+.start-cta{
+  position:sticky;bottom:0;left:0;right:0;
+  margin:14px -22px -20px;padding:14px 22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.98) 30%);
+  backdrop-filter:blur(8px);
+  border-top:1px solid var(--border);
+  display:flex;gap:8px;align-items:center;
+}
+.start-cta .btn{flex:1;justify-content:center;min-height:46px;font-size:15px}
+.start-cta .help{font-size:11px;color:var(--muted);max-width:120px;line-height:1.35}
+
 /* Settings overflow menu */
 .settings-row{
   display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;
@@ -963,96 +1024,135 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
 
   <section class="grid">
     <aside class="panel setup-panel" id="setupPanel">
-      <h2>Custom Setup</h2>
+      <h2 style="margin-bottom:6px">Custom Setup</h2>
+      <p class="hint" style="margin:0 0 12px">Three quick steps. Or just hit <strong>Play Demo Now</strong> on the hero.</p>
 
-      <div class="form-row">
-        <label>Language</label>
-        <div class="lang-row" id="langRow" style="overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px">
-          <button class="lang-pick active" data-lang="en" title="English">EN</button>
-          <button class="lang-pick" data-lang="hi" title="हिन्दी">हिं</button>
-          <button class="lang-pick" data-lang="ar" title="العربية">ع</button>
-          <button class="lang-pick" data-lang="es" title="Español">ES</button>
-          <button class="lang-pick" data-lang="fr" title="Français">FR</button>
-          <button class="lang-pick" data-lang="de" title="Deutsch">DE</button>
-          <button class="lang-pick" data-lang="pt" title="Português">PT</button>
-          <button class="lang-pick" data-lang="ja" title="日本語">日</button>
-          <button class="lang-pick" data-lang="ko" title="한국어">한</button>
-          <button class="lang-pick" data-lang="zh" title="中文">中</button>
-          <button class="lang-pick" data-lang="ru" title="Русский">RU</button>
-          <button class="lang-pick" data-lang="it" title="Italiano">IT</button>
-          <button class="lang-pick" data-lang="id" title="Bahasa Indonesia">ID</button>
-          <button class="lang-pick" data-lang="tr" title="Türkçe">TR</button>
+      <!-- STEP 1: Quick start -->
+      <div class="setup-section">
+        <div class="setup-section-head">
+          <span class="sec-ico">1</span>
+          <h3>Quick start</h3>
+          <span class="step">Optional</span>
         </div>
-        <p class="hint">EN: 28 prompts. 13 other languages: 8-10 prompts each. RTL auto-applied for Arabic. Use Custom Prompts to extend any language.</p>
+        <div class="quickstart">
+          <button class="btn ghost" id="loadSampleBtn">↻ Use 3 demo teams</button>
+          <button class="btn ghost" id="saveTemplateBtn">⭑ Save as template</button>
+        </div>
+        <div id="templateList" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px"></div>
       </div>
 
-      <div class="form-row">
-        <label>Saved Templates <button type="button" class="btn ghost btn-sm" id="saveTemplateBtn" style="float:right;min-height:28px;padding:4px 9px;font-size:11px">+ Save current</button></label>
-        <div id="templateList" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><span class="hint" style="margin:0">No saved templates yet. Build a config and click "Save current".</span></div>
+      <!-- STEP 2: Game settings -->
+      <div class="setup-section">
+        <div class="setup-section-head">
+          <span class="sec-ico">2</span>
+          <h3>Game settings</h3>
+          <span class="step">Required</span>
+        </div>
+
+        <div class="form-row">
+          <label>Language</label>
+          <div class="lang-row" id="langRow" style="overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px">
+            <button class="lang-pick active" data-lang="en" title="English (28 prompts)">EN</button>
+            <button class="lang-pick" data-lang="hi" title="हिन्दी (Hindi)">हिं</button>
+            <button class="lang-pick" data-lang="ar" title="العربية (Arabic, RTL)">ع</button>
+            <button class="lang-pick" data-lang="es" title="Español (Spanish)">ES</button>
+            <button class="lang-pick" data-lang="fr" title="Français (French)">FR</button>
+            <button class="lang-pick" data-lang="de" title="Deutsch (German)">DE</button>
+            <button class="lang-pick" data-lang="pt" title="Português (Portuguese)">PT</button>
+            <button class="lang-pick" data-lang="ja" title="日本語 (Japanese)">日</button>
+            <button class="lang-pick" data-lang="ko" title="한국어 (Korean)">한</button>
+            <button class="lang-pick" data-lang="zh" title="中文 (Chinese)">中</button>
+            <button class="lang-pick" data-lang="ru" title="Русский (Russian)">RU</button>
+            <button class="lang-pick" data-lang="it" title="Italiano (Italian)">IT</button>
+            <button class="lang-pick" data-lang="id" title="Bahasa Indonesia">ID</button>
+            <button class="lang-pick" data-lang="tr" title="Türkçe (Turkish)">TR</button>
+          </div>
+        </div>
+
+        <div class="setup-grid-2">
+          <div class="form-row">
+            <label for="gameCategory">Category</label>
+            <select id="gameCategory">
+              <option value="mixed">Mixed</option>
+              <option value="communication">Communication</option>
+              <option value="leadership">Leadership</option>
+              <option value="sales">Sales</option>
+              <option value="customer-service">Customer Service</option>
+              <option value="change-management">Change Management</option>
+              <option value="critical-thinking">Critical Thinking</option>
+              <option value="conflict">Conflict Resolution</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="difficulty">Difficulty</label>
+            <select id="difficulty">
+              <option value="any">Any</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="roundDuration">Round length</label>
+            <select id="roundDuration">
+              <option value="30">30 seconds</option>
+              <option value="60">60 seconds</option>
+              <option value="90" selected>90 seconds</option>
+              <option value="120">2 minutes</option>
+              <option value="180">3 minutes</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="totalRounds">Total rounds</label>
+            <select id="totalRounds">
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10 (max)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="estimator" id="setupEstimator">
+          <span class="ico">⏱</span>
+          <div>
+            Session length: <strong id="estTime">~7 min</strong> · <strong id="estPrompts">28 prompts</strong> available
+          </div>
+        </div>
       </div>
 
-      <div class="form-row">
-        <label for="gameCategory">Prompt Category</label>
-        <select id="gameCategory">
-          <option value="mixed">Mixed Workplace Scenarios</option>
-          <option value="communication">Communication</option>
-          <option value="leadership">Leadership</option>
-          <option value="sales">Sales</option>
-          <option value="customer-service">Customer Service</option>
-          <option value="change-management">Change Management</option>
-          <option value="critical-thinking">Critical Thinking</option>
-          <option value="conflict">Conflict Resolution</option>
-        </select>
+      <!-- STEP 3: Teams -->
+      <div class="setup-section">
+        <div class="setup-section-head">
+          <span class="sec-ico">3</span>
+          <h3>Teams</h3>
+          <span class="step">Required</span>
+        </div>
+
+        <div class="add-team-form">
+          <div class="name-row">
+            <input id="teamName" placeholder="Team name (e.g. Phoenix)" aria-label="Team name"/>
+            <button class="btn btn-sm" id="addTeamBtn">+ Add</button>
+          </div>
+          <textarea id="teamMembers" placeholder="Members (optional, comma-separated): Asha, Ravi, Meera" aria-label="Team members"></textarea>
+        </div>
+        <p class="hint" style="margin-top:8px">Each team starts with <strong>50 🪙 EngageCoins</strong> for power-ups.</p>
+
+        <div class="team-list-head">
+          <h3 style="margin:0;font-size:13px">Roster</h3>
+          <small id="rosterCount">0 teams</small>
+        </div>
+        <div class="team-list" id="teamList"><div class="empty-state">Add your first team, load demo teams, or just click Play Demo Now.</div></div>
       </div>
 
-      <div class="form-row">
-        <label for="difficulty">Difficulty</label>
-        <select id="difficulty">
-          <option value="any">Any difficulty</option>
-          <option value="Easy">Easy</option>
-          <option value="Medium" selected>Medium</option>
-          <option value="Hard">Hard</option>
-        </select>
-      </div>
-
-      <div class="form-row">
-        <label for="roundDuration">Round Duration</label>
-        <select id="roundDuration">
-          <option value="30">30 seconds</option>
-          <option value="60">60 seconds</option>
-          <option value="90" selected>90 seconds</option>
-          <option value="120">2 minutes</option>
-          <option value="180">3 minutes</option>
-        </select>
-      </div>
-
-      <div class="form-row">
-        <label for="totalRounds">Total Rounds</label>
-        <select id="totalRounds">
-          <option value="3" selected>3 rounds (default)</option>
-          <option value="4">4 rounds</option>
-          <option value="5">5 rounds</option>
-          <option value="6">6 rounds</option>
-          <option value="7">7 rounds</option>
-          <option value="8">8 rounds</option>
-          <option value="9">9 rounds</option>
-          <option value="10">10 rounds (max)</option>
-        </select>
-        <p class="hint">When the last round finishes, the game crowns an overall winner with a final celebration.</p>
-      </div>
-
-      <div class="form-row">
-        <label for="teamName">Add Team</label>
-        <input id="teamName" placeholder="Example: Team Phoenix" />
-        <textarea id="teamMembers" placeholder="Optional: Add members separated by commas"></textarea>
-        <button class="btn secondary" id="addTeamBtn">+ Add Team</button>
-        <button class="btn ghost" id="loadSampleBtn">↻ Load Sample Teams</button>
-        <p class="hint">Skip setup with "Play Demo Now". Each team starts with <strong>50 EngageCoins</strong> to spend on power-ups.</p>
-      </div>
-
-      <h3>Teams</h3>
-      <div class="team-list" id="teamList"><div class="empty-state">No teams added yet.</div></div>
-
+      <!-- Custom prompts (collapsed) -->
       <details class="collapsible custom-prompts-box">
         <summary class="collapsible-head" style="list-style:none;cursor:pointer">
           <h3 style="margin:0">+ Custom Prompts <small style="font-weight:600;color:var(--muted)">(your own scenarios)</small></h3>
@@ -1092,6 +1192,12 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
         </div>
         </div>
       </details>
+
+      <!-- Sticky start CTA -->
+      <div class="start-cta">
+        <button class="btn success" id="startGameBtn">▶ Start Game</button>
+        <span class="help" id="startCtaHelp">Add at least 1 team to start, or use demo teams.</span>
+      </div>
     </aside>
 
     <main class="game-board" id="gameArea">
@@ -1952,6 +2058,9 @@ function updateUI(){
   updateRoundLog();
   renderPowerups();
   setPhase(phase);
+  if(typeof updateEstimator === 'function') updateEstimator();
+  if(typeof updateRosterCount === 'function') updateRosterCount();
+  if(typeof updateStartCta === 'function') updateStartCta();
 }
 
 // ---------- Teams ----------
@@ -2604,6 +2713,57 @@ $('setupGameBtn').addEventListener('click', setupCustomGame);
 $('startRoundBtn').addEventListener('click', startRound);
 $('nextPromptBtn').addEventListener('click', nextPrompt);
 // nextPromptHeroBtn removed (redundant with in-game Next Prompt button)
+
+// ---------- Setup estimator + Start Game CTA ----------
+function updateEstimator(){
+  const dur = Number(document.getElementById('roundDuration')?.value || 90);
+  const rounds = Number(document.getElementById('totalRounds')?.value || 3);
+  const debriefBuffer = 30; // 30s setup + 30s debrief assumed per round
+  const total = (dur + debriefBuffer) * rounds;
+  const m = Math.round(total/60);
+  document.getElementById('estTime').textContent = '~' + m + ' min';
+
+  const lang = currentLanguage;
+  const cat = document.getElementById('gameCategory')?.value || 'mixed';
+  const diff = document.getElementById('difficulty')?.value || 'any';
+  const pool = (PROMPTS_LANG[lang] || []).concat(customPrompts).filter(p =>
+    (cat === 'mixed' || p.category === cat || p.category === 'mixed') &&
+    (diff === 'any' || p.difficulty === diff)
+  );
+  document.getElementById('estPrompts').textContent = pool.length + ' prompts';
+}
+function updateRosterCount(){
+  const el = document.getElementById('rosterCount');
+  if(el) el.textContent = teams.length + (teams.length === 1 ? ' team' : ' teams');
+}
+function updateStartCta(){
+  const btn = document.getElementById('startGameBtn');
+  const help = document.getElementById('startCtaHelp');
+  if(!btn) return;
+  const ready = teams.length >= 1;
+  btn.disabled = !ready;
+  if(!ready){
+    help.textContent = 'Add at least 1 team, or use demo teams.';
+  } else if(currentRound >= maxRounds && roundLog.length){
+    btn.textContent = '↻ New game';
+    help.textContent = 'Last game complete. Start a fresh one.';
+  } else if(currentRound > 0){
+    btn.textContent = '▶ Continue: Round ' + (currentRound+1);
+    help.textContent = 'Resume from where you left off.';
+  } else {
+    btn.textContent = '▶ Start Game · ' + teams.length + (teams.length === 1 ? ' team' : ' teams');
+    help.textContent = document.getElementById('estTime')?.textContent + ' total';
+  }
+}
+['gameCategory','difficulty','roundDuration','totalRounds'].forEach(id => {
+  document.getElementById(id)?.addEventListener('change', updateEstimator);
+});
+document.getElementById('startGameBtn').addEventListener('click', ()=>{
+  if(!teams.length){ showToast('Add a team first', 'warning'); return; }
+  if(currentRound >= maxRounds && roundLog.length){ resetGame(); return; }
+  if(!currentPrompt) choosePrompt();
+  setTimeout(startRound, 200);
+});
 $('pauseTimerBtn').addEventListener('click', pauseTimer);
 $('finishRoundBtn').addEventListener('click', finishRound);
 $('exportBtn').addEventListener('click', exportReport);
