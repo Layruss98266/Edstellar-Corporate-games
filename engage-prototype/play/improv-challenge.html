@@ -825,12 +825,60 @@ body.hc .btn,body.hc .timer{box-shadow:none}
 body.hc .hint,body.hc .team-meta{color:#1F2937}
 body.hc::before{display:none}
 
-/* Hide-coaching outside perform phase */
+/* ============= PROGRESSIVE DISCLOSURE =============
+   Hide elements until they're actually useful. Phase- and state-driven. */
+
+/* Coaching bar only when a round is in flight or being scored */
 body[data-phase="setup"] .coaching-bar,
 body[data-phase="prompt"] .coaching-bar{display:none}
 
-/* Hide-twist after round saved */
-body[data-phase="setup"] .twist-banner{display:none !important}
+/* Timer hidden before any round starts */
+body[data-phase="setup"] .timer{display:none}
+
+/* Power-ups bar - only when teams exist AND we're past setup */
+body[data-phase="setup"] .powerups,
+body[data-teams="0"] .powerups{display:none}
+
+/* Twist banner only meaningful during a round */
+body[data-phase="setup"] .twist-banner,
+body[data-phase="score"] .twist-banner{display:none !important}
+
+/* Hide tabs that need at least 1 saved round to be useful */
+body[data-rounds-played="0"] .tab[data-view="analytics"],
+body[data-rounds-played="0"] .tab[data-view="badges"],
+body[data-rounds-played="0"] .tab[data-view="log"]{display:none}
+
+/* Action buttons: only show what's actionable for the current phase */
+body[data-phase="setup"] #pauseTimerBtn,
+body[data-phase="setup"] #twistBtn,
+body[data-phase="setup"] #finishRoundBtn,
+body[data-phase="prompt"] #pauseTimerBtn,
+body[data-phase="score"] #pauseTimerBtn,
+body[data-phase="score"] #twistBtn{display:none}
+
+/* Snapshot phase stat is redundant with the flow stepper - hide */
+#phaseStatBox{display:none}
+
+/* Settings overflow menu */
+.settings-row{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;
+  margin-top:10px;font-size:12px;
+}
+.settings-row > label{display:inline-flex;align-items:center;gap:6px;color:var(--muted);cursor:pointer;font-weight:700}
+.settings-row .autosave{margin-left:0}
+.settings-row .meta-actions{display:flex;gap:6px;align-items:center}
+
+/* Hero actions: hide secondary buttons in compact mode */
+.hero-actions .btn.tertiary{
+  background:transparent;border:1px solid transparent;color:var(--muted);
+  box-shadow:none;font-weight:700;padding:8px 12px;
+}
+.hero-actions .btn.tertiary:hover{color:var(--brand-deep);border-color:var(--border)}
+
+/* Setup hint card - tighter when teams exist */
+body[data-teams="0"] #addTeamRow{padding-top:0}
+body[data-teams="0"] #addTeamRow summary{font-weight:900}
+#addTeamRow .collapsible-body{padding-top:6px}
 
 /* Player join mini-view */
 .player-mini{display:none}
@@ -865,8 +913,7 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
         <button class="btn success" id="demoBtn">▶ Play Demo Now</button>
         <button class="btn" id="setupGameBtn">⚙ Setup Custom Game</button>
         <button class="btn secondary" id="howToPlayBtn">📖 How to Play</button>
-        <button class="btn secondary" id="nextPromptHeroBtn">🎲 New Prompt</button>
-        <button class="btn ghost" id="resetBtn">↺ Reset</button>
+        <button class="btn tertiary" id="resetBtn" title="Reset game state">↺ Reset</button>
       </div>
     </div>
 
@@ -876,7 +923,7 @@ body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;pad
         <div class="stat-box"><span class="stat-label">Teams</span><span class="stat-value" id="teamCount">0</span></div>
         <div class="stat-box"><span class="stat-label">Round</span><span class="stat-value" id="roundStat">0 / 3</span></div>
         <div class="stat-box"><span class="stat-label">Prompts</span><span class="stat-value" id="promptCount">0</span></div>
-        <div class="stat-box"><span class="stat-label">Phase</span><span class="stat-value" id="phaseStat" style="font-size:20px">Setup</span></div>
+        <div class="stat-box" id="phaseStatBox"><span class="stat-label">Phase</span><span class="stat-value" id="phaseStat" style="font-size:20px">Setup</span></div>
       </div>
       <div class="coins-strip">
         <div>
@@ -1642,6 +1689,9 @@ function updateStats(){
   const totalCoins = teams.reduce((s,t)=> s + (t.coins||0), 0);
   $('totalCoins').textContent = totalCoins;
   $('coinPool').textContent = teams.length ? Math.round(totalCoins/teams.length) + ' avg' : 'Pool';
+  // Body data-attrs drive progressive disclosure (CSS rules above)
+  document.body.dataset.teams = String(teams.length);
+  document.body.dataset.roundsPlayed = String(roundLog.length);
 }
 
 function memberPills(t, { addable=false } = {}){
@@ -2553,7 +2603,7 @@ $('howToSetup').addEventListener('click', () => { closeHowToPlay(); setupCustomG
 $('setupGameBtn').addEventListener('click', setupCustomGame);
 $('startRoundBtn').addEventListener('click', startRound);
 $('nextPromptBtn').addEventListener('click', nextPrompt);
-$('nextPromptHeroBtn').addEventListener('click', nextPrompt);
+// nextPromptHeroBtn removed (redundant with in-game Next Prompt button)
 $('pauseTimerBtn').addEventListener('click', pauseTimer);
 $('finishRoundBtn').addEventListener('click', finishRound);
 $('exportBtn').addEventListener('click', exportReport);

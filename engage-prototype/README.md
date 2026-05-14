@@ -1,124 +1,67 @@
-# Edstellar Engage - Static Prototype
+# Edstellar Engage — Prototype
 
-A clickable, demo-ready static prototype of the planned `engage.edstellar.com` product surface. Vanilla HTML / CSS / JS, no build step, no framework. Opens directly in a browser via `file://`.
+Static prototype of the planned `engage.edstellar.com` product surface. Vanilla HTML/CSS/JS, no build step.
 
-## File map
+## Files
 
 ```
 engage-prototype/
-├── index.html              # Landing page (slim)
-├── games.html              # Game library (215 games, filtered + paginated)
-├── game.html               # Game detail (reads ?id=<slug>)
-├── pricing.html            # Plans + plan-comparison + pricing FAQ
-├── use-cases.html          # HR / L&D / Managers / Enterprise personas
-├── how-it-works.html       # Session anatomy + admin/employee flows + mechanics
-├── facilitated.html        # Facilitated sessions service product
+├── index.html              # Landing
+├── games.html              # Library (215 games, filters, pagination)
+├── game.html               # Game detail (?id=<slug>)
+├── pricing.html            # Plans + comparison
+├── use-cases.html          # HR / L&D / Managers / Enterprise
+├── how-it-works.html       # Anatomy + flows + integrations
+├── facilitated.html        # Facilitated session tiers
 ├── compare.html            # Engage vs Kahoot / Mentimeter / Gametize
-├── case-studies.html       # Three field stories with before/after metrics
+├── case-studies.html       # Three stories with before/after
 ├── about.html              # Company, mission, roadmap
 ├── play/
-│   └── improv-challenge.html  # Fully playable in-browser game (prompts, timer, scoring, leaderboard, JSON export)
-├── assets/
-│   ├── styles.css          # Single stylesheet - CSS variables for theming
-│   ├── app.js              # Cards, filters, pagination, walkthrough, detail, currency concept
-│   ├── games.json          # Canonical JSON (215 games)
-│   └── games-data.js       # Loaded as a script - exposes window.GAMES_DATA
-└── _build/
-    ├── parse_master.py     # Parser: Edstellar_Engage_All_Games_Master.html → games.json + games-data.js
-    └── build_pages.py      # Generator: emits the 7 marketing pages with shared nav/footer
+│   └── improv-challenge.html  # Fully playable game (14 languages)
+├── assets/                 # styles.css, app.js, motion.js, games-data.js, games.json
+└── _build/                 # parse_master.py + build_pages.py (re-generators)
 ```
 
-## Pages and what they cover
+## Run
 
-| Page | Purpose |
-|---|---|
-| **index.html** | Landing: hero, problem stats, value props, rich category tiles, anatomy timeline, featured games, explore-strip linking to dedicated pages, single testimonial teaser, final CTA. |
-| **games.html** | Library: full-width layout, 215 games, sidebar filters with live counts, pagination (12 per page), spotlight card, search with `/` shortcut. |
-| **game.html** | Detail: 2-pane with TOC scroll-spy, concept / outcomes / how-to-play / what-you-need / variations / review questions / key takeaway / related. Read-only EngageCoins concept panel when game has `economy`. Auto-launching 4-step walkthrough. |
-| **pricing.html** | 4 plan cards + plan comparison table + pricing FAQ + custom-quote CTA. |
-| **use-cases.html** | 4 persona deep-dives (HR / L&D / Managers / Enterprise) with top games per persona + a buyer-perspective comparison table. |
-| **how-it-works.html** | Anatomy timeline + admin/employee tabs + mechanics under-the-hood + full integrations table. |
-| **facilitated.html** | Session tiers ($1,500 / $2,500 / $4,000 / $8K-$15K) + regional coverage + facilitator FAQ. |
-| **compare.html** | Engage vs Kahoot / Mentimeter / Gametize. The differences that actually matter + migration CTA. |
-| **case-studies.html** | Three long-form case studies (Bangalore SaaS / Dubai bank / Singapore logistics) with before/after metrics tables. |
-| **about.html** | Mission, numbers, the why-engagement-why-now thesis, 12-month roadmap. |
+Double-click `index.html`. Works from `file://` because data loads via a script tag, not `fetch`.
 
-## How to run
+For HTTP: `python -m http.server 8080` → `http://localhost:8080/engage-prototype/`.
 
-**Option A - open the file directly (recommended)**
-Double-click `index.html`. Works from `file://` because the games dataset is loaded via `<script src="./assets/games-data.js">` (not `fetch`).
+## Regenerate
 
-**Option B - local server**
 ```bash
-python -m http.server 8080
-# visit http://localhost:8080/engage-prototype/
+# Refresh games dataset from master HTML
+python _build/parse_master.py
+
+# Re-emit the 7 marketing pages with consistent nav/footer
+python _build/build_pages.py
 ```
 
-## Information architecture (decisions)
+## Playable game
 
-- **Nav (5 items)**: Games · How it works · Use Cases · Pricing · Compare.
-- **Footer (5 columns)**: Brand+tagline · Product · Solutions · Resources · Company.
-- **Sticky CTAs**: "Book a Demo" bottom-right on every page; "?" help button bottom-left on Library and Game Detail.
-- **Marketing pages** generated by `_build/build_pages.py` from a single Python shell - to keep nav/footer in sync, edit the script and re-run.
-- **Game data** generated by `_build/parse_master.py` from the master HTML - to refresh, edit the master and re-run.
+`play/improv-challenge.html` is a fully playable workplace-improv game.
 
-## Playable games
-
-Some games in the library ship a real in-browser playable demo. When a game record has `playable: true` and a `playUrl`, the prototype:
-
-- Adds a green "▶ Play now" badge on its card in the Library and Featured grids.
-- Replaces the Game Detail page CTA with a prominent **"▶ Play live demo"** button alongside the standard "Run this game with your team".
-
-Currently playable:
-
-| Game | Path | What it does |
-|---|---|---|
-| **Improv Challenge v4** | `play/improv-challenge.html` | The fullest-featured demo in the prototype, ~3,350 lines self-contained. **14 language packs**: English (28 prompts) + Hindi, Arabic, Spanish, French, German, Portuguese, Japanese, Korean, Chinese, Russian, Italian, Indonesian, Turkish (8-10 prompts each). RTL auto-applied for Arabic. Every prompt: difficulty (Easy/Medium/Hard) + skill-focus tag + strong/weak response examples. **Configurable total rounds (3-10)** with final-winner celebration. **Custom prompt creator** + JSON pack import/export. **Saved session templates**. **Customisable teams** (inline name/members editor, 8 color swatches, 8 avatar emojis, member pills everywhere). **Live coaching toolbar** with 8 behavior tags that auto-nudge criterion scores. **Auto coaching tips** at round end (weakest criterion + linked Edstellar course). **10-badge achievement system**. **Per-team canvas analytics** (radar + round trend + weakest-criterion). **EngageCoins economy** + 5 power-ups + 10 plot twists. **Daily streak tracker**. **Share modal** (URL with base64 state + Slack/Teams card + iframe embed). **Presenter mode** (`?mode=present`) + **Player mode** (`?mode=play`). **14-day reinforcement reminder** as downloadable .ics. **Undo last save** with 12-second banner. **Edit historical round** scores inline in the Round Log. **Auto-save indicator** ("Saved 5s ago"). **Cheat-sheet modal** (`?` key) covering all shortcuts, power-ups, tags, badges, modes. **Accessibility**: skip link, ARIA-live round announcements ("Round 2 starting, 90 seconds, Team Phoenix first"), **high-contrast mode toggle**, prefers-reduced-motion respected. UI/UX polish: custom prompts collapsed by default, coaching bar only visible during perform phase. Color-state timer with audio cues. Keyboard shortcuts (Space, N, T, F, P/L/R/A/B, ?, Esc). JSON + CSV exports. Print-friendly. Fully client-side · state persists in `localStorage`. |
-
-To add more playable games:
-1. Drop a self-contained HTML file under `play/<slug>.html` with a `← Back to Engage` link at the top.
-2. Add a `playUrl` entry to the matching record in `assets/games-data.js` (or extend `PLAYABLE` in `_build/parse_master.py` and re-run the parser).
-
-## Login-gated currency
-
-EngageCoins is described on the public Game Detail page as a **read-only concept**: starting balance, earn rules, shop items with a 🔒 indicator. A "Sign in to start playing" CTA hints at the full experience. The interactive shop, balance, and persistent purchases sit behind sign-in inside a real game session (not built in this prototype - by design).
-
-Two demo games carry `economy` data: `egg-drop`, `sales-jeopardy`.
-
-## Refresh workflows
-
-**Add or edit games**: edit `Edstellar_Engage_All_Games_Master.html` at the repo root, then run:
-```bash
-python engage-prototype/_build/parse_master.py
-```
-Writes both `games.json` and `games-data.js`. Stats by category print after.
-
-**Edit marketing pages** (pricing copy, persona content, comparison rows, etc.): edit `engage-prototype/_build/build_pages.py`, then run:
-```bash
-python engage-prototype/_build/build_pages.py
-```
-Re-emits all 7 marketing pages with consistent nav/footer.
+- **14 languages** (EN + 13 packs)
+- Configurable rounds (3–10), team customisation, EngageCoins economy with 5 power-ups, 10 plot twists, live coaching toolbar, auto coaching tips with linked Edstellar courses, 10 achievement badges, per-team canvas analytics (radar + trend), round summary with confetti, final-game champion overlay.
+- Undo last save, edit historical round scores, auto-save indicator, cheat-sheet (`?`), high-contrast mode, ARIA-live announcements.
+- Presenter mode (`?mode=present`), Player mode (`?mode=play`), share URL, Slack/Teams card, iframe embed, 14-day .ics reminder.
+- Custom prompt creator with JSON pack import/export, saved session templates.
+- All client-side, state persists in `localStorage`.
 
 ## Theming
 
-All design tokens are CSS variables at the top of `assets/styles.css`:
+All design tokens live as CSS variables at the top of `assets/styles.css`:
 
 ```css
 :root{
-  --brand-primary:#0B3C5D;   /* edstellar deep blue */
-  --brand-accent:#2563EB;    /* edstellar CTA blue */
+  --brand-primary:#0B3C5D;   /* Edstellar deep blue */
+  --brand-accent:#2563EB;    /* Edstellar CTA blue */
   --brand-sky:#38BDF8;
   ...
 }
 ```
 
-Change two values to rebrand the whole prototype.
+## Login-gated currency
 
-## Companion docs (repo root)
-
-- `Edstellar_Engage_Concept_Document.docx` - overall product strategy.
-- `Edstellar_Engage_Games_Research.docx` - competitor + market research.
-- `Edstellar_Blogs_Games_Catalog.docx` - full 14-blog game reference.
-- `Edstellar_Engage_Game_Page_Concept.docx` - design spec for the three core game pages.
-- `Edstellar_Engage_All_Games_Master.html` - source HTML the parser reads.
-- `Edstellar_Engage_Individual_Game_HTML_Files/` - 216 standalone per-game HTML modules.
+On the public game-detail page (`game.html`), the EngageCoins panel is **read-only** — concept, starting balance, earn rules, and shop items with a 🔒 indicator. The interactive shop lives behind sign-in inside a real game session (not built in the prototype, by design). The Improv Challenge demonstrates the full mechanic in a playable form.
