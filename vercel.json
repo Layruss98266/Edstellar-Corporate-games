@@ -1,0 +1,19 @@
+{
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "destination": "/engage-prototype/index.html" },
+    { "source": "/index.html", "destination": "/engage-prototype/index.html" },
+    { "source": "/games.html", "destination": "/engage-prototype/games.html" },
+    { "source": "/game.html", "destination": "/engage-prototype/game.html" },
+    { "source": "/pricing.html", "destination": "/engage-prototype/pricing.html" },
+    { "source": "/use-cases.html", "destination": "/engage-prototype/use-cases.html" },
+    { "source": "/how-it-works.html", "destination": "/engage-prototype/how-it-works.html" },
+    { "source": "/facilitated.html", "destination": "/engage-prototype/facilitated.html" },
+    { "source": "/compare.html", "destination": "/engage-prototype/compare.html" },
+    { "source": "/case-studies.html", "destination": "/engage-prototype/case-studies.html" },
+    { "source": "/about.html", "destination": "/engage-prototype/about.html" },
+    { "source": "/assets/:path*", "destination": "/engage-prototype/assets/:path*" },
+    { "source": "/img/:path*", "destination": "/engage-prototype/img/:path*" }
+  ]
+}
