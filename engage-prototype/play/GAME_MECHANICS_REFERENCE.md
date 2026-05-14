@@ -1,9 +1,45 @@
 # Game Mechanics Reference
 
 > The standardised infrastructure every playable Engage game should implement.
-> Use **Improv Challenge** (`improv-challenge.html`) and **Egg Drop Pro** (`egg-drop.html`) as the two reference implementations.
+> Use **Two Truths and a Lie** (`two-truths-and-a-lie.html`), **Improv Challenge** (`improv-challenge.html`), and **Egg Drop Pro** (`egg-drop.html`) as the three reference implementations.
 
 When a new game graduates from concept to playable demo, this document is the engineering checklist. Every item that applies to your game's mechanic should ship. Items that don't apply (e.g. score dots in a non-scoring game) can be skipped — but the **bold-tagged "Required"** items below must ship for the game to qualify as a v1 playable.
+
+## 0. Shared shell · **Required**
+
+Most of the Required infrastructure below is already implemented in **`_shared/shell.css`** and **`_shared/shell.js`**. New games link these two files and only ship game-specific logic + styles on top.
+
+```html
+<link rel="stylesheet" href="_shared/shell.css" />
+<!-- ...your game HTML... -->
+<script src="_shared/shell.js"></script>
+<script>
+  const Shell = window.EngageShell;
+  // Shell.toast, Shell.fireConfetti, Shell.beep, Shell.download,
+  // Shell.downloadIcs, Shell.buildShareLink, Shell.loadFromHash,
+  // Shell.updateStreak, Shell.setLanguage, Shell.applyHc,
+  // Shell.detectMode, Shell.setPhase, Shell.startTimer, Shell.stopTimer,
+  // Shell.showUndoBanner, Shell.makeViewSwitcher (with optional gated views),
+  // Shell.TEAM_COLORS, Shell.TEAM_AVATARS, Shell.languageOptionsHtml(),
+  // Shell.confirmReset, Shell.exportCsv, Shell.bindAutosaveLabel, Shell.bindKeys
+</script>
+```
+
+**The fastest path** for a new game:
+
+```bash
+python engage-prototype/_build/scaffold_game.py <slug> "<Game Title>" [--register]
+```
+
+This emits a ~600-line skeleton wired to the shell with TODOs in the right places. With `--register` it also appends the slug to `parse_master.py`'s `PLAYABLE` dict and regenerates the catalog.
+
+The reference implementation **two-truths-and-a-lie.html** is shell-based (1289 lines, ~30% smaller than the pre-shell version). The other two reference games (egg-drop, improv-challenge) remain in the older monolithic form and are slated to migrate.
+
+---
+
+## Required-item index
+
+The numbered sections below define each Required mechanic in full. **Bold** items are shipped by `_shared/shell.css` + `_shared/shell.js` — your game only needs to call them with the right parameters. *Italic* items still need per-game implementation.
 
 ---
 
@@ -518,8 +554,14 @@ Reference implementation: [`two-truths-and-a-lie.html`](two-truths-and-a-lie.htm
 
 ## Reference implementations
 
-- [`improv-challenge.html`](improv-challenge.html) — prompt-based, criterion scoring, EngageCoins economy, plot twists
-- [`egg-drop.html`](egg-drop.html) — build-based, drag-and-drop placement, budget-per-round, random events, drop animation
-- [`two-truths-and-a-lie.html`](two-truths-and-a-lie.html) — hidden-information game with Judge view, voter queue, coin-based power-ups, plot twists, private statement editor
+- [`two-truths-and-a-lie.html`](two-truths-and-a-lie.html) — **shell-based** hidden-information game with Judge view, voter queue, coin-based power-ups, plot twists, private statement editor. Read this first; it's the canonical example of how to consume `_shared/shell.css` + `_shared/shell.js`.
+- [`improv-challenge.html`](improv-challenge.html) — *monolithic* prompt-based game with criterion scoring, EngageCoins economy, plot twists. Pre-shell; migration pending.
+- [`egg-drop.html`](egg-drop.html) — *monolithic* build-based game with drag-and-drop placement, budget-per-round, random events, drop animation. Pre-shell; migration pending.
 
-Read those files end-to-end before starting a new game. Every infrastructure pattern in this document has a working example in one or more of them.
+Read `two-truths-and-a-lie.html` end-to-end before starting a new game — it's the smallest and most current. The two monolithic games are useful for seeing how unusual gameplay surfaces (drag-drop build zone, prompt packs) are wired up.
+
+## Tooling
+
+- **`_shared/shell.css`** (316 lines) — every Required CSS rule from §1-31
+- **`_shared/shell.js`** (298 lines) — every Required JS utility (`EngageShell` namespace)
+- **`_build/scaffold_game.py`** — `python scaffold_game.py <slug> "<Title>" [--register]` writes a working ~600-line skeleton in `play/`

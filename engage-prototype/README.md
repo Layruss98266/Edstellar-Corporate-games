@@ -17,11 +17,15 @@ engage-prototype/
 ├── case-studies.html       # Three stories with before/after
 ├── about.html              # Company, mission, roadmap
 ├── play/
-│   ├── improv-challenge.html      # Fully playable game (14 languages)
-│   ├── egg-drop.html              # Fully playable build-and-drop game (14 languages)
-│   └── two-truths-and-a-lie.html  # Fully playable hidden-info game with Judge view (14 languages)
+│   ├── _shared/
+│   │   ├── shell.css              # Shared infrastructure CSS (§1-31 from mechanics reference)
+│   │   └── shell.js               # Shared utilities (EngageShell namespace)
+│   ├── GAME_MECHANICS_REFERENCE.md
+│   ├── improv-challenge.html      # Monolithic playable game (14 languages) - pre-shell
+│   ├── egg-drop.html              # Monolithic playable game (14 languages) - pre-shell
+│   └── two-truths-and-a-lie.html  # Shell-based hidden-info game with Judge view
 ├── assets/                 # styles.css, app.js, motion.js, games-data.js, games.json
-└── _build/                 # parse_master.py + build_pages.py (re-generators)
+└── _build/                 # parse_master.py + build_pages.py + scaffold_game.py
 ```
 
 ## Run
@@ -57,7 +61,15 @@ All: client-side only, state persists in `localStorage`, opens from `file://`.
 
 ### Building the next playable game
 
-See [`play/GAME_MECHANICS_REFERENCE.md`](play/GAME_MECHANICS_REFERENCE.md) — the standardised infrastructure every playable game should implement (34 sections, marked Required vs Optional). Use `improv-challenge.html`, `egg-drop.html`, and `two-truths-and-a-lie.html` as the three reference implementations. **§34** documents the reusable **Judge view** pattern for any future game with hidden information.
+Fastest path:
+
+```bash
+python engage-prototype/_build/scaffold_game.py <slug> "<Game Title>" --register
+```
+
+This emits a ~600-line skeleton in `play/<slug>.html` wired to `_shared/shell.css` and `_shared/shell.js`, registers it in the parser, and regenerates the catalog. Then fill in the TODOs (gameplay UI, scoring, 10 badges, plot twists, cheat sheet) — typically ~400 lines of game-specific code on top of the shared shell.
+
+See [`play/GAME_MECHANICS_REFERENCE.md`](play/GAME_MECHANICS_REFERENCE.md) for the full mechanics checklist (34 sections, marked Required vs Optional). **§34** documents the reusable **Judge view** pattern for any future game with hidden information. The shell collapses §1-31 down to two file links + `Shell.*` utility calls.
 
 ## Theming
 
