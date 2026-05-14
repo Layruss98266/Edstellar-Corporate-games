@@ -423,13 +423,81 @@ body[data-phase="setup"] .event-card{display:none}
 /* Materials grid */
 .materials-section{margin-top:18px}
 .materials-section h2{margin-bottom:10px}
-.materials{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.materials-toolbar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;
+  padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:14px;
+}
+.materials-toolbar .label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:4px}
+.preset-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#F8FAFC;border:1px solid var(--border);color:var(--deep);
+  padding:6px 11px;border-radius:999px;font-weight:800;font-size:12px;cursor:pointer;
+}
+.preset-pill:hover{border-color:var(--blue);color:var(--blue)}
+.preset-pill.clear{background:#FEF2F2;color:#B91C1C;border-color:#FECACA}
+.preset-pill.clear:hover{background:#FEE2E2}
+.role-tabs{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.role-tab{
+  display:inline-flex;align-items:center;gap:4px;
+  background:#fff;border:1px solid var(--border);color:var(--muted);
+  padding:4px 10px;border-radius:999px;font-weight:800;font-size:11px;cursor:pointer;
+}
+.role-tab:hover{border-color:var(--blue);color:var(--blue)}
+.role-tab.active{background:var(--deep);color:#fff;border-color:var(--deep)}
+.role-tab .dot{width:8px;height:8px;border-radius:50%;background:var(--role-color,#999)}
+.materials{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
 .material-card{
   border:1px solid var(--border);background:#fff;border-radius:16px;padding:12px;
-  user-select:none;
+  user-select:none;position:relative;transition:transform .12s ease,box-shadow .12s ease;
+}
+.material-card::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:16px 0 0 16px;
+  background:var(--role-color,transparent);
 }
 .material-card[draggable=true]{cursor:grab}
+.material-card[draggable=true]:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(15,23,42,.08)}
 .material-card.disabled{opacity:.45;filter:grayscale(.4)}
+.role-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--role-bg,#F1F5F9);color:var(--role-color,#475569);
+  padding:2px 7px;border-radius:999px;font-size:10.5px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+
+/* Egg face morph */
+.egg-wrapper{transition:transform .35s ease, background .25s ease, border-color .25s ease}
+.egg-wrapper.mood-good{background:linear-gradient(135deg,#D1FAE5,#A7F3D0);border-color:#10B981}
+.egg-wrapper.mood-meh{background:linear-gradient(135deg,#FFFBEB,#FDE68A);border-color:#F59E0B}
+.egg-wrapper.mood-bad{background:linear-gradient(135deg,#FEE2E2,#FECACA);border-color:#EF4444}
+
+/* Strategy hint card */
+.strategy-hint{
+  background:linear-gradient(135deg,#EFF6FF,#FFFFFF);
+  border:1px solid #BFDBFE;border-radius:14px;padding:12px 14px;
+  font-size:13px;color:var(--deep);line-height:1.5;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.strategy-hint .ico{font-size:18px;line-height:1}
+.strategy-hint strong{color:#1D4ED8;font-weight:900}
+
+/* Material undo + sandbox row */
+.action-tools{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;
+}
+.action-tools .btn{flex:initial}
+
+/* Round comparison modal */
+.compare-grid{display:grid;gap:12px;padding:20px 24px}
+.compare-team{
+  border:1px solid var(--border);background:#fff;border-radius:14px;padding:14px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+}
+.compare-team.survived{border-color:#A7F3D0;background:linear-gradient(135deg,#ECFDF5,#fff)}
+.compare-team.cracked{border-color:#FECACA;background:linear-gradient(135deg,#FEF2F2,#fff)}
+.compare-team .mats{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;font-size:12px}
+.compare-team .mats span{
+  background:#F1F5F9;padding:2px 7px;border-radius:999px;color:var(--muted);font-weight:700;
+}
 .material-icon{font-size:24px}
 .material-name{color:var(--heading);font-weight:900;font-size:13.5px}
 .material-cost{font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.45}
@@ -871,6 +939,10 @@ body.hc .btn,body.hc .timer{box-shadow:none}
             <div class="meter"><div class="meter-fill" id="chanceMeter"></div></div>
           </div>
           <div class="event-card" id="eventCard"><strong>No event yet</strong><span>Random events begin when a round starts.</span></div>
+          <div class="strategy-hint" id="strategyHint">
+            <span class="ico">💡</span>
+            <span><strong>Tip:</strong> Add at least 1 material to see live coaching.</span>
+          </div>
           <textarea id="strategy" placeholder="Strategy notes: Why these materials? What risk are you reducing?"></textarea>
           <div class="actions">
             <button class="btn success" id="startBuildBtn">▶ Start Round</button>
@@ -878,11 +950,29 @@ body.hc .btn,body.hc .timer{box-shadow:none}
             <button class="btn danger" id="dropBtn">⬇ Run Drop Test</button>
             <button class="btn secondary" id="nextTeamBtn">→ Next Team</button>
           </div>
+          <div class="action-tools">
+            <button class="btn ghost btn-sm" id="undoPlacementBtn">↶ Undo placement</button>
+            <button class="btn ghost btn-sm" id="practiceDropBtn">🧪 Practice drop (no score)</button>
+          </div>
         </div>
       </div>
 
       <div class="materials-section">
         <h2>Materials <small style="font-weight:600;color:var(--muted);font-size:13px">· click + or drag onto the egg</small></h2>
+        <div class="materials-toolbar">
+          <span class="label">Presets</span>
+          <button class="preset-pill" data-preset="cushion-heavy">🛡 Cushion-heavy</button>
+          <button class="preset-pill" data-preset="balanced">⚖ Balanced</button>
+          <button class="preset-pill" data-preset="light-drag">🌬 Light + drag</button>
+          <button class="preset-pill clear" data-preset="clear">↺ Clear</button>
+          <div class="role-tabs" id="roleTabs">
+            <button class="role-tab active" data-role="all">All</button>
+            <button class="role-tab" data-role="cushion" style="--role-color:#10B981"><span class="dot"></span>Cushion</button>
+            <button class="role-tab" data-role="structure" style="--role-color:#2563EB"><span class="dot"></span>Structure</button>
+            <button class="role-tab" data-role="drag" style="--role-color:#7C3AED"><span class="dot"></span>Drag</button>
+            <button class="role-tab" data-role="utility" style="--role-color:#F59E0B"><span class="dot"></span>Utility</button>
+          </div>
+        </div>
         <div class="materials" id="materials"></div>
       </div>
     </div>
@@ -1077,6 +1167,24 @@ body.hc .btn,body.hc .timer{box-shadow:none}
   </div>
 </div>
 
+<!-- Round comparison modal -->
+<div class="overlay" id="compareOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="overlay-head">
+      <div>
+        <h2 id="compareTitle">Round complete</h2>
+        <p>Every team's design side-by-side. Identify what worked before the next round.</p>
+      </div>
+      <button class="close" id="compareClose">×</button>
+    </div>
+    <div class="compare-grid" id="compareGrid"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 24px 24px;justify-content:flex-end">
+      <button class="btn ghost" id="compareCloseBottom">Close</button>
+      <button class="btn warning" id="compareNext">▶ Start next round</button>
+    </div>
+  </div>
+</div>
+
 <!-- Undo banner -->
 <div class="undo-banner" id="undoBanner" role="status" aria-live="polite">
   <span id="undoText">Drop saved.</span>
@@ -1092,17 +1200,31 @@ body.hc .btn,body.hc .timer{box-shadow:none}
 =========================================================== */
 
 const MATERIALS = [
-  {id:'straws',    name:'Straws',       icon:'🥤', cost:8,  cushion:4,  structure:12, drag:1,  weight:3, best:'side'},
-  {id:'tape',      name:'Tape',         icon:'🩹', cost:10, cushion:1,  structure:14, drag:0,  weight:2, best:'center'},
-  {id:'cotton',    name:'Cotton Balls', icon:'☁️', cost:12, cushion:18, structure:1,  drag:2,  weight:2, best:'bottom'},
-  {id:'paper',     name:'Paper Sheets', icon:'📄', cost:6,  cushion:5,  structure:5,  drag:4,  weight:2, best:'side'},
-  {id:'balloon',   name:'Balloon',      icon:'🎈', cost:14, cushion:8,  structure:1,  drag:14, weight:1, best:'top'},
-  {id:'rubber',    name:'Rubber Bands', icon:'🧶', cost:9,  cushion:4,  structure:9,  drag:0,  weight:1, best:'center'},
-  {id:'bag',       name:'Plastic Bag',  icon:'🛍️', cost:13, cushion:3,  structure:1,  drag:18, weight:1, best:'top'},
-  {id:'cup',       name:'Paper Cup',    icon:'🥛', cost:11, cushion:6,  structure:11, drag:2,  weight:4, best:'center'},
-  {id:'sponge',    name:'Sponge',       icon:'🧽', cost:16, cushion:20, structure:3,  drag:1,  weight:5, best:'bottom'},
-  {id:'cardboard', name:'Cardboard',    icon:'📦', cost:15, cushion:5,  structure:20, drag:1,  weight:7, best:'side'}
+  {id:'straws',    name:'Straws',       icon:'🥤', cost:8,  cushion:4,  structure:12, drag:1,  weight:3, best:'side',   role:'structure'},
+  {id:'tape',      name:'Tape',         icon:'🩹', cost:10, cushion:1,  structure:14, drag:0,  weight:2, best:'center', role:'structure'},
+  {id:'cotton',    name:'Cotton Balls', icon:'☁️', cost:12, cushion:18, structure:1,  drag:2,  weight:2, best:'bottom', role:'cushion'},
+  {id:'paper',     name:'Paper Sheets', icon:'📄', cost:6,  cushion:5,  structure:5,  drag:4,  weight:2, best:'side',   role:'utility'},
+  {id:'balloon',   name:'Balloon',      icon:'🎈', cost:14, cushion:8,  structure:1,  drag:14, weight:1, best:'top',    role:'drag'},
+  {id:'rubber',    name:'Rubber Bands', icon:'🧶', cost:9,  cushion:4,  structure:9,  drag:0,  weight:1, best:'center', role:'structure'},
+  {id:'bag',       name:'Plastic Bag',  icon:'🛍️', cost:13, cushion:3,  structure:1,  drag:18, weight:1, best:'top',    role:'drag'},
+  {id:'cup',       name:'Paper Cup',    icon:'🥛', cost:11, cushion:6,  structure:11, drag:2,  weight:4, best:'center', role:'structure'},
+  {id:'sponge',    name:'Sponge',       icon:'🧽', cost:16, cushion:20, structure:3,  drag:1,  weight:5, best:'bottom', role:'cushion'},
+  {id:'cardboard', name:'Cardboard',    icon:'📦', cost:15, cushion:5,  structure:20, drag:1,  weight:7, best:'side',   role:'structure'}
 ];
+
+const ROLE_META = {
+  cushion:   {icon:'🛡', label:'Cushion',   color:'#10B981', bg:'rgba(16,185,129,.08)'},
+  structure: {icon:'🏗', label:'Structure', color:'#2563EB', bg:'rgba(37,99,235,.08)'},
+  drag:      {icon:'🌬', label:'Drag',      color:'#7C3AED', bg:'rgba(124,58,237,.08)'},
+  utility:   {icon:'🛠', label:'Utility',   color:'#F59E0B', bg:'rgba(245,158,11,.08)'}
+};
+
+const BUILD_PRESETS = {
+  'cushion-heavy': {label:'🛡 Cushion-heavy', desc:'Soak the impact', plan:{cotton:3, sponge:2, paper:2, straws:1}},
+  'balanced':      {label:'⚖ Balanced',      desc:'Mix everything', plan:{cotton:2, sponge:1, straws:2, tape:2, balloon:1, cardboard:1}},
+  'light-drag':    {label:'🌬 Light + drag', desc:'Fall slowly',     plan:{paper:3, balloon:2, bag:1, rubber:1}},
+  'clear':         {label:'↺ Clear all',     desc:'Empty the egg',   plan:{}}
+};
 
 const ROUNDS = [
   {label:'Desk Level',     difficulty:55},
@@ -1376,23 +1498,33 @@ function changeQty(id, delta){
   const old = item.qty;
   item.qty = Math.max(0, item.qty + delta);
   if(calculate(t).cost > 100){ item.qty = old; showToast('Budget limit reached', 'warning'); return; }
-  if(delta !== 0) floatPoints(t.id, delta);
+  if(delta !== 0){
+    floatPoints(t.id, delta);
+    if(delta > 0) placementStack.push({ id, prevQty: old, prevPos: item.pos });
+  }
   saveState();
   renderMaterials(); renderSummary(); renderEggMaterials(); renderLeaderboard();
+  updateStrategyHint(); updateEggFace();
 }
+
+let activeRole = 'all';
+let placementStack = []; // stack of {id, pos, prevQty} for undo
 
 function renderMaterials(){
   const t = activeTeam();
-  $('materials').innerHTML = MATERIALS.map(m => {
+  const filtered = activeRole === 'all' ? MATERIALS : MATERIALS.filter(m => m.role === activeRole);
+  $('materials').innerHTML = filtered.map(m => {
     const item = t?.build?.[m.id] || {qty:0, pos:m.best};
     const c = materialCost(m);
-    return `<div class="material-card" draggable="true" data-mid="${m.id}">
+    const role = ROLE_META[m.role];
+    return `<div class="material-card" draggable="true" data-mid="${m.id}"
+      style="--role-color:${role.color};--role-bg:${role.bg}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px">
         <span class="material-icon">${m.icon}</span>
-        <span style="font-size:11px;font-weight:900;color:${item.pos===m.best?'#047857':'#9CA3AF'}">${item.pos===m.best?'✓ pos':'⚠ pos'}</span>
+        <span class="role-tag" style="--role-color:${role.color};--role-bg:${role.bg}">${role.icon} ${role.label}</span>
       </div>
       <div class="material-name">${m.name}</div>
-      <div class="material-cost">$${c} · cushion ${m.cushion} · structure ${m.structure} · best: ${m.best}</div>
+      <div class="material-cost">$${c} · cushion ${m.cushion} · structure ${m.structure} · drag ${m.drag}</div>
       <select class="position-select" onchange="setPos('${m.id}',this.value)">
         <option value="top" ${item.pos==='top'?'selected':''}>Top / parachute</option>
         <option value="bottom" ${item.pos==='bottom'?'selected':''}>Bottom / impact</option>
@@ -1404,12 +1536,143 @@ function renderMaterials(){
         <span>${item.qty}</span>
         <button onclick="changeQty('${m.id}',1)" aria-label="Add">+</button>
       </div>
+      <div style="font-size:10.5px;color:${item.pos===m.best?'#047857':'#9CA3AF'};font-weight:800;margin-top:6px">${item.pos===m.best?'✓ in best position':'⚠ try ' + m.best}</div>
     </div>`;
   }).join('');
   document.querySelectorAll('.material-card').forEach(card => {
     card.ondragstart = e => e.dataTransfer.setData('text/plain', card.dataset.mid);
   });
 }
+
+function setRole(role){
+  activeRole = role;
+  document.querySelectorAll('.role-tab').forEach(b => b.classList.toggle('active', b.dataset.role === role));
+  renderMaterials();
+}
+
+function applyPreset(key){
+  ensureTeams();
+  const preset = BUILD_PRESETS[key];
+  if(!preset) return;
+  const t = activeTeam();
+  // Reset all to zero, then apply the plan
+  MATERIALS.forEach(m => { t.build[m.id] = { qty:0, pos:m.best }; });
+  Object.entries(preset.plan).forEach(([id, qty]) => {
+    if(t.build[id]){ t.build[id].qty = qty; }
+  });
+  // Check it fits within budget; trim if needed
+  let c = calculate(t);
+  while(c.cost > 100){
+    // pop the highest-cost material qty
+    const sorted = MATERIALS.slice().sort((a,b) => materialCost(b) - materialCost(a));
+    for(const m of sorted){
+      if(t.build[m.id].qty > 0){ t.build[m.id].qty--; break; }
+    }
+    c = calculate(t);
+  }
+  placementStack = [];
+  saveState(); render();
+  showToast(`Preset applied: ${preset.label}`, 'success');
+}
+
+function undoPlacement(){
+  if(!placementStack.length) return showToast('Nothing to undo', 'warning');
+  const last = placementStack.pop();
+  const t = activeTeam(); if(!t) return;
+  t.build[last.id].qty = last.prevQty;
+  if(last.prevPos) t.build[last.id].pos = last.prevPos;
+  saveState(); render();
+  showToast('Last placement undone', 'success');
+}
+
+function runPracticeDrop(){
+  fullscreenMode();
+  ensureTeams();
+  const t = activeTeam();
+  const c = calculate(t);
+  $('dropZone').classList.remove('drop-animate');
+  $('resultBanner').classList.remove('show');
+  void $('dropZone').offsetWidth;
+  $('dropZone').classList.add('drop-animate');
+  $('statusTitle').textContent = `🧪 Practice: ${t.name}`;
+  $('statusSub').textContent = 'No score, no badges, no log. Iterate as much as you want.';
+  setTimeout(() => {
+    const roll = Math.floor(Math.random() * 21) - 10;
+    const integrity = Math.max(0, Math.min(100, c.chance + roll));
+    const survived = integrity >= 55;
+    $('resultTitle').textContent = survived ? '🧪 Practice: would survive 🥚✅' : '🧪 Practice: would crack 🥚💥';
+    $('resultText').textContent = `Integrity ${integrity}%. No score recorded. Tweak materials and try again.`;
+    $('resultBanner').classList.add('show');
+    $('egg').textContent = survived ? '🥚' : '🍳';
+    if(survived) fireConfetti();
+    setTimeout(() => $('egg').textContent = '🥚', 1800);
+    showToast('Practice drop complete', 'success');
+    announce(`Practice drop. ${survived?'Would survive':'Would crack'}.`);
+  }, 1650);
+}
+
+function updateStrategyHint(){
+  const el = $('strategyHint'); if(!el) return;
+  const t = activeTeam(); if(!t) return;
+  const c = calculate(t);
+  const tips = [];
+  if(c.items === 0){
+    el.innerHTML = '<span class="ico">💡</span><span><strong>Tip:</strong> Add at least 1 material to see live coaching.</span>';
+    return;
+  }
+  if(c.cushion < 20) tips.push('Add <strong>cotton or sponge at the bottom</strong> — cushioning is the #1 survival driver.');
+  if(c.structure < 25) tips.push('Stabilize the core with <strong>straws, tape, or cardboard</strong>.');
+  if(c.drag < 15 && round >= 2) tips.push('Higher drop — add <strong>balloon or plastic bag on top</strong> to slow the fall.');
+  if(c.weightPenalty > 30) tips.push('Design is heavy. Heavy ≠ safer — strip non-essentials to reduce impact force.');
+  if(c.placement < 0) tips.push('Materials in wrong slots. Cushion → bottom · drag → top · structure → sides/core.');
+  if(c.cost > 90) tips.push('Almost at budget. Make sure each remaining coin buys real survival.');
+  if(c.chance >= 75 && c.cost < 85) tips.push('🚀 Strong build — efficient too. Try the drop!');
+  if(!tips.length) tips.push('Balanced. You can refine placement or try a drop.');
+  el.innerHTML = '<span class="ico">💡</span><span><strong>Hint:</strong> ' + tips[0] + '</span>';
+}
+
+function updateEggFace(){
+  const c = calculate(activeTeam());
+  const egg = $('egg'); if(!egg) return;
+  egg.classList.remove('mood-good','mood-meh','mood-bad');
+  if(c.chance >= 70){ egg.classList.add('mood-good'); }
+  else if(c.chance >= 40){ egg.classList.add('mood-meh'); }
+  else if(c.items > 0){ egg.classList.add('mood-bad'); }
+}
+
+function showRoundCompare(){
+  const r = round;
+  const drops = log.filter(x => x.round === r);
+  if(!drops.length) return;
+  $('compareTitle').textContent = `Round ${r} complete — ${ROUNDS[r-1].label}`;
+  $('compareGrid').innerHTML = drops.sort((a,b)=> b.score - a.score).map((d, i) => {
+    const t = teams.find(x => x.id === d.teamId);
+    const mats = Object.entries(d.build || {}).filter(([, v]) => v.qty > 0).map(([id, v]) => {
+      const m = MATERIALS.find(x => x.id === id);
+      return m ? `<span>${m.icon} ${m.name} ×${v.qty}</span>` : '';
+    }).join('');
+    return `<div class="compare-team ${d.survived?'survived':'cracked'}">
+      <div class="rank">${i+1}</div>
+      <div>
+        <div class="team-name">${safe(d.team)} <span style="color:var(--muted);font-weight:700;font-size:12px">${d.survived?'✅ survived':'💥 cracked'}</span></div>
+        <div class="team-meta">Integrity ${d.integrity}% · Budget ${d.cost}/100 · ${safe(d.event)}</div>
+        <div class="mats">${mats || '<span>No materials placed</span>'}</div>
+      </div>
+      <div class="leader-score">+${d.score}<small>${d.survived?'won':'failed'}</small></div>
+    </div>`;
+  }).join('');
+  // If this was the final round, change the next button
+  if(r >= maxRounds){
+    $('compareNext').textContent = '🏆 See champion';
+    $('compareNext').onclick = () => { closeCompare(); showFinalWinner(); };
+  } else {
+    $('compareNext').textContent = '▶ Start round ' + (r+1);
+    $('compareNext').onclick = () => { closeCompare(); startRound(); };
+  }
+  $('compareOverlay').classList.add('show');
+  fireConfetti();
+}
+function closeCompare(){ $('compareOverlay').classList.remove('show'); }
 
 function renderSummary(){
   const c = calculate(activeTeam());
@@ -1538,6 +1801,11 @@ function runDrop(){
     });
     // Award per-drop badges
     awardBadgesAfterDrop(t, c, survived, integrity);
+
+    // Reset this team's build so the next round starts from a clean slate
+    t.build = defaultBuild();
+    $('strategy').value = '';
+
     $('resultTitle').textContent = survived ? 'Egg Survived! 🥚✅' : 'Egg Cracked! 🥚💥';
     $('resultText').textContent = `Integrity ${integrity}%. Score +${finalScore}. Budget ${c.cost}/100. ${review.summary}`;
     $('resultBanner').classList.add('show');
@@ -1552,9 +1820,9 @@ function runDrop(){
     saveState(); render(); beep();
     switchView('review');
 
-    // If progressive and all teams have tested this round, advance to final or next
-    if($('roundMode').value === 'progressive' && everyTeamTested(round) && round >= maxRounds){
-      setTimeout(showFinalWinner, 1200);
+    // If every team has dropped in this round, fire the comparison modal
+    if($('roundMode').value === 'progressive' && everyTeamTested(round)){
+      setTimeout(showRoundCompare, 1200);
     }
   }, 1650);
 }
@@ -2018,6 +2286,8 @@ function render(){
   updateBestScore();
   updateRoundProgress();
   renderTemplates();
+  updateStrategyHint();
+  updateEggFace();
 }
 
 /* ---------- High contrast ---------- */
@@ -2079,6 +2349,15 @@ $('playerModeBtn').onclick = () => window.open(location.pathname + '?mode=play',
 
 $('summaryClose').onclick = closeSummary;
 $('undoBtn').onclick = undoLastDrop;
+
+/* Preset / role tab / undo / practice drop / comparison modal */
+document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => applyPreset(b.dataset.preset)));
+document.querySelectorAll('.role-tab').forEach(b => b.addEventListener('click', () => setRole(b.dataset.role)));
+$('undoPlacementBtn').onclick = undoPlacement;
+$('practiceDropBtn').onclick = runPracticeDrop;
+$('compareClose').onclick = closeCompare;
+$('compareCloseBottom').onclick = closeCompare;
+$('compareOverlay').onclick = e => { if(e.target.id === 'compareOverlay') closeCompare(); };
 
 $('hcToggle').addEventListener('change', e => applyHc(e.target.checked));
 
