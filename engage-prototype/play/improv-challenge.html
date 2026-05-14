@@ -544,10 +544,208 @@ input:focus,textarea:focus,select:focus{
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
 }
+
+/* ============= NEW MODULES ============= */
+
+/* Streak pill (snapshot) */
+.streak-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#FB923C,#EF4444);color:#fff;
+  padding:4px 10px;border-radius:999px;font-weight:900;font-size:11px;
+  box-shadow:0 4px 10px rgba(239,68,68,.25);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+
+/* Language picker */
+.lang-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.lang-pick{
+  border:1px solid var(--border);background:#fff;color:var(--body);
+  padding:5px 11px;border-radius:999px;font-weight:800;font-size:12px;cursor:pointer;
+  transition:all .12s ease;
+}
+.lang-pick:hover{border-color:var(--brand-blue);color:var(--brand-blue)}
+.lang-pick.active{background:var(--brand-blue);color:#fff;border-color:var(--brand-blue)}
+
+/* Coaching toolbar (sits in each team score card during round) */
+.coaching-bar{
+  display:flex;flex-wrap:wrap;gap:5px;
+  background:#0F172A;border-radius:10px;padding:8px;margin-top:8px;
+}
+.coaching-bar small{color:#94A3B8;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;width:100%;margin-bottom:2px}
+.coach-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.08);color:#fff;
+  border:1px solid rgba(255,255,255,.18);border-radius:8px;
+  padding:5px 9px;font-size:11.5px;font-weight:800;cursor:pointer;
+  transition:all .12s ease;
+}
+.coach-tag:hover{background:rgba(255,255,255,.15)}
+.coach-tag.positive{border-color:rgba(16,185,129,.4)}
+.coach-tag.negative{border-color:rgba(239,68,68,.4)}
+.coach-tag .ct-count{
+  background:rgba(255,255,255,.16);border-radius:999px;
+  padding:1px 6px;font-size:10px;
+}
+.coach-tag.has{background:var(--brand-blue);border-color:var(--brand-blue)}
+
+/* Coaching tips card (in round summary) */
+.coaching-tips{
+  background:linear-gradient(135deg,#EFF6FF,#FFFFFF);
+  border:1px solid #BFDBFE;border-radius:14px;padding:14px 16px;margin:10px 24px 0;
+}
+.coaching-tips h4{margin:0 0 6px;font-size:13px;color:var(--brand-deep);text-transform:uppercase;letter-spacing:.06em}
+.coaching-tips ul{margin:6px 0 0;padding-left:20px;font-size:13.5px;line-height:1.55;color:var(--body)}
+.coaching-tips a{color:var(--brand-blue);font-weight:800;text-decoration:underline}
+
+/* Analytics */
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:14px}
+.analytics-card{
+  background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;
+}
+.analytics-card h3{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--heading);margin-bottom:6px}
+.analytics-card .team-avatar{width:30px;height:30px;font-size:14px;border-radius:9px}
+.analytics-card canvas{width:100%;height:auto;max-height:200px;display:block;margin-top:8px}
+.analytics-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:10px;font-size:12px}
+.analytics-stat{background:#F8FAFC;border-radius:8px;padding:6px 10px}
+.analytics-stat small{color:var(--muted);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.analytics-stat strong{display:block;color:var(--heading);font-size:16px;font-weight:900}
+.weak-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  background:#FEF2F2;color:#991B1B;
+  padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:900;
+  margin-left:6px;
+}
+
+/* Badges */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:10px}
+.badge{
+  background:#fff;border:1px solid var(--border);border-radius:14px;
+  padding:14px 12px;text-align:center;position:relative;
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.badge.earned{
+  border-color:#F59E0B;
+  background:linear-gradient(135deg,#FFFBEB,#FEF3C7);
+  box-shadow:0 8px 18px rgba(245,158,11,.18);
+}
+.badge.earned:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(245,158,11,.24)}
+.badge.locked{opacity:.5}
+.badge-icon{font-size:32px;line-height:1;margin-bottom:6px}
+.badge-name{font-weight:900;color:var(--heading);font-size:13px;margin-bottom:3px}
+.badge-desc{color:var(--muted);font-size:11px;line-height:1.4}
+.badge-by{margin-top:6px;font-size:10px;color:var(--brand-blue);font-weight:800}
+.team-badges{display:flex;gap:3px;flex-wrap:wrap;margin-top:6px}
+.team-badge-mini{
+  width:22px;height:22px;border-radius:7px;
+  background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1px solid #F59E0B;
+  display:inline-flex;align-items:center;justify-content:center;font-size:13px;
+  cursor:help;
+}
+
+/* Custom prompts */
+.custom-prompts-box{
+  margin-top:16px;padding:14px;background:#F8FAFC;
+  border-radius:14px;border:1px dashed #CBD5E1;
+}
+.custom-prompts-box h3{margin:0 0 8px;font-size:13px}
+.cp-list{display:grid;gap:8px;max-height:240px;overflow-y:auto;margin-bottom:10px}
+.cp-item{
+  background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;font-size:12.5px;
+}
+.cp-item .cp-info{flex:1;min-width:0}
+.cp-item .cp-info b{display:block;color:var(--heading);font-size:13px}
+.cp-item .cp-info span{display:block;color:var(--muted);font-size:11.5px;margin-top:2px;line-height:1.4}
+.cp-form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.cp-form-row select,.cp-form-row input{padding:8px 10px;font-size:12.5px}
+
+/* Templates */
+.template-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#EFF6FF;color:var(--brand-blue);
+  padding:5px 11px;border-radius:999px;font-size:12px;font-weight:800;
+  border:1px solid #BFDBFE;cursor:pointer;margin:3px;
+}
+.template-pill:hover{background:var(--brand-blue);color:#fff}
+.template-pill .x{
+  background:rgba(255,255,255,.4);border-radius:50%;width:14px;height:14px;
+  display:inline-flex;align-items:center;justify-content:center;font-size:10px;
+}
+
+/* Share modal */
+.share-box{
+  background:#F8FAFC;border:1px solid var(--border);border-radius:12px;
+  padding:12px;display:flex;align-items:center;gap:8px;margin-bottom:12px;
+}
+.share-box input{flex:1;border:none;background:transparent;font-family:ui-monospace,monospace;font-size:12px}
+.share-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.share-row .btn{flex:1;min-width:140px;justify-content:center}
+
+/* Presenter mode - hide chrome, blow up the prompt */
+body.mode-present .back-pill,
+body.mode-present .hero aside,
+body.mode-present .flow,
+body.mode-present aside.setup-panel,
+body.mode-present .powerups,
+body.mode-present .footer-note,
+body.mode-present .tabs{display:none !important}
+body.mode-present .grid{grid-template-columns:1fr}
+body.mode-present .hero{grid-template-columns:1fr}
+body.mode-present .prompt-text{font-size:clamp(34px,5vw,64px) !important}
+body.mode-present .timer{font-size:32px;padding:18px 28px}
+body.mode-present .response-grid{grid-template-columns:repeat(4,1fr)}
+body.mode-present .team-score-card .criteria,
+body.mode-present .team-score-card .response-input,
+body.mode-present .team-score-card .quick-score-row,
+body.mode-present .team-score-card .coaching-bar{display:none}
+
+/* Player mode - phone-friendly, minimal UI */
+body.mode-play .back-pill,
+body.mode-play .hero,
+body.mode-play .flow,
+body.mode-play aside.setup-panel,
+body.mode-play .powerups,
+body.mode-play .footer-note,
+body.mode-play .leaderboard,
+body.mode-play .response-grid,
+body.mode-play .tabs{display:none !important}
+body.mode-play .grid{grid-template-columns:1fr}
+body.mode-play .app-shell{padding:14px;max-width:600px}
+body.mode-play #leaderboardView,
+body.mode-play #reflectionView,
+body.mode-play #logView{display:none !important}
+
+/* Mode banner */
+.mode-banner{
+  display:none;align-items:center;gap:10px;
+  padding:8px 14px;border-radius:999px;
+  background:#0F172A;color:#fff;font-size:12px;font-weight:800;
+  position:fixed;top:14px;right:14px;z-index:1001;
+}
+body.mode-present .mode-banner,body.mode-play .mode-banner{display:inline-flex}
+.mode-banner a{color:#7ee5d6;text-decoration:underline;font-weight:900}
+
+/* RTL */
+[dir="rtl"] .back-pill{left:auto;right:16px}
+[dir="rtl"] .mode-banner{right:auto;left:14px}
+[dir="rtl"] .toast{transform:translateX(50%) translateY(20px)}
+[dir="rtl"] .toast.show{transform:translateX(50%) translateY(0)}
+
+/* Player join mini-view */
+.player-mini{display:none}
+body.mode-play .player-mini{display:block;background:#fff;border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.player-mini h2{font-size:18px;margin:0 0 8px}
+.player-mini textarea{min-height:120px}
+.player-mini .reactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.player-mini .reaction-btn{
+  background:#F8FAFC;border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px;font-size:18px;cursor:pointer;
+}
 </style>
 </head>
 <body>
 <a class="back-pill" href="../game.html?id=improv">← Back to Engage</a>
+<div class="mode-banner" id="modeBanner"></div>
 <canvas id="confetti" aria-hidden="true"></canvas>
 
 <div class="app-shell">
@@ -582,7 +780,10 @@ input:focus,textarea:focus,select:focus{
           <small style="color:#cbd5e1;text-transform:uppercase;letter-spacing:.06em;font-size:10px;font-weight:800">Total EngageCoins</small>
           <div style="font-size:24px;font-weight:900;color:#fff;line-height:1.2"><span id="totalCoins">0</span> 🪙</div>
         </div>
-        <div class="coin-badge"><span class="coin-dot">¢</span><span id="coinPool">Pool</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+          <div class="coin-badge"><span class="coin-dot">¢</span><span id="coinPool">Pool</span></div>
+          <div class="streak-pill" id="streakPill" style="display:none">🔥 <span id="streakDays">0</span>-day streak</div>
+        </div>
       </div>
       <div class="mini-card">
         <p><strong style="color:var(--heading)">Core rule:</strong> Use "Yes, and..." thinking. Build on the previous idea instead of blocking it.</p>
@@ -606,6 +807,22 @@ input:focus,textarea:focus,select:focus{
   <section class="grid">
     <aside class="panel setup-panel" id="setupPanel">
       <h2>Custom Setup</h2>
+
+      <div class="form-row">
+        <label>Language</label>
+        <div class="lang-row" id="langRow">
+          <button class="lang-pick active" data-lang="en">EN</button>
+          <button class="lang-pick" data-lang="hi">हिं</button>
+          <button class="lang-pick" data-lang="ar">ع</button>
+          <button class="lang-pick" data-lang="es">ES</button>
+        </div>
+        <p class="hint">EN: 28 prompts. HI / AR / ES: 10 prompts each (compact pack). RTL auto-applied for Arabic.</p>
+      </div>
+
+      <div class="form-row">
+        <label>Saved Templates <button type="button" class="btn ghost btn-sm" id="saveTemplateBtn" style="float:right;min-height:28px;padding:4px 9px;font-size:11px">+ Save current</button></label>
+        <div id="templateList" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><span class="hint" style="margin:0">No saved templates yet. Build a config and click "Save current".</span></div>
+      </div>
 
       <div class="form-row">
         <label for="gameCategory">Prompt Category</label>
@@ -668,6 +885,41 @@ input:focus,textarea:focus,select:focus{
 
       <h3>Teams</h3>
       <div class="team-list" id="teamList"><div class="empty-state">No teams added yet.</div></div>
+
+      <div class="custom-prompts-box">
+        <h3>+ Custom Prompts <small style="font-weight:600;color:var(--muted)">(your own scenarios)</small></h3>
+        <div id="cpList" class="cp-list"></div>
+        <div class="cp-form-row">
+          <select id="cpCategory">
+            <option value="mixed">Mixed</option>
+            <option value="communication">Communication</option>
+            <option value="leadership">Leadership</option>
+            <option value="sales">Sales</option>
+            <option value="customer-service">Customer Service</option>
+            <option value="change-management">Change Management</option>
+            <option value="critical-thinking">Critical Thinking</option>
+            <option value="conflict">Conflict Resolution</option>
+          </select>
+          <select id="cpDifficulty">
+            <option value="Easy">Easy</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+        <input id="cpSkill" placeholder="Skill focus (e.g. Active listening)" style="margin-bottom:8px"/>
+        <textarea id="cpText" placeholder="Prompt scenario (the situation teams will respond to)" style="margin-bottom:8px"></textarea>
+        <textarea id="cpInstruction" placeholder="One-line facilitator instruction (what to coach)" style="margin-bottom:8px;min-height:54px"></textarea>
+        <div class="cp-form-row">
+          <textarea id="cpStrong" placeholder="Strong response example (Yes, and...)" style="min-height:54px"></textarea>
+          <textarea id="cpWeak" placeholder="Weak response example (block / dismissive)" style="min-height:54px"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" id="addCpBtn">+ Add Prompt</button>
+          <button class="btn ghost btn-sm" id="exportCpBtn">📥 Export Pack</button>
+          <button class="btn ghost btn-sm" id="importCpBtn">📤 Import Pack</button>
+          <input type="file" id="importCpInput" accept="application/json" style="display:none"/>
+        </div>
+      </div>
     </aside>
 
     <main class="game-board" id="gameArea">
@@ -696,6 +948,8 @@ input:focus,textarea:focus,select:focus{
         <div class="tabs">
           <button class="tab active" data-view="play">▶ Play <span class="kbd">P</span></button>
           <button class="tab" data-view="leaderboard">🏆 Leaderboard <span class="kbd">L</span></button>
+          <button class="tab" data-view="analytics">📊 Analytics <span class="kbd">A</span></button>
+          <button class="tab" data-view="badges">🎖 Badges <span class="kbd">B</span></button>
           <button class="tab" data-view="reflection">💬 Reflection <span class="kbd">R</span></button>
           <button class="tab" data-view="log">📋 Round Log</button>
         </div>
@@ -732,6 +986,18 @@ input:focus,textarea:focus,select:focus{
           <div class="leaderboard" id="leaderboard"></div>
         </div>
 
+        <div id="analyticsView" class="hidden">
+          <h2>Team analytics</h2>
+          <p class="hint">Radar chart shows average score per criterion across all rounds. Trend chart shows total per round. Weakest criterion is flagged for targeted coaching.</p>
+          <div class="analytics-grid" id="analyticsGrid"></div>
+        </div>
+
+        <div id="badgesView" class="hidden">
+          <h2>Achievement badges</h2>
+          <p class="hint">10 badges to unlock across the game. Earn them through round wins, perfect criterion scores, comebacks, and streaks.</p>
+          <div class="badge-grid" id="badgeGrid"></div>
+        </div>
+
         <div id="reflectionView" class="hidden">
           <h2>Reflection</h2>
           <div class="reflection-card">
@@ -752,6 +1018,8 @@ input:focus,textarea:focus,select:focus{
           <div style="display:flex;gap:10px;flex-wrap:wrap">
             <button class="btn" id="exportBtn">📥 Export JSON</button>
             <button class="btn secondary" id="exportCsvBtn">📊 Export CSV</button>
+            <button class="btn secondary" id="shareBtn">🔗 Share session</button>
+            <button class="btn secondary" id="reminderBtn">📅 Schedule reminder (14d)</button>
             <button class="btn ghost" id="printBtn">🖨 Print / PDF</button>
           </div>
         </div>
@@ -822,6 +1090,44 @@ input:focus,textarea:focus,select:focus{
     <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 24px 24px;justify-content:flex-end">
       <button class="btn ghost" id="summaryClose">Close</button>
       <button class="btn warning" id="summaryNext">🎲 Next Round</button>
+    </div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="overlay" id="shareOverlay" role="dialog" aria-modal="true">
+  <div class="overlay-modal">
+    <div class="overlay-header">
+      <div>
+        <h2>Share this session</h2>
+        <p>Copy a link, generate an embed snippet, or download a calendar reminder. Everything works without a backend - the full session state is encoded in the URL.</p>
+      </div>
+      <button class="overlay-close" id="shareClose">×</button>
+    </div>
+    <div class="overlay-body">
+      <label style="display:block;margin-bottom:6px;font-weight:900">Shareable URL</label>
+      <div class="share-box">
+        <input id="shareUrl" readonly value=""/>
+        <button class="btn btn-sm" id="copyShareUrl">📋 Copy</button>
+      </div>
+
+      <label style="display:block;margin-bottom:6px;font-weight:900;margin-top:14px">Slack / Teams card</label>
+      <div class="share-box" style="display:block">
+        <p id="slackCard" style="margin:0;line-height:1.55;font-size:13.5px;white-space:pre-line"></p>
+        <button class="btn btn-sm" id="copySlackCard" style="margin-top:8px">📋 Copy card text</button>
+      </div>
+
+      <label style="display:block;margin-bottom:6px;font-weight:900;margin-top:14px">Embed snippet</label>
+      <div class="share-box">
+        <input id="embedSnippet" readonly value=""/>
+        <button class="btn btn-sm" id="copyEmbed">📋 Copy</button>
+      </div>
+      <p class="hint">Drops a 600×800 iframe onto Confluence, Notion, or any company intranet page.</p>
+
+      <div class="share-row" style="margin-top:14px">
+        <button class="btn warning" id="presenterModeBtn">📺 Open Presenter View</button>
+        <button class="btn warning" id="playerModeBtn">📱 Open Player View</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1051,7 +1357,10 @@ function showToast(message, kind=''){
 }
 
 function saveState(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ teams, currentRound, roundLog, phase, activePowerups, maxRounds }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    teams, currentRound, roundLog, phase, activePowerups, maxRounds,
+    customPrompts, sessionTemplates, coachingTags, currentLanguage
+  }));
 }
 function loadState(){
   try{
@@ -1062,10 +1371,18 @@ function loadState(){
     phase = s.phase || 'setup';
     activePowerups = s.activePowerups || {};
     maxRounds = Number(s.maxRounds) || 3;
+    customPrompts = s.customPrompts || [];
+    sessionTemplates = s.sessionTemplates || [];
+    coachingTags = s.coachingTags || {};
+    currentLanguage = s.currentLanguage || 'en';
   }catch(e){}
   // sync the select with stored value
   const sel = $('totalRounds');
   if(sel) sel.value = String(maxRounds);
+  // sync language pills
+  document.querySelectorAll('.lang-pick').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLanguage));
+  // sync PROMPTS to active language + custom
+  PROMPTS.length = 0; getActivePrompts().forEach(p => PROMPTS.push(p));
   updateUI();
 }
 
@@ -1193,6 +1510,10 @@ function updateResponses(){
             </div>
           </div>
         `).join('')}
+      </div>
+      <div class="coaching-bar">
+        <small>Live coaching tags · click as the team responds</small>
+        ${COACHING_TAGS.map(ct => `<button class="coach-tag ${ct.positive?'positive':'negative'}" onclick="tagBehavior('${t.id}','${ct.id}')" title="${escapeHtml(ct.tip)}">${ct.icon} ${escapeHtml(ct.label)}</button>`).join('')}
       </div>
       <div class="response-input">
         <textarea id="response-${t.id}" placeholder="Capture the team's response or facilitator notes for this round."></textarea>
@@ -1545,6 +1866,19 @@ function finishRound(){
     if(activePowerups[tid].steal) delete activePowerups[tid].steal;
   });
 
+  // Capture per-criterion scores per team for analytics
+  const criteriaPerTeam = {};
+  teams.forEach(t => {
+    criteriaPerTeam[t.id] = {};
+    CRITERIA.forEach(c => { criteriaPerTeam[t.id][c.key] = clampScore(getScore(t.id, c.key)); });
+  });
+
+  // Compute coaching tips before clearing scores
+  const coachingTips = generateCoachingTips(scores);
+
+  // Award badges (this round)
+  awardBadges(scores, false);
+
   roundLog.push({
     round: currentRound,
     category: currentPrompt.category,
@@ -1552,7 +1886,10 @@ function finishRound(){
     skill: currentPrompt.skill,
     prompt: currentPrompt.text,
     twist: $('twistBanner').classList.contains('show') ? $('twistText').textContent : null,
-    scores: scores.map(({team,points,response,coinsEarned}) => ({ team, points, response, coinsEarned })),
+    scores: scores.map(({team,teamId,points,response,coinsEarned}) => ({ team, teamId, points, response, coinsEarned })),
+    criteriaPerTeam,
+    coachingTags: coachingTags[String(currentRound)] || {},
+    coachingTips,
     time: new Date().toISOString()
   });
 
@@ -1586,6 +1923,8 @@ function showFinalWinner(){
   if(!teams.length) return;
   const ranked = [...teams].sort((a,b) => (b.score||0) - (a.score||0));
   const champ = ranked[0];
+  // Champion badge
+  if(champ){ champ.badges = champ.badges || []; addBadge(champ, 'champion'); saveState(); }
   $('summaryWinnerName').textContent = '🏆 ' + champ.name + ' wins the game';
   $('summaryWinnerScore').textContent =
     champ.score + ' points · ' + (champ.coins||0) + ' 🪙 · ' + (champ.rounds||0) + ' rounds played';
@@ -1618,6 +1957,17 @@ function showSummary(sortedRound, winner){
   btn.textContent = '🎲 Next Round';
   btn.dataset.mode = 'round';
   btn.onclick = () => { closeSummary(); nextPrompt(); };
+  // Clean any previous coaching tips card
+  document.getElementById('summaryCoaching')?.remove();
+  // Build coaching tips section from the just-finished round log entry
+  const lastRound = roundLog[roundLog.length - 1];
+  if(lastRound && (lastRound.coachingTips || []).length){
+    const card = document.createElement('div');
+    card.id = 'summaryCoaching';
+    card.className = 'coaching-tips';
+    card.innerHTML = `<h4>💬 Coaching tips</h4><ul>${lastRound.coachingTips.map(t => `<li>${t}</li>`).join('')}</ul>`;
+    $('summaryGrid').parentElement.insertBefore(card, $('summaryGrid'));
+  }
   $('summaryWinnerName').textContent = winner.team + ' wins this round';
   $('summaryWinnerScore').textContent = '+' + winner.points + ' points · +' + (winner.coinsEarned||0) + ' 🪙';
   $('summaryGrid').innerHTML = sortedRound.map((s,i) => {
@@ -1753,6 +2103,7 @@ function resetGame(){
   if(!confirm('Reset the game, scores, coins, and round log?')) return;
   clearInterval(timer);
   teams = []; currentRound=0; currentPrompt=null; roundLog=[]; phase='setup'; activePowerups={};
+  coachingTags = {};
   maxRounds = Number($('totalRounds')?.value) || 3;
   localStorage.removeItem(STORAGE_KEY);
   $('promptCategory').textContent='Prompt';
@@ -1773,10 +2124,12 @@ function resetGame(){
 }
 
 function switchView(view){
-  ['play','leaderboard','reflection','log'].forEach(v => {
-    $(v+'View').classList.toggle('hidden', v !== view);
+  ['play','leaderboard','reflection','log','analytics','badges'].forEach(v => {
+    $(v+'View')?.classList.toggle('hidden', v !== view);
   });
   document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.view === view));
+  if(view === 'analytics') renderAnalytics();
+  if(view === 'badges') renderBadges();
 }
 
 // ---------- Utils ----------
@@ -1904,9 +2257,628 @@ document.addEventListener('keydown', e => {
   if(e.key.toLowerCase() === 's'){ if(phase !== 'perform') startRound(); }
 });
 
+/* ===========================================================
+   NEW MODULES (v3): languages, custom prompts, templates,
+   coaching, badges, analytics, sharing, modes, streak
+=========================================================== */
+
+// ---------- Multilingual prompt packs (compact 10 each for HI/AR/ES) ----------
+const PROMPTS_LANG = {
+  en: PROMPTS,
+  hi: [
+    { category:'communication', difficulty:'Easy', skill:'सक्रिय श्रवण', text:'मैनेजर एक ज़रूरी प्रोजेक्ट के लिए अस्पष्ट निर्देश देता है। टीम को स्पष्टता की ओर ले जाएँ।', instruction:'बेहतर सवाल पूछें, उम्मीदों की पुष्टि करें, अनुमान न लगाएँ।', strong:'ज़रूर, और स्पष्ट करूँ: शुक्रवार तक नतीजा A, रोज़ चेक-इन। 30 मिनट में एक-पेज सारांश भेजता हूँ।', weak:'ठीक है, कर देंगे।' },
+    { category:'leadership', difficulty:'Medium', skill:'जिम्मेदारी', text:'आपकी टीम ने अभी एक बड़ी डेडलाइन मिस की। आपके पास टीम से बात करने के दो मिनट हैं।', instruction:'मालिकाना हक, शांत संवाद, और आगे की योजना दिखाएँ।', strong:'हाँ, और चूक मेरी थी - मैंने इंटीग्रेशन का अनुमान कम लगाया। यह नया प्लान है और इस हफ्ते हम क्या अलग करेंगे।', weak:'आप सब फेल हो गए। दोबारा मत होने देना।' },
+    { category:'sales', difficulty:'Medium', skill:'मूल्य फ्रेमिंग', text:'ग्राहक कहता है आपका समाधान बहुत महंगा है, प्रतिस्पर्धी सस्ता है।', instruction:'मूल्य, खोज, और आपत्ति पर ध्यान दें।', strong:'हाँ, और कीमत मायने रखती है - आपके तीन परिणामों पर नज़र डालें, क्या सस्ता विकल्प वही देता है?', weak:'हम अच्छे हैं इसलिए महंगे हैं।' },
+    { category:'customer-service', difficulty:'Easy', skill:'सहानुभूति', text:'ग्राहक नाराज़ है क्योंकि वादा की गई डिलीवरी छूट गई। जवाब दें।', instruction:'सहानुभूति, मालिकाना हक, व्यावहारिक समाधान।', strong:'जी हाँ, और मुझे खेद है - यह हमारी गलती है। प्राथमिकता से आज भेज रहा हूँ। और क्या ठीक करूँ?', weak:'क्षमा करें, वेयरहाउस की दिक्कत थी।' },
+    { category:'change-management', difficulty:'Medium', skill:'अपनाने का संदेश', text:'कंपनी अगले महीने नई परफॉर्मेंस समीक्षा प्रणाली पर जा रही है। कर्मचारी संशय में हैं।', instruction:'उद्देश्य, लाभ, सहायता समझाकर भरोसा बनाएँ।', strong:'हाँ, और पुरानी प्रणाली ग़लत चीज़ों को इनाम देती थी। नई प्रणाली उन तीन व्यवहारों पर केंद्रित है जो हम चाहते हैं।', weak:'हो रहा है, ढलना ही पड़ेगा।' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'अनिश्चितता में निर्णय', text:'टीम के पास अधूरा डेटा है पर आज शाम तक सिफारिश देनी है।', instruction:'धारणाएँ, जोखिम, निर्णय तर्क पर अभ्यास करें।', strong:'हाँ, और जिन तीन डेटा बिंदुओं पर भरोसा है उनके आधार पर सिफारिश X है। दो खुली धारणाएँ बुधवार तक जाँचेंगे।', weak:'और डेटा चाहिए, फिर तय करेंगे।' },
+    { category:'conflict', difficulty:'Medium', skill:'मध्यस्थता', text:'दो टीम सदस्य समस्या के समाधान पर ज़ोरदार असहमत हैं।', instruction:'सुगमता, साक्ष्य, सम्मानजनक चुनौती।', strong:'हाँ, और आप दोनों एक ही नतीजा चाहते हैं - तेज़ डिलीवरी। हर तरीके की धारणाएँ सूचीबद्ध करें, सबसे जोखिम वाली पहले परखें।', weak:'कोई एक चुनो और आगे बढ़ो।' },
+    { category:'mixed', difficulty:'Easy', skill:'समावेश', text:'नया कर्मचारी रिमोट से जुड़ता है और अलग-थलग महसूस करता है।', instruction:'समावेश, संवाद, टीम बंधन पर ध्यान दें।', strong:'हाँ, और मैं पहले हफ्ते आपको दो लोगों के साथ जोड़ता हूँ - एक साथी, एक मेंटर। रोज़ 15 मिनट तय।', weak:'स्वागत है। कुछ चाहिए तो बताना।' },
+    { category:'communication', difficulty:'Hard', skill:'कठिन संवाद', text:'साथी की काम की गुणवत्ता गिरी है। बातचीत जारी रखें।', instruction:'जिज्ञासा से शुरू करें, ठोस उदाहरण साझा करें, स्पष्ट अगला कदम तय करें।', strong:'हाँ, और पिछली दो रिपोर्ट्स में QA पास नहीं हुआ। बताइए क्या बदला और मैं कैसे मदद कर सकता हूँ?', weak:'आपका काम ख़राब हो रहा है, ठीक करो।' },
+    { category:'leadership', difficulty:'Easy', skill:'पहचान', text:'जूनियर साथी ने अभी छोटी पर प्रभावशाली जीत दिलाई। पहचान का पल बनाएँ।', instruction:'विशिष्ट, सार्वजनिक, दोहराने योग्य व्यवहार से जोड़ें।', strong:'हाँ, और सबसे बढ़िया था कि प्रिया ने वेंडर टीम के साथ पेयरिंग से API समस्या हल की - यही वह तरीका है जो सब अपनाएँ।', weak:'अच्छा काम, प्रिया।' }
+  ],
+  ar: [
+    { category:'communication', difficulty:'Easy', skill:'الإصغاء الفعّال', text:'يعطي المدير تعليمات غير واضحة لمشروع عاجل. تابع وقُد الفريق نحو الوضوح.', instruction:'اطرح أسئلة أفضل، أكّد التوقعات، تجنّب الافتراضات.', strong:'نعم، وللتأكيد: النتيجة A بحلول الجمعة مع متابعات يومية. سأرسل ملخصاً من صفحة واحدة خلال 30 دقيقة.', weak:'حسناً، سأفعل ذلك.' },
+    { category:'leadership', difficulty:'Medium', skill:'تحمّل المسؤولية', text:'فاتت فريقك للتو مهلة كبيرة. أمامك دقيقتان لتُخاطبهم وتُعيد الزخم.', instruction:'أظهر المسؤولية والهدوء والتخطيط للأمام.', strong:'نعم، والتقصير عليّ - قللت من تقدير عمل التكامل. هذه الخطة الجديدة وماذا سنُغيّر هذا الأسبوع.', weak:'لقد فشلتم جميعاً. لا تكرروا ذلك.' },
+    { category:'sales', difficulty:'Medium', skill:'تأطير القيمة', text:'يقول العميل إن حلّك مكلف جداً وسعر المنافس أقل. تابع.', instruction:'ركّز على القيمة والاستكشاف ومعالجة الاعتراض.', strong:'نعم، والسعر مهم - لننظر في النتائج الثلاث التي ذكرتها ونرى هل البديل الأرخص يحقّقها فعلاً.', weak:'نحن نستحق ذلك لأن جودتنا أفضل.' },
+    { category:'customer-service', difficulty:'Easy', skill:'التعاطف', text:'العميل غاضب بسبب تأخّر شحنة وعد بها. أجِب وتابع.', instruction:'تعاطف، تحمّل المسؤولية، حلّ عملي.', strong:'نعم، وأعتذر - هذا خطؤنا. البديل يُرسل اليوم بأولوية، وإليك رصيداً تعويضاً. ما الذي يمكنني إصلاحه أيضاً؟', weak:'آسف. كانت لدينا مشاكل في المستودع.' },
+    { category:'change-management', difficulty:'Medium', skill:'رسائل التبنّي', text:'تنتقل الشركة إلى نظام مراجعة أداء جديد الشهر القادم. الموظفون متشكّكون.', instruction:'ابنِ الثقة بشرح الهدف والفوائد والدعم.', strong:'نعم، والنظام القديم كافأ الأشياء الخاطئة. الجديد مبني حول السلوكيات الثلاث التي قلنا إننا نريد المزيد منها.', weak:'هذا يحدث، علينا التكيّف.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'القرار تحت عدم اليقين', text:'لدى الفريق بيانات ناقصة ولكن عليه تقديم توصية بنهاية اليوم.', instruction:'مارس الافتراضات وتأطير المخاطر ومنطق القرار.', strong:'نعم، وبناءً على النقاط الثلاث التي نثق بها، التوصية هي X. الافتراضان المفتوحان A و B - سنتحقّق منهما بحلول الأربعاء.', weak:'نحتاج بيانات أكثر قبل القرار.' },
+    { category:'conflict', difficulty:'Medium', skill:'الوساطة', text:'يختلف عضوان في الفريق بشدّة حول كيفية حلّ مشكلة.', instruction:'استخدم التيسير والأدلة والتحدّي المحترم.', strong:'نعم، وكلاكما يدافع عن النتيجة نفسها - شحنٌ أسرع. لنُدرج الافتراضات وراء كل نهج ونختبر الأكثر مخاطرة أولاً.', weak:'اختاروا واحداً وامضوا.' },
+    { category:'mixed', difficulty:'Easy', skill:'الاحتواء', text:'ينضم موظف جديد عن بُعد ويشعر بالانعزال.', instruction:'ركّز على الاحتواء والتواصل والترابط.', strong:'نعم، ودعني أُقرنك بشخصين في الأسبوع الأول - زميل ومُرشد. سنحجز 15 دقيقة يومياً.', weak:'مرحباً بك. أخبرنا إذا احتجت شيئاً.' },
+    { category:'leadership', difficulty:'Hard', skill:'التدريب', text:'موظف متميّز فقد دافعه بعد تلقّي ملاحظات صعبة. تابع المحادثة.', instruction:'مارس التعاطف والتدريب والمساءلة.', strong:'نعم، وكان من الصعب سماع تلك الملاحظات - شكراً لأنك تعاملت معها. ما الدعم الذي يساعدك على التصرّف بشأن ما توافق عليه؟', weak:'صعب. كانت الملاحظات عادلة. تجاوز ذلك.' },
+    { category:'communication', difficulty:'Medium', skill:'تيسير الاجتماعات', text:'اجتماع الفريق ينحرف عن المسار. على شخص ما إعادة المحادثة دون أن يبدو وقحاً.', instruction:'تدخّل موجز ومحترم.', strong:'نعم، وهذه المواضيع الجانبية تستحق اجتماعاً خاصاً. لنُؤجّلها ونعود إلى القرار المستحق بحلول الخامسة.', weak:'هل يمكن للجميع التوقف عن الكلام والبقاء في الموضوع؟' }
+  ],
+  es: [
+    { category:'communication', difficulty:'Easy', skill:'Escucha activa', text:'Un gerente da instrucciones poco claras para un proyecto urgente. Continúa y lleva al equipo hacia la claridad.', instruction:'Mejor pregunta, confirma expectativas, evita supuestos.', strong:'Sí, y para confirmar: resultado A para el viernes, con check-ins diarios. Enviaré un brief de una página en 30 minutos.', weak:'Vale, lo haré.' },
+    { category:'leadership', difficulty:'Medium', skill:'Responsabilidad', text:'Tu equipo acaba de incumplir una fecha límite importante. Tienes dos minutos para hablar con ellos.', instruction:'Demuestra responsabilidad, calma y planificación.', strong:'Sí, y el desliz es mío - subestimé el trabajo de integración. Aquí está el nuevo plan y qué haremos diferente esta semana.', weak:'Todos fallaron. Que no vuelva a pasar.' },
+    { category:'sales', difficulty:'Medium', skill:'Encuadre de valor', text:'Un prospecto dice que tu solución es muy cara y la competencia ofrece menos.', instruction:'Enfócate en valor, descubrimiento y manejo de objeciones.', strong:'Sí, y el precio importa - revisemos los tres resultados que mencionaste y veamos si la opción barata realmente los entrega.', weak:'Valemos lo que cobramos porque la calidad es mejor.' },
+    { category:'customer-service', difficulty:'Easy', skill:'Empatía', text:'Un cliente está molesto porque se perdió una entrega prometida. Responde.', instruction:'Empatía, responsabilidad, resolución práctica.', strong:'Sí, y lamento esto - es nuestra culpa. El reemplazo sale hoy con prioridad, y aquí hay un crédito. ¿Qué más puedo arreglar?', weak:'Disculpa. Tuvimos problemas en el almacén.' },
+    { category:'change-management', difficulty:'Medium', skill:'Mensaje de adopción', text:'La empresa cambia a un nuevo sistema de revisión de desempeño. Los empleados son escépticos.', instruction:'Genera confianza explicando propósito, beneficios y soporte.', strong:'Sí, y el sistema anterior premiaba cosas erróneas. El nuevo está construido en torno a los tres comportamientos que queremos más.', weak:'Está pasando, hay que adaptarse.' },
+    { category:'critical-thinking', difficulty:'Hard', skill:'Decisión bajo incertidumbre', text:'El equipo tiene datos incompletos pero debe dar una recomendación hoy.', instruction:'Practica supuestos, encuadre de riesgo, y lógica de decisión.', strong:'Sí, y basándonos en los tres puntos de datos que confiamos, la recomendación es X. Los dos supuestos abiertos los validaremos el miércoles.', weak:'Necesitamos más datos antes de decidir.' },
+    { category:'conflict', difficulty:'Medium', skill:'Mediación', text:'Dos miembros del equipo no se ponen de acuerdo sobre cómo resolver un problema.', instruction:'Usa facilitación, evidencia y desafío respetuoso.', strong:'Sí, y ambos defienden el mismo resultado - entregar más rápido. Listemos las suposiciones de cada enfoque y probemos la más riesgosa primero.', weak:'Elijan uno y avancen.' },
+    { category:'mixed', difficulty:'Easy', skill:'Inclusión', text:'Un nuevo empleado se une remoto y se siente desconectado.', instruction:'Enfócate en inclusión, comunicación y vínculo.', strong:'Sí, y te pondré con dos personas la primera semana - un par y un mentor. Reservaremos 15 minutos diarios para guiarte.', weak:'Bienvenido. Avísanos si necesitas algo.' },
+    { category:'leadership', difficulty:'Hard', skill:'Coaching', text:'Un colaborador estrella perdió motivación tras recibir feedback duro. Continúa la conversación.', instruction:'Practica empatía, coaching y responsabilidad.', strong:'Sí, y el feedback fue difícil de oír - gracias por procesarlo. ¿Qué apoyo te ayudaría a actuar sobre las partes con las que estás de acuerdo?', weak:'Difícil. El feedback fue justo. Sigamos.' },
+    { category:'communication', difficulty:'Medium', skill:'Facilitación de reuniones', text:'Una reunión se está desviando. Alguien debe traer la conversación de vuelta sin sonar grosero.', instruction:'Intervención concisa y respetuosa.', strong:'Sí, y estos temas paralelos merecen su propia reunión. Aparquémoslos y volvamos a la decisión que debemos para las cinco.', weak:'¿Pueden dejar de hablar y mantenerse en tema?' }
+  ]
+};
+
+const STRINGS = {
+  en: { setupTitle:'Custom Setup', play:'Play', leaderboard:'Leaderboard', reflection:'Reflection', startRound:'Start Round' },
+  hi: { setupTitle:'अपनी सेटअप करें', play:'खेलें', leaderboard:'लीडरबोर्ड', reflection:'चिंतन', startRound:'राउंड शुरू करें' },
+  ar: { setupTitle:'إعداد مخصّص', play:'العب', leaderboard:'لوحة الصدارة', reflection:'مراجعة', startRound:'ابدأ الجولة' },
+  es: { setupTitle:'Configuración personalizada', play:'Jugar', leaderboard:'Clasificación', reflection:'Reflexión', startRound:'Iniciar Ronda' }
+};
+
+let currentLanguage = 'en';
+let customPrompts = [];      // user-authored prompts
+let sessionTemplates = [];   // saved configs
+let coachingTags = {};       // { roundIdx: { teamId: [{tag, t}] } }
+
+// ---------- Coaching tags ----------
+const COACHING_TAGS = [
+  { id:'build',    label:'Strong build', icon:'✓',  criterion:'builds',     positive:true,  delta:+1, tip:'They extended on the previous idea. Mark Builds high.' },
+  { id:'block',    label:'Block',        icon:'🛑', criterion:'builds',     positive:false, delta:-1, tip:'They dismissed or shut down the previous idea ("No, but..."). Coach: replace with "Yes, and...".' },
+  { id:'clear',    label:'Crystal clear', icon:'💎', criterion:'clarity',    positive:true,  delta:+1, tip:'Concrete, easy to follow.' },
+  { id:'unclear',  label:'Unclear',      icon:'🤔', criterion:'clarity',    positive:false, delta:-1, tip:'Rambling or vague. Coach: sharpen the message in one sentence.' },
+  { id:'creative', label:'Novel angle',  icon:'💡', criterion:'creativity', positive:true,  delta:+1, tip:'Original framing.' },
+  { id:'fast',     label:'Quick recovery', icon:'⚡', criterion:'speed',     positive:true,  delta:+1, tip:'Fast, confident pivot.' },
+  { id:'solution', label:'Moved to outcome', icon:'🎯', criterion:'solution', positive:true, delta:+1, tip:'Closed with a real next step.' },
+  { id:'team',     label:'Whole team in', icon:'👥', criterion:'teamwork',  positive:true,  delta:+1, tip:'More than one voice contributed.' }
+];
+
+function tagBehavior(teamId, tagId){
+  const tag = COACHING_TAGS.find(x => x.id === tagId);
+  if(!tag) return;
+  const k = String(currentRound || 0);
+  coachingTags[k] = coachingTags[k] || {};
+  coachingTags[k][teamId] = coachingTags[k][teamId] || [];
+  coachingTags[k][teamId].push({ tag: tagId, t: Date.now() });
+  // nudge the relevant criterion score
+  bumpScore(teamId, tag.criterion, tag.delta);
+  saveState();
+  updateResponses();
+  showToast(tag.icon + ' ' + tag.label);
+}
+
+function generateCoachingTips(roundScores){
+  const tips = [];
+  // Surface lowest scoring criterion across the round
+  const totals = {};
+  CRITERIA.forEach(c => { totals[c.key] = 0; });
+  roundScores.forEach(s => {
+    const t = teams.find(x => x.id === s.teamId);
+    if(!t) return;
+    CRITERIA.forEach(c => {
+      totals[c.key] += clampScore(getScore(t.id, c.key) || 0);
+    });
+  });
+  let worstKey = CRITERIA[0].key, worstVal = Infinity;
+  CRITERIA.forEach(c => { if(totals[c.key] < worstVal){ worstVal = totals[c.key]; worstKey = c.key; } });
+  const worst = CRITERIA.find(c => c.key === worstKey);
+
+  const courseFor = {
+    builds:'https://www.edstellar.com/course/communication-skills-training',
+    clarity:'https://www.edstellar.com/course/communication-skills-training',
+    creativity:'https://www.edstellar.com/course/critical-thinking',
+    speed:'https://www.edstellar.com/course/time-management',
+    solution:'https://www.edstellar.com/course/problem-solving',
+    teamwork:'https://www.edstellar.com/course/team-building-training'
+  };
+  tips.push(`Weakest criterion this round: <strong>${worst.label}</strong> (avg ${(worstVal/Math.max(1,roundScores.length)).toFixed(1)}/10). <a href="${courseFor[worstKey]}" target="_blank" rel="noopener">Go deeper on ${worst.label} →</a>`);
+
+  // Coaching tip from accumulated tags
+  const k = String(currentRound || 0);
+  const allTags = Object.values(coachingTags[k] || {}).flat();
+  const blocks = allTags.filter(t => t.tag === 'block').length;
+  if(blocks > 0){
+    tips.push(`${blocks} block${blocks>1?'s':''} detected this round. Coach: practice replacing "No, but..." with "Yes, and..." in the next round.`);
+  }
+  const builds = allTags.filter(t => t.tag === 'build').length;
+  if(builds >= 3){
+    tips.push(`${builds} strong builds across teams. The "Yes, and..." habit is forming - reinforce in the debrief.`);
+  }
+  if(roundScores.every(s => s.points >= 40)){
+    tips.push('Every team scored 40+. Try increasing difficulty or shortening the timer for the next round.');
+  }
+  if(roundScores.some(s => s.points < 20)){
+    tips.push('At least one team scored under 20. Pair-up tip: spend the next round in mixed teams to share patterns.');
+  }
+  return tips;
+}
+
+// ---------- Badge library ----------
+const BADGES = [
+  { id:'first-win',  icon:'🥇', name:'First Win',      desc:'Won your first round' },
+  { id:'hat-trick',  icon:'🎩', name:'Hat-Trick',      desc:'Won 3 rounds in a row' },
+  { id:'all-rounder',icon:'🌟', name:'All-Rounder',    desc:'Scored 6+ on every criterion' },
+  { id:'builder',    icon:'🏗',  name:'Master Builder', desc:'Scored 10 on Builds' },
+  { id:'closer',     icon:'🎯', name:'Solution Closer',desc:'Scored 10 on Solution' },
+  { id:'comeback',   icon:'📈', name:'Comeback Kid',   desc:'Climbed from last to first' },
+  { id:'rich',       icon:'💰', name:'Coin Hoarder',   desc:'Held 100+ coins at once' },
+  { id:'lightning',  icon:'⚡', name:'Lightning Round',desc:'Scored 50+ in under 30s remaining' },
+  { id:'storyteller',icon:'📖', name:'Storyteller',    desc:'Captured 5+ written responses' },
+  { id:'champion',   icon:'👑', name:'Champion',       desc:'Won the final game' }
+];
+
+function awardBadges(roundScores, isFinal){
+  const sorted = [...roundScores].sort((a,b) => b.points - a.points);
+  const winner = sorted[0];
+  // helpers
+  const ensure = t => { t.badges = t.badges || []; t.streakWins = t.streakWins || 0; t.responsesCount = t.responsesCount || 0; };
+  // track consecutive wins
+  teams.forEach(t => {
+    ensure(t);
+    if(winner && winner.teamId === t.id) t.streakWins = (t.streakWins||0) + 1;
+    else t.streakWins = 0;
+    if(t.coins >= 100) addBadge(t, 'rich');
+    if(t.streakWins >= 1 && winner.teamId === t.id) addBadge(t, 'first-win');
+    if(t.streakWins >= 3) addBadge(t, 'hat-trick');
+  });
+  // per-round checks
+  roundScores.forEach(s => {
+    const t = teams.find(x => x.id === s.teamId); if(!t) return;
+    if(s.response && s.response.length) t.responsesCount = (t.responsesCount||0) + 1;
+    if(t.responsesCount >= 5) addBadge(t, 'storyteller');
+    const sc = key => clampScore(Number(($('score-'+t.id+'-'+key)?.textContent) || 0));
+    // all 6+
+    if(CRITERIA.every(c => sc(c.key) >= 6)) addBadge(t, 'all-rounder');
+    if(sc('builds') === 10) addBadge(t, 'builder');
+    if(sc('solution') === 10) addBadge(t, 'closer');
+    // Lightning: high score with lots of time left
+    if(s.points >= 50 && remainingSeconds >= Math.floor(Number($('roundDuration').value)/3)) addBadge(t, 'lightning');
+  });
+  // Comeback Kid: was last in previous round, now first
+  if(roundLog.length >= 2){
+    const prev = roundLog[roundLog.length - 2];
+    const prevSorted = [...prev.scores].sort((a,b) => b.points - a.points);
+    const wasLastId = teams.find(t => t.name === prevSorted[prevSorted.length-1].team)?.id;
+    if(winner && wasLastId === winner.teamId){
+      const t = teams.find(x => x.id === winner.teamId);
+      if(t) addBadge(t, 'comeback');
+    }
+  }
+  if(isFinal){
+    const ranked = [...teams].sort((a,b) => (b.score||0) - (a.score||0));
+    const champ = ranked[0];
+    if(champ) addBadge(champ, 'champion');
+  }
+}
+
+function addBadge(team, id){
+  team.badges = team.badges || [];
+  if(team.badges.find(b => b.id === id)) return;
+  team.badges.push({ id, at: Date.now() });
+  const b = BADGES.find(x => x.id === id);
+  if(b) showToast(`🏅 ${team.name} earned "${b.name}"`, 'success');
+}
+
+// ---------- Analytics (canvas radar + trend) ----------
+function teamCriteriaAverages(teamId){
+  const sums = {}; CRITERIA.forEach(c => sums[c.key] = []);
+  roundLog.forEach(log => {
+    const per = log.criteriaPerTeam?.[teamId];
+    if(per) CRITERIA.forEach(c => sums[c.key].push(per[c.key] || 0));
+  });
+  return CRITERIA.map(c => {
+    const arr = sums[c.key];
+    return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
+  });
+}
+function teamRoundTotals(teamId){
+  return roundLog.map(log => {
+    const e = log.scores.find(s => teams.find(t => t.name === s.team && t.id === teamId));
+    return e ? e.points : 0;
+  });
+}
+
+function renderRadar(canvas, team){
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width = canvas.clientWidth * 2;
+  const h = canvas.height = 200 * 2;
+  ctx.scale(2,2);
+  const cw = w/2, ch = h/2, cx = cw/2, cy = ch/2, r = Math.min(cw,ch)/2 - 18;
+  const data = teamCriteriaAverages(team.id);
+  const n = CRITERIA.length;
+  // Background polygons
+  ctx.strokeStyle = '#E5E7EB';
+  for(let level=1; level<=4; level++){
+    ctx.beginPath();
+    for(let i=0;i<n;i++){
+      const ang = (Math.PI*2*i/n) - Math.PI/2;
+      const rr = (r * level / 4);
+      const x = cx + Math.cos(ang)*rr, y = cy + Math.sin(ang)*rr;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath(); ctx.stroke();
+  }
+  // Axes + labels
+  ctx.fillStyle = '#64748B'; ctx.font='600 10px Inter';
+  for(let i=0;i<n;i++){
+    const ang = (Math.PI*2*i/n) - Math.PI/2;
+    const x = cx + Math.cos(ang)*r, y = cy + Math.sin(ang)*r;
+    ctx.strokeStyle = '#E5E7EB';
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y); ctx.stroke();
+    ctx.fillText(CRITERIA[i].label, cx + Math.cos(ang)*(r+10) - 14, cy + Math.sin(ang)*(r+12) + 3);
+  }
+  // Data polygon
+  ctx.fillStyle = team.color + '33'; ctx.strokeStyle = team.color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  data.forEach((v, i) => {
+    const ang = (Math.PI*2*i/n) - Math.PI/2;
+    const rr = (Math.min(10, Math.max(0,v))/10) * r;
+    const x = cx + Math.cos(ang)*rr, y = cy + Math.sin(ang)*rr;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  // Data points
+  ctx.fillStyle = team.color;
+  data.forEach((v, i) => {
+    const ang = (Math.PI*2*i/n) - Math.PI/2;
+    const rr = (Math.min(10, Math.max(0,v))/10) * r;
+    const x = cx + Math.cos(ang)*rr, y = cy + Math.sin(ang)*rr;
+    ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill();
+  });
+}
+
+function renderTrend(canvas, team){
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width = canvas.clientWidth * 2;
+  const h = canvas.height = 120 * 2;
+  ctx.scale(2,2);
+  const cw = w/2, ch = h/2, pad = 18;
+  ctx.clearRect(0,0,cw,ch);
+  const data = teamRoundTotals(team.id);
+  if(!data.length){
+    ctx.fillStyle = '#94A3B8'; ctx.font='600 11px Inter';
+    ctx.fillText('Play a round to see the trend.', pad, ch/2);
+    return;
+  }
+  const maxV = Math.max(60, ...data);
+  // Axis
+  ctx.strokeStyle = '#E5E7EB';
+  ctx.beginPath(); ctx.moveTo(pad, ch-pad); ctx.lineTo(cw-pad, ch-pad); ctx.stroke();
+  // Line
+  ctx.strokeStyle = team.color; ctx.lineWidth = 2;
+  ctx.beginPath();
+  data.forEach((v,i)=>{
+    const x = pad + (i/(Math.max(1,data.length-1)))*(cw-pad*2);
+    const y = ch-pad - (v/maxV)*(ch-pad*2);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  // Points
+  ctx.fillStyle = team.color;
+  data.forEach((v,i)=>{
+    const x = pad + (i/(Math.max(1,data.length-1)))*(cw-pad*2);
+    const y = ch-pad - (v/maxV)*(ch-pad*2);
+    ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill();
+  });
+  // Labels
+  ctx.fillStyle = '#64748B'; ctx.font='600 9px Inter';
+  ctx.fillText('R1', pad-4, ch-pad+12);
+  ctx.fillText('R'+data.length, cw-pad-10, ch-pad+12);
+}
+
+function renderAnalytics(){
+  const host = document.getElementById('analyticsGrid');
+  if(!host) return;
+  if(!teams.length){ host.innerHTML = '<div class="empty-state">No teams yet.</div>'; return; }
+  host.innerHTML = teams.map(t => {
+    const avgs = teamCriteriaAverages(t.id);
+    let weakIdx = 0, weakVal = Infinity;
+    avgs.forEach((v,i)=>{ if(v<weakVal){ weakVal=v; weakIdx=i; } });
+    const weakLabel = CRITERIA[weakIdx].label;
+    const badges = (t.badges||[]).slice(0,5).map(b => {
+      const def = BADGES.find(x => x.id === b.id);
+      return def ? `<span class="team-badge-mini" title="${escapeHtml(def.name)}">${def.icon}</span>` : '';
+    }).join('');
+    return `
+    <div class="analytics-card">
+      <h3>
+        <span class="team-avatar" style="--team-color:${t.color}">${t.avatar}</span>
+        ${escapeHtml(t.name)}
+        ${roundLog.length ? `<span class="weak-pill">Weak: ${weakLabel}</span>` : ''}
+      </h3>
+      <div class="team-badges">${badges}</div>
+      <canvas id="radar-${t.id}" width="280" height="200"></canvas>
+      <canvas id="trend-${t.id}" width="280" height="120"></canvas>
+      <div class="analytics-stats">
+        <div class="analytics-stat"><small>Total points</small><strong>${t.score||0}</strong></div>
+        <div class="analytics-stat"><small>Rounds played</small><strong>${t.rounds||0}</strong></div>
+        <div class="analytics-stat"><small>Coins earned</small><strong>${t.coins||0}</strong></div>
+        <div class="analytics-stat"><small>Badges</small><strong>${(t.badges||[]).length}</strong></div>
+      </div>
+    </div>`;
+  }).join('');
+  // Now draw canvases
+  teams.forEach(t => {
+    const rc = document.getElementById('radar-'+t.id);
+    const tc = document.getElementById('trend-'+t.id);
+    if(rc) renderRadar(rc, t);
+    if(tc) renderTrend(tc, t);
+  });
+}
+
+function renderBadges(){
+  const host = document.getElementById('badgeGrid'); if(!host) return;
+  if(!teams.length){ host.innerHTML = '<div class="empty-state">No teams yet.</div>'; return; }
+  // Build a map: which teams have each badge
+  const byBadge = {};
+  BADGES.forEach(b => byBadge[b.id] = []);
+  teams.forEach(t => (t.badges||[]).forEach(b => byBadge[b.id].push(t)));
+  host.innerHTML = BADGES.map(b => {
+    const earners = byBadge[b.id] || [];
+    const earned = earners.length > 0;
+    return `
+    <div class="badge ${earned ? 'earned' : 'locked'}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${escapeHtml(b.name)}</div>
+      <div class="badge-desc">${escapeHtml(b.desc)}</div>
+      ${earned ? `<div class="badge-by">Won by ${earners.map(t=>escapeHtml(t.name)).join(', ')}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ---------- Custom prompts ----------
+function getActivePrompts(){
+  const lang = currentLanguage;
+  const base = PROMPTS_LANG[lang] || PROMPTS_LANG.en;
+  // Re-bind global PROMPTS reference used elsewhere
+  return [...base, ...customPrompts];
+}
+function renderCustomPrompts(){
+  const host = document.getElementById('cpList'); if(!host) return;
+  if(!customPrompts.length){ host.innerHTML = '<div class="empty-state" style="padding:10px;font-size:12px">No custom prompts yet. Add your first below.</div>'; return; }
+  host.innerHTML = customPrompts.map(p => `
+    <div class="cp-item">
+      <div class="cp-info"><b>${escapeHtml(p.text.slice(0,60))}${p.text.length>60?'…':''}</b><span>${escapeHtml(p.category)} · ${escapeHtml(p.difficulty)} · ${escapeHtml(p.skill||'')}</span></div>
+      <button class="delete-team" onclick="deleteCustomPrompt('${p.id}')">×</button>
+    </div>`).join('');
+}
+function addCustomPrompt(){
+  const text = $('cpText').value.trim(); if(!text) return showToast('Add prompt text', 'warning');
+  customPrompts.push({
+    id: makeId(), custom: true,
+    category: $('cpCategory').value,
+    difficulty: $('cpDifficulty').value,
+    skill: $('cpSkill').value.trim() || 'Custom',
+    text,
+    instruction: $('cpInstruction').value.trim() || 'Run the scenario; debrief after.',
+    strong: $('cpStrong').value.trim() || '',
+    weak: $('cpWeak').value.trim() || ''
+  });
+  ['cpText','cpInstruction','cpStrong','cpWeak','cpSkill'].forEach(id => $(id).value = '');
+  saveState(); renderCustomPrompts();
+  // Refresh PROMPTS reference
+  PROMPTS.length = 0; getActivePrompts().forEach(p => PROMPTS.push(p));
+  showToast('Custom prompt added', 'success');
+}
+function deleteCustomPrompt(id){
+  customPrompts = customPrompts.filter(p => p.id !== id);
+  saveState(); renderCustomPrompts();
+  PROMPTS.length = 0; getActivePrompts().forEach(p => PROMPTS.push(p));
+}
+function exportCustomPack(){
+  if(!customPrompts.length) return showToast('No custom prompts to export', 'warning');
+  download('edstellar-improv-custom-pack.json', JSON.stringify({ version:1, customPrompts }, null, 2), 'application/json');
+  showToast('Pack exported', 'success');
+}
+function importCustomPack(file){
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const data = JSON.parse(e.target.result);
+      const items = data.customPrompts || (Array.isArray(data) ? data : []);
+      let added = 0;
+      items.forEach(p => {
+        if(p.text){ customPrompts.push({ ...p, id: makeId(), custom:true }); added++; }
+      });
+      saveState(); renderCustomPrompts();
+      PROMPTS.length = 0; getActivePrompts().forEach(p => PROMPTS.push(p));
+      showToast(`Imported ${added} prompt${added!==1?'s':''}`, 'success');
+    }catch(err){
+      showToast('Invalid pack file', 'warning');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ---------- Templates ----------
+function saveSessionTemplate(){
+  const name = prompt('Template name?', 'Sales Kickoff');
+  if(!name) return;
+  sessionTemplates.push({
+    id: makeId(), name,
+    category: $('gameCategory').value,
+    difficulty: $('difficulty').value,
+    duration: $('roundDuration').value,
+    rounds: $('totalRounds').value,
+    language: currentLanguage
+  });
+  saveState(); renderTemplates();
+  showToast('Template saved: ' + name, 'success');
+}
+function loadSessionTemplate(id){
+  const tpl = sessionTemplates.find(t => t.id === id); if(!tpl) return;
+  $('gameCategory').value = tpl.category;
+  $('difficulty').value = tpl.difficulty;
+  $('roundDuration').value = tpl.duration;
+  $('totalRounds').value = tpl.rounds;
+  maxRounds = Number(tpl.rounds) || 3;
+  setLanguage(tpl.language || 'en');
+  saveState(); updateStats();
+  showToast('Loaded template: ' + tpl.name);
+}
+function deleteSessionTemplate(id){
+  sessionTemplates = sessionTemplates.filter(t => t.id !== id);
+  saveState(); renderTemplates();
+}
+function renderTemplates(){
+  const host = document.getElementById('templateList'); if(!host) return;
+  if(!sessionTemplates.length){
+    host.innerHTML = '<span class="hint" style="margin:0">No saved templates yet. Build a config and click "Save current".</span>';
+    return;
+  }
+  host.innerHTML = sessionTemplates.map(t => `
+    <span class="template-pill" onclick="loadSessionTemplate('${t.id}')">
+      ${escapeHtml(t.name)}
+      <span class="x" onclick="event.stopPropagation();deleteSessionTemplate('${t.id}')" title="Delete template">×</span>
+    </span>`).join('');
+}
+
+// ---------- Language ----------
+function setLanguage(lang){
+  currentLanguage = lang;
+  document.documentElement.lang = lang;
+  document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  // Swap PROMPTS array contents in place
+  PROMPTS.length = 0;
+  getActivePrompts().forEach(p => PROMPTS.push(p));
+  // Update lang pills
+  document.querySelectorAll('.lang-pick').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  saveState();
+}
+
+// ---------- Sharing ----------
+function buildShareLink(){
+  const state = { teams, currentRound, maxRounds, roundLog, language: currentLanguage, customPrompts };
+  const enc = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+  return location.origin + location.pathname + '#s=' + enc;
+}
+function buildSlackCard(){
+  const ranked = [...teams].sort((a,b) => (b.score||0) - (a.score||0));
+  const champ = ranked[0];
+  const head = `:trophy: *Improv Challenge - Edstellar Engage*`;
+  const teamLine = champ ? `Winner: *${champ.name}* with *${champ.score} pts*` : 'Game in progress';
+  const rounds = `Rounds played: ${roundLog.length} / ${maxRounds}`;
+  const url = buildShareLink();
+  return `${head}\n${teamLine}\n${rounds}\nReplay: ${url}`;
+}
+function buildEmbed(){
+  return `<iframe src="${location.origin}${location.pathname}?mode=present" width="600" height="800" frameborder="0" allow="fullscreen"></iframe>`;
+}
+function openShare(){
+  $('shareUrl').value = buildShareLink();
+  $('slackCard').textContent = buildSlackCard();
+  $('embedSnippet').value = buildEmbed();
+  $('shareOverlay').classList.add('show');
+}
+function closeShare(){ $('shareOverlay').classList.remove('show'); }
+function copyToClipboard(text){
+  navigator.clipboard?.writeText(text).then(
+    () => showToast('Copied!', 'success'),
+    () => showToast('Copy failed - select manually', 'warning')
+  );
+}
+function loadFromHash(){
+  if(!location.hash.startsWith('#s=')) return false;
+  try{
+    const enc = location.hash.slice(3);
+    const json = decodeURIComponent(escape(atob(enc)));
+    const state = JSON.parse(json);
+    teams = state.teams || teams;
+    currentRound = state.currentRound || 0;
+    maxRounds = state.maxRounds || 3;
+    roundLog = state.roundLog || [];
+    customPrompts = state.customPrompts || [];
+    if(state.language) currentLanguage = state.language;
+    showToast('Loaded shared session', 'success');
+    return true;
+  }catch(e){ console.warn('Bad share link', e); return false; }
+}
+
+// ---------- Reminder (.ics) ----------
+function downloadIcs(days){
+  const start = new Date(Date.now() + days*24*60*60*1000);
+  start.setHours(10,0,0,0);
+  const end = new Date(start.getTime() + 30*60*1000);
+  const fmt = d => d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/, '');
+  const ranked = [...teams].sort((a,b) => (b.score||0) - (a.score||0));
+  const winner = ranked[0]?.name || 'TBD';
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Edstellar Engage//Improv Challenge//EN',
+    'BEGIN:VEVENT',
+    'UID:' + makeId() + '@edstellar.com',
+    'DTSTAMP:' + fmt(new Date()),
+    'DTSTART:' + fmt(start),
+    'DTEND:' + fmt(end),
+    'SUMMARY:Improv Challenge - Reinforcement Session',
+    'DESCRIPTION:Replay Improv Challenge with the same teams. Last winner: ' + winner + '. Beat the forgetting curve - re-run the same prompts to see retention improve.',
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  download('improv-challenge-reminder.ics', ics, 'text/calendar');
+  showToast('Reminder downloaded · open it to add to your calendar', 'success');
+}
+
+// ---------- Mode detection ----------
+function detectMode(){
+  const params = new URLSearchParams(location.search);
+  const mode = params.get('mode');
+  if(mode === 'present'){
+    document.body.classList.add('mode-present');
+    $('modeBanner').innerHTML = '📺 Presenter mode · <a href="?">exit</a>';
+  } else if(mode === 'play'){
+    document.body.classList.add('mode-play');
+    $('modeBanner').innerHTML = '📱 Player mode · <a href="?">exit</a>';
+  }
+}
+
+// ---------- Streak ----------
+function updateStreak(){
+  const lastSession = Number(localStorage.getItem('edstellarImprovLastSession') || 0);
+  let streak = Number(localStorage.getItem('edstellarImprovStreak') || 0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if(lastSession){
+    const lastDay = new Date(lastSession); lastDay.setHours(0,0,0,0);
+    const days = Math.floor((today - lastDay) / (1000*60*60*24));
+    if(days === 0){} // same day
+    else if(days === 1) streak += 1;
+    else streak = 1;
+  } else { streak = 1; }
+  localStorage.setItem('edstellarImprovStreak', String(streak));
+  localStorage.setItem('edstellarImprovLastSession', String(Date.now()));
+  if(streak >= 2){
+    $('streakPill').style.display = 'inline-flex';
+    $('streakDays').textContent = streak;
+  }
+}
+
+// ---------- Wire up new modules ----------
+$('saveTemplateBtn').addEventListener('click', saveSessionTemplate);
+$('addCpBtn').addEventListener('click', addCustomPrompt);
+$('exportCpBtn').addEventListener('click', exportCustomPack);
+$('importCpBtn').addEventListener('click', () => $('importCpInput').click());
+$('importCpInput').addEventListener('change', e => { const f = e.target.files[0]; if(f) importCustomPack(f); e.target.value=''; });
+document.querySelectorAll('.lang-pick').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+
+$('shareBtn').addEventListener('click', openShare);
+$('shareClose').addEventListener('click', closeShare);
+$('shareOverlay').addEventListener('click', e => { if(e.target.id === 'shareOverlay') closeShare(); });
+$('copyShareUrl').addEventListener('click', () => copyToClipboard($('shareUrl').value));
+$('copySlackCard').addEventListener('click', () => copyToClipboard($('slackCard').textContent));
+$('copyEmbed').addEventListener('click', () => copyToClipboard($('embedSnippet').value));
+$('presenterModeBtn').addEventListener('click', () => { window.open(location.pathname + '?mode=present', '_blank'); });
+$('playerModeBtn').addEventListener('click', () => { window.open(location.pathname + '?mode=play', '_blank'); });
+$('reminderBtn').addEventListener('click', () => downloadIcs(14));
+
+// Extra keyboard
+document.addEventListener('keydown', e => {
+  if(e.target.matches('input,textarea,select')) return;
+  if(e.key.toLowerCase() === 'a'){ switchView('analytics'); }
+  if(e.key.toLowerCase() === 'b'){ switchView('badges'); }
+});
+
 // Boot
+detectMode();
+const fromHash = loadFromHash();
 loadState();
-if(!localStorage.getItem('edstellarImprovHowToSeenV3')){
+if(currentLanguage !== 'en') setLanguage(currentLanguage);
+updateStreak();
+renderCustomPrompts();
+renderTemplates();
+if(!localStorage.getItem('edstellarImprovHowToSeenV3') && !document.body.classList.contains('mode-present') && !document.body.classList.contains('mode-play')){
   setTimeout(openHowToPlay, 450);
   localStorage.setItem('edstellarImprovHowToSeenV3','1');
 }
